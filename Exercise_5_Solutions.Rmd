@@ -1,0 +1,248 @@
+---
+title: "Consumer Behavior - Solutions Exercise 5"
+author: "Jun.-Prof. Dr. Marcel Lichters"
+date: "`r Sys.Date()`"
+output:
+  html_document: 
+    df_print: default
+    editor_options:
+      chunk_output_type: console
+    keep_md: yes
+    number_sections: yes
+    toc: yes
+    toc_collapsed: yes
+    toc_float: yes
+  chunk_output_type: console
+theme: lumen
+bibliography: Citavi_Export2.bib
+csl: apa-old-doi-prefix.csl
+---
+
+
+
+```{r setup, include=FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE, warning=FALSE, message=FALSE, include = TRUE)
+
+
+```
+
+
+**************************************************************
+
+<a title="Follow me on ResearchGate" href="https://www.researchgate.net/profile/Marcel_Lichters?cp=shp"><img src="https://www.researchgate.net/images/public/profile_share_badge.png" alt="Follow me on ResearchGate" /></a>
+
+[Connect with me on Open Science Framework](https://osf.io/u7hyz/) | 
+[Contact me via LinkedIn](https://www.linkedin.com/in/lichters/) 
+
+*Depending on your machine it might be necessary to use right-click -> open in new browser window.*
+
+**************************************************************
+
+
+R analysis script presenting the results for exercise 5 in consumer behavior. These are the questions regarding Biswas et al. [-@Biswas.2014]. 
+
+
+# Loading packages that we will use
+
+> Beware: *R* is a context-sensitive language. Thus, 'data' will be interpreted not in the same way as 'Data' will.
+
+In *R* most functionality is provided by additional packages.  
+Most of the packages are well-documented, See: https://cran.r-project.org/
+
+The code chunk below first evaluates if the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html) is already installed to your machine. If yes, the corresponding package will be loaded. If not, *R* will install the package. 
+
+Alternatively, you can do this manually first by executing *install.packages("pacman")* and then *library(pacman)*.
+
+The second line then loads the package *pacman*
+
+The third line uses the function *p_load()* from the pacman package to install (if necessary) and load all packages that we provide as arguments (e.g., [pwr](https://cran.r-project.org/web/packages/pwr/index.html), which provides functions for *power analysis*).
+
+
+
+```{r , warning=FALSE, message=FALSE}
+
+
+if(!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
+
+library(pacman)
+
+pacman::p_load(tidyverse, dplyr, pwr, tidyselect, compute.es)
+
+
+```
+
+
+Here is the *R* session info which gives you information on my machine, all loaded packages and their version:
+
+``` {r  }
+
+sessionInfo()
+
+
+```
+
+********************************************************************
+
+
+# Finding an answer to question #5
+
+> How many subjects have to be recruited in order to replicate the overall effect of Study 1b (Assumptions: $\alpha$=5%, Power=0.8, Chi²-test, effect size=sample)?
+
+We see that the problem is very similar to what we have done in Exercise 2 [@Kim.2018b], as in the article a $\chi^{2}$-test was applied to analyze counts. 
+
+## Calculate effect size Cohen's $\omega$
+
+Information the article provides:
+
+1. *"Fifty-one restaurant patrons ($M_{age}$ = 38 years, 26% female) participated in the experiment in exchange for a free drink and complimentary chocolates."*
+2. *"Consumers chose the chocolate sampled sequentially last to a greater extent when the sensory cues were dissimilar (vs. similar) and chose the first chocolate to a greater extent when the sensory cues were similar (vs. dissimilar) ($\chi^{2}$ = 7.07, p < .01)."*
+
+From this we are able to extract:
+
+* sample size n=51 
+* the $\chi^{2}$ value which is 7.07
+
+Unfortunately, the authors did not report the degrees of freedom (df), which is a suboptimal style. However, based on the information provided, we understand that their analysis is based on a 2x2 contingency table:
+
+|                     | First chocolate chosen    | Last chocolate chosen     |
+| ------------------- |:-------------------------:| :------------------------:|
+| **Similar cues**    | a                         | b                         |
+| **Dissimilar cues** | c                         | d                         |
+
+Furthermore, we know from lectures in statistics that the df in a $\chi^{2}$-test equal: (number of rows -1) * (number of columns -1).
+Thus, df=(2-1)*(2-1)=1. The degrees of freedom are 1.
+
+
+This is all that we need to first calculate the observed effect size Cohen's $\omega$ [@Cohen.1988].
+Remember from exercise: Cohen's $\omega$=$\sqrt{\frac{chi^{2}}{n}}$. Therefore, we simply need to solve $\sqrt{\frac{7.07}{51}}$
+
+We achieve this by using the next code chunk. Within this code chunk we use the *sqrt()* function (place the cursor in the function and press 'F1' to see help), which calculates the square root of a number. We feed this function with the values of $\chi^{2}(1)$=7.07, and the total sample size n=51. We assign the results to an object that we call 'Cohen_omega'.
+
+In the next line we call the object and simultaneously round the results to 4 digits. This is obtained by using the *round()* function. 
+
+
+```{r}
+
+Cohen_omega <- sqrt(7.07/51)
+
+round(Cohen_omega, digits = 4)
+
+```
+
+> We can see that the calculated effect size `r round(Cohen_omega, digits = 4)` perfectly mirrors the one we have seen in the exercise slides. Common classifications for Cohen's $\omega$ are: [0.1 | 0.3[ - small effect, [0.3 | 0.5[ - medium effect, and [0.5 | +$\infty$] - large effect.
+
+***********************************************************************
+
+
+## Conduct A priori power analysis to search for minimum n
+
+
+In the question we are asked for a statistical power of 80% (a commonly used threshold in social sciences).
+
+To estimate a minimum sample size n for the replication we apply the *pwr.chisq.test()* function from the [pwr](https://cran.r-project.org/web/packages/pwr/index.html) package. This function needs us to provide 5 arguments to fill its parameters. These are (see help by pressing 'F1'):
+
+* w	= Effect size Cohen's $\omega$
+* N	= Total number of observations
+* df= degrees of freedom 
+* sig.level	= Significance level (Type I error probability $\alpha$)
+* power	= Power of test (1 minus Type II error probability)
+
+The function, furthermore, assumes us to set one of these arguments to **NULL**. By doing so, we tell the function to use the remaining 4 parameters to search for the value of the fifth. In our case, we are searching for 'N', therefore, we set 'N=NULL'.
+
+We assign the results of our power analysis to a new object named 'results'. Then we call for its content.
+
+
+```{r results='asis'}
+
+results <- pwr.chisq.test(w=Cohen_omega, df=1 ,N=NULL, sig.level=0.05, power = 0.8) 
+
+results
+
+```
+
+> We can see that the calculated sample size `r ceiling(results$N)` perfectly mirrors the one we have seen in G*Power 3 [@Faul.2007]. Keep in mind: if an original study comes with a medium effect size, then a replication with a power of 80% often needs a comparable sample size as compared to the original study. However, studies reporting only small effects usually need much more participants for a successful replication.
+
+******************************************************************
+
+
+## Visualize results
+
+In a last step we can visualize the relationship between the expected statistical power and different sample sizes.
+
+For this purpose we apply the *plot()* function with the 'results' object and a catchy label for the x-axes as arguments.
+
+```{r}
+
+plot(results, xlab="sample size")
+
+```
+
+> From this plot we can alternatively extract the same information for sample size planning. 
+
+
+
+# Additional reading *(not relevant for the exam)*
+
+In the above-discussed example, we were planning a replication of the original findings.
+In doing so, we have made certain assumptions:
+
+We assume that the observed effect size Cohen's $\omega$ = `r round(Cohen_omega, digits = 4)` is the true effect size to find. Strictly speaking, this is wrong. Our calculated value is only a sample estimate of the true effect size in the underlying population.
+Under the assumption of knowing the true effect size $\omega$ = `r round(Cohen_omega, digits = 4)` we calculated that we need at least n=`r round(results$N, digits=0)` participants for a replication of the original findings with a power of 80%. This means that we will have approximately the chance of 80% to find the effect as to be significant at $\alpha$=0.05. Because, the true effect to find might, however, be smaller, this calculation maybe presents an overly optimistic approach.
+Therefore, other researchers prefer to focus on the confidence intervals for the estimate of effect sizes measures [@Thompson.2002].
+
+Apart from Cohen's $\omega$, there are plenty of other effect sizes 'out in the market'. They all can be converted into each other [@Borenstein.2009b; @Fern.1996; @Lenhard.2017; @Volker.2006]. In our case (Chi² with df=1), for example, Cohen's $\omega$ is equivalent to the common language effect size *r* [@Lenhard.2017].
+
+One *R* package that is facilitating the calculation of confidence levels for effect sizes is the [compute.es](https://cran.r-project.org/web/packages/compute.es/) package. This package supports the use of *r* as an effect size measure.
+
+We can apply the *chies()* function to obtain confidence intervals for our observed effect size.
+We use the function twice. The first time we assign the results to an object named 'CI_effect'. The second time we don not assign the results to an object, which is equivalent to printing the results to the screen.
+
+In the second call we feed the function with 5 arguments:
+
+* chi.sq = our $\chi^{2}$ value which is 7.07
+* n = our sample size of 51
+* level = the level of confidence for the confidence intervals to be calculated
+* dig = the number of digits to be saved
+* verbose = TRUE, in order to print detailed results
+
+
+```{r}
+
+CI_effect <- chies(chi.sq = 7.07, n =51, level = 95, dig = 3, verbose = FALSE)
+
+chies(chi.sq = 7.07, n =51, level = 95, dig = 3, verbose = TRUE)
+
+
+
+
+```
+
+Along the output of the *chies()*-function we see for the relevant effect size **r** that we are additionally provided with a test for significance for the effect size itself. This is an alternative to the classical $\chi^{2}$ test. If we reach at a significant result here, this means that the effect size obtained is significantly greater than 0. Put differently, the effect is assumed to exist in the underlying population. Recently researchers in the context effect domain are starting to report tests on effect sizes, especially, when their articles span over multiple studies [@Evangelidis.2018].
+
+
+> We now recognize that the effect size in the underlying population is likely to be located somewhere in the interval ranging from `r CI_effect$l.r` to `r CI_effect$u.r`. Put differently, in the worst case we have to plan for a replication of an effect that is, indeed, only of the size of $\omega$ = `r CI_effect$l.r`.
+
+We can briefly calculate how this will change our assumptions about the minimum sample size.
+We, again, use the *pwr.chisq.test()* function (see above). This time, we hand in 'CI_effect$l.r' as the argument for the effect size parameter w.
+Calling 'CI_effect\$l.r' simply returns the value of the lower limit of the 95% confidence interval of the effect size *r* (=Cohen's $\omega$ in our case).
+
+> in *R* objects such as 'CI_effect' can compromise of different elements. We can assess these elements by using the '\$' notation. In the code chunk below, the element 'l.r' simply stores the value lower limit of the 95% confidence interval of the effect size *r*.
+
+
+```{r results='asis'}
+
+results_worst_case <- pwr.chisq.test(w=CI_effect$l.r, df=1 ,N=NULL, sig.level=0.05, power = 0.8) 
+
+results_worst_case 
+
+```
+
+> We can see that the more conservative sample size is `r ceiling(results_worst_case$N)`, which makes a replication of the original findings almost impossible. This is a general problem in consumer research. Most universities (especially the smaller European schools) do not have the necessary budget to replicate findings published in the top-tier journals which, however, decreases trust in the findings' usefulness.
+
+
+************************************************************************
+
+# List of References
+
+
+
