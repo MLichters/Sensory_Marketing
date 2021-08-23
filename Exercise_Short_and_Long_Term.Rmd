@@ -40,7 +40,8 @@ knitr::opts_chunk$set(echo = TRUE, cache = TRUE, warning=FALSE, message=FALSE, i
 **************************************************************
 
 
-R analysis script presenting the solutions for the exercise in Sensory Marketing regarding Girard et al. [-@Li.2021]. In one of the questions students are asked to estimate the appropriate samples size for a replication of Study 1's findings (under $\alpha$=5%, Power=0.8).
+R analysis script presenting the solutions for the exercise in Sensory Marketing regarding Girard et al. [-@Girard.2019]. In one of the questions students are asked: How many respondents should one at minimum calculate for a replication of study 1’s results regarding perceived service value? Assumptions: equal split to scent vs. no scent conditions, $\alpha$=5%, $\beta$=5%, between-subjects ANOVA).
+
 
 > If this exercise grabs your attention, please check-out our study programs at the Chemnitz University of Technology by clicking on the logo (Germany): 
 <a title="Chemnitz University of Technology" href="https://www.tu-chemnitz.de/wirtschaft/fakultaet/studiengaenge.php.en"><img src="TU_Chemnitz_Logo.png" alt="Chemnitz University of Technology" /></a>
@@ -93,11 +94,11 @@ sessionInfo()
 > How many respondents should one at minimum calculate for a replication of study 1’s results regarding perceived service value? Assumptions: equal split to scent vs. no scent conditions, $\alpha$=5%, $\beta$=5%, between-subjects ANOVA)
 
 
-As we use an ANOVA here, the solution is very similar to Exercise 3 on Topolinski et al. [-@Topolinski.2014].
+We use an ANOVA here.
 
 ## Calculate effect size Cohen's f [@Cohen.1988]
 
-We have seen from our exercise that the program [G*Power](http://www.psychologie.hhu.de/arbeitsgruppen/allgemeine-psychologie-und-arbeitspsychologie/gpower.html) requires the effect size measure Cohen's f [@Cohen.1988]. The same hold for the [pwr](https://cran.r-project.org/web/packages/pwr/index.html) package, which we will again, use to conduct power analysis in *R*. Therefore, we first need to convert information provided by the *JSR* article into a sample estimate of f. 
+We have seen from our exercise that the program [G*Power](http://www.psychologie.hhu.de/arbeitsgruppen/allgemeine-psychologie-und-arbeitspsychologie/gpower.html) requires the effect size measure Cohen's f [@Cohen.1988]. The same hold for the [pwr](https://cran.r-project.org/web/packages/pwr/index.html) package, which we will, again, use to conduct power analysis in *R*. Therefore, we first need to convert information provided by the *JSR* article into a sample estimate of f. 
 
 
 Information the article provides:
@@ -116,7 +117,7 @@ From this we are able to extract:
 
 This is all that we need to first calculate the observed effect size Cohen's f [@Cohen.1988].
 According the Cohen [-@Cohen.1988, p. 281] $\eta^{2}_{p}$ can easily be converted to f by a simple formula: f= $\sqrt{\frac{\eta^{2}}{1-\eta^{2}}}$
-Therefore, we simply need to solve $\sqrt{\frac{0.069}{1-0.069}}$
+Therefore, we need to solve $\sqrt{\frac{0.069}{1-0.069}}$
 
 We achieve this by using the next code chunk. Within this code chunk we use the *sqrt()* function (place the cursor in the function and press 'F1' to see help), which calculates the square root of a number. We feed this function with the value of $\eta^{2}_{p}$=0.069. We assign the results to an object that we call 'Cohen_f'.
 
