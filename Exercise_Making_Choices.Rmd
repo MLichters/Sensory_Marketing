@@ -1,7 +1,7 @@
 ---
 title: "Sensory Marketing"
 subtitle: 'Solutions - Exercise: Making choices while smelling...'
-author: "Uni.-Prof. Dr. Marcel Lichters"
+author: "Univ.-Prof. Dr. Marcel Lichters"
 date: "`r Sys.Date()`"
 output:
   html_document: 
