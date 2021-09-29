@@ -62,7 +62,7 @@ if(!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(tidyverse, dplyr, tidyselect, osfr, ez, rstatix)
+pacman::p_load(tidyverse, dplyr, tidyselect, osfr, rstatix)
 
 ```
 
@@ -187,17 +187,6 @@ print(d_stacked)
 
 ```{r}
 
-Cappuccino_rANOVA <- ezANOVA(
-  data = d_stacked, 
-  dv = liking, 
-  wid = ID, 
-  within = .(sample, environment), 
-  detailed = TRUE, 
-  return_aov = FALSE
-)
-
-print(Cappuccino_rANOVA, 
-      digits = 3)
 
 
 cappuccino_rANOVA <- anova_test(data = d_stacked,
@@ -211,7 +200,10 @@ print(cappuccino_rANOVA,
       digits = 3)
 
 
-tukey_hsd(cappuccino_rANOVA$ANOVA)
+
+post_hoc <- with(d_stacked, pairwise.t.test(x=liking, g=environment, p.adjust.method="holm", paired=T))
+post_hoc
+
 
 ```
 
