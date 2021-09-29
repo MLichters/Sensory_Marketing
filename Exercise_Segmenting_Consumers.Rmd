@@ -8,6 +8,7 @@ output:
     df_print: default
     editor_options:
       chunk_output_type: console
+      markdown: 
     keep_md: yes
     number_sections: yes
     toc: yes
@@ -19,49 +20,40 @@ bibliography: Citavi_Export2.bib
 csl: apa.csl
 ---
 
-
-
 ```{r setup, include=FALSE, warning=FALSE, message=FALSE}
 knitr::opts_chunk$set(echo = TRUE, cache = TRUE, warning=FALSE, message=FALSE, include = TRUE)
 
 
 ```
 
+------------------------------------------------------------------------
 
-**************************************************************
+<a title="Follow me on ResearchGate" href="https://www.researchgate.net/profile/Marcel_Lichters?cp=shp"><img src="https://www.researchgate.net/images/public/profile_share_badge.png" alt="Follow me on ResearchGate"/></a>
 
-<a title="Follow me on ResearchGate" href="https://www.researchgate.net/profile/Marcel_Lichters?cp=shp"><img src="https://www.researchgate.net/images/public/profile_share_badge.png" alt="Follow me on ResearchGate" /></a>
+[Connect with me on Open Science Framework](https://osf.io/u7hyz/) \| [Contact me via LinkedIn](https://www.linkedin.com/in/lichters/)
 
-[Connect with me on Open Science Framework](https://osf.io/u7hyz/) | 
-[Contact me via LinkedIn](https://www.linkedin.com/in/lichters/) 
+*Depending on your machine it might be necessary to use right-click -\> open in new browser window.*
 
-*Depending on your machine it might be necessary to use right-click -> open in new browser window.*
+------------------------------------------------------------------------
 
-**************************************************************
+R analysis script presenting the solutions for the exercise in Sensory Marketing regarding Lichters et al.[-@Lichters.2021c] . 
 
-
-R analysis script presenting the solutions for the exercise in Sensory Marketing regarding Lichters et al.[-@Lichters.2021c] . In one of the questions students are asked to estimate the appropriate samples size for a replication of Study 1's findings (under $\alpha$=5%, Power=0.8).
-
-> If this exercise grabs your attention, please check-out our study programs at the Chemnitz University of Technology by clicking on the logo (Germany): 
-<a title="Chemnitz University of Technology" href="https://www.tu-chemnitz.de/wirtschaft/fakultaet/studiengaenge.php.en"><img src="TU_Chemnitz_Logo.png" alt="Chemnitz University of Technology" /></a>
-
+> If this exercise grabs your attention, please check-out our study programs at the Chemnitz University of Technology by clicking on the logo (Germany): <a title="Chemnitz University of Technology" href="https://www.tu-chemnitz.de/wirtschaft/fakultaet/studiengaenge.php.en"><img src="TU_Chemnitz_Logo.png" alt="Chemnitz University of Technology"/></a>
 
 # Loading packages that we will use
 
 > Beware: *R* is a context-sensitive language. Thus, 'data' will be interpreted not in the same way as 'Data' will.
 
-In *R* most functionality is provided by additional packages.  
-Most of the packages are well-documented, See: https://cran.r-project.org/
+In *R* most functionality is provided by additional packages.\
+Most of the packages are well-documented, See: <https://cran.r-project.org/>
 
-The code chunk below first evaluates if the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html) is already installed to your machine. If yes, the corresponding package will be loaded. If not, *R* will install the package. 
+The code chunk below first evaluates if the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html) is already installed to your machine. If yes, the corresponding package will be loaded. If not, *R* will install the package.
 
 Alternatively, you can do this manually first by executing *install.packages("pacman")* and then *library(pacman)*.
 
 The second line then loads the package *pacman*
 
-The third line uses the function *p_load()* from the pacman package to install (if necessary) and load all packages that we provide as arguments (e.g., [pwr](https://cran.r-project.org/web/packages/pwr/index.html), which provides functions for *power analysis*).
-
-
+The third line uses the function *p_load()* from the pacman package to install (if necessary) and load all packages that we provide as arguments (e.g., [osfr](https://cran.r-project.org/web/packages/osfr/index.html), which provides functions for interfacing with the open science framework from *R*).
 
 ```{r , warning=FALSE, message=FALSE, hide=TRUE}
 
@@ -70,148 +62,177 @@ if(!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(tidyverse, dplyr, tidyselect, osfr)
-
+pacman::p_load(tidyverse, dplyr, tidyselect, osfr, ez, rstatix)
 
 ```
 
 
+------------------------------------------------------------------------
+
 Here is the *R* session info which gives you information on my machine, all loaded packages and their version:
 
-``` {r  }
+```{r  }
 
 sessionInfo()
 
 
 ```
 
-********************************************************************
+------------------------------------------------------------------------
 
+# Task 5.1. Loading data from OSF
 
-# Loading data from OSF
+The article provides us with the link to a corresponding OSF project: <https://doi.org/10.17605/OSF.IO/VKZ4Y>. Here, we can find all data sets and *R*-scrips accompanying the manuscript in *Food Quality and Preference*. [OSF](https://osf.io/)  is a free web application that provides a space for researchers to collaboratively store, manage, and share their research materials (e.g. data, code, protocols). Most work on OSF is organized around projects, which include a cloud-based storage bucket where files can be stored and organized into directories. Please navigate to the corresponding project, using your web browser. We can see that the project contains a data component named *Data Sets and Analysis Scripts*. If we click on the data component, we are provided with its own url identifyer which is: <https://osf.io/kst7p> This data component is housing the product acceptance scores for the cappuccino category within the data set named **Working dataset Cappuccino.csv** within the directory path **Data and analysis scripts/Main studies**. 
 
-> For your master thesis it could be an idea to replicate the IAT-findings of Study 1. Based on a power analysis (Assumptions: $\alpha$=5%, Power=0.8), how many subjects should you recruit for such a study?
+To load the data set we use functions provided by the *[osfr](https://cran.r-project.org/web/packages/osfr/index.html) package*.
 
-
-## Extract information on the effect size Cohen's d and the statistical analysis procedure
-
-Information the article provides on page 3:
-
-*The D-score was significantly greater than 0 (D = 0.45, SD = 0.47, t(133) = 10.98, p < .001, 95% CI = [0.37, 0.53], Cohen’s d = 0.95), suggesting that participants responded significantly faster in assigning the stimuli when healthy and light were grouped together.*
-
-From this we are able to extract:
-
-* The effect size measure Cohen's d equals 0.95.
-* For analysis the authors applied a one sample t test, which tests against the constant value of 0.
-
-
-## Conduct A priori power analysis to search for minimum n
-
-
-In the question we are asked for a statistical power of 80% (a commonly used threshold in social sciences).
-
-To estimate a minimum sample size n for the replication we apply the *pwr.t.test()* function from the [pwr](https://cran.r-project.org/web/packages/pwr/index.html) package. This function needs us to provide 6 arguments to fill its parameters. These are (see help by pressing 'F1' when setting the corsor into the function's name):
-
-* d	= Effect size Cohen's d
-* n	= Total number of observations
-* sig.level	= Significance level (Type I error probability $\alpha$)
-* power	= Power of test (1 minus Type II error probability)
-* type = Type of t test: one- ("one.sample") two- ("two.sample") or paired-samples ("paired")
-* alternative = parameter indicating the test strategy: one of "two.sided" (default), "greater" or "less"
-
-The function, furthermore, assumes us to set one of the arguments (d, n, sig.level, or power) to **NULL**. By doing so, we tell the function to use the remaining 5 parameters to search for the value of the sixth. In our case, we are searching for 'n', therefore, we set 'n=NULL'. Furthermore, we are using a one sample t test and the original study expects the d score to be greater than 0. Therefore, we set alternative to "greater".
-
-We assign the results of our power analysis to a new object named 'results'. Then we call for its content.
-
-
-```{r results='asis'}
-
-results <- pwr.t.test(d = 0.95, n = NULL, type = "one.sample", sig.level = 0.05, power = 0.8, alternative = "greater")
-
-results
-
-```
-
-> We can see that the (conservatively rounded) calculated sample size `r ceiling(results$n)` perfectly mirrors the one we have seen in G*Power 3 [@Faul.2007]. As discussed in our exercise, the authors of the study applied standard exclusion criteria for IAT procedures. Therefore, 1.49 times the sample size estimate (1.49 times 9 = `r ceiling(1.49*9)`) would be nessecary to end at n = 9 in the net sample.
-
-Keep in mind: if an original study comes with a very large effect size, then a replication with a power of 80% often needs fewer subjects as compared to the original study. However, studies reporting only small effects usually need much more participants for a successful replication.
-
-******************************************************************
-
-
-
-# Additional reading *(not relevant for the exam)*
-
-In the above-discussed example, we were planning a replication of the original findings.
-In doing so, we have made certain assumptions:
-
-We assume that the observed effect size Cohen's d = 0.95 is the true effect size to find. Strictly speaking, this is wrong. Our calculated value is only a sample estimate of the true effect size in the underlying population.
-Under the assumption of knowing the true effect size we calculated that we need at least n=`r ceiling(9*1.49)` participants for a replication of the original findings with a power of 80%. This means that we will have approximately the chance of 80% to find the effect as to be significant at $\alpha$=0.05. Because, the true effect to find might, however, be smaller, this calculation may present an overly optimistic approach.
-Therefore, other researchers prefer to focus on the confidence intervals for the estimate of effect sizes measures [@Thompson.2002].
-
-To estimate the lower limit of the observed Cohen's d, we can apply a formula proposed by Hedges & Olkin [-@Hedges.1985]:
-
-$d \pm se * z_{crit}$
-
-Where se is the standard error given by:
-
-$se = \sqrt{\frac{1}{n}+\frac{d^{2}}{2n}}$
-
-and $z_{crit}$ is given by the standard normal distribution at p=0.95 ($\alpha$=5%).
-
-Let us first calculate **se**. Table 4 in the article informs that n = 134 participants were used for analysis.
- 
+We first assess the corresponding OSF data component from *R*. For this purpose we apply the function *osf_retrieve_node()*, which expects us to hand-in an url to an existing resource. We assign the results of the function to an object named *OSF_project_segmenting_consumers*. 
 
 ```{r}
 
-se <- sqrt((1/134)+((0.95*0.95)/(2*134)))
-
-se
+OSF_project_segmenting_consumers <- osf_retrieve_node("https://osf.io/kst7p/")
 
 ```
 
-Next, let us determine the critical z-value ($\alpha$=5%). For this purpose we use the *qnorm()* function. We only have to provide the probability (95%) as well as the mean and standard deviation.
+The code chunk above opens a, so to say, table of content for the corresponding OSF data component.
+Let’s list all of the files that have been uploaded to the path **Data and analysis scripts/Main studies**. This is done by the *osf_ls_files()* function:
 
 ```{r}
 
-z_crit <- qnorm(p = 0.95, mean = 0, sd = 1, lower.tail = TRUE)
-
-z_crit
+osf_ls_files(OSF_project_segmenting_consumers, path = "Data and analysis scripts/Main studies")
 
 ```
 
-Finally, we calculate the lower limit of the 95% confidence interval of Cohen's d:
+This returns an *osf_tbl* object, which is the *data.frame*-like class the *osfr* package uses to represent items retrieved from OSF. This one contains 8 rows; one for each of the files stored on the OSF data component. 
+To download a local copy of the cappuccino data set (which is row 1 by the way), we use the *osf_download()* function. More specifically, we build a pipe of commands: First, we hand over our list of files stored in the OSF file path to a function *filter()*. This function helps us in selecting only the entry with the file named *Working dataset Cappuccino.csv*. The result of this step then goes as argument to the last command in the pipe, which is *osf_download()*.
 
 ```{r}
 
-d_lower95 <- 0.95 -se*z_crit
+osf_ls_files(OSF_project_segmenting_consumers, path = "Data and analysis scripts/Main studies") %>%
+  filter(name == "Working dataset Cappuccino.csv") %>%
+  osf_download(conflicts = "overwrite")
 
-d_lower95
+```
+
+As a result, the data set *Working dataset Cappuccino.csv* is stored to the current working directory of your *R*-project.
+All we need to do, is to import it to our current *R* analysis session. For this purpose, we use *read.csv()* function.
+We assign the data set to a new object **d**. In a last step, we convert the object to the [tibble] (https://tibble.tidyverse.org/) format, which is prominent among marketing researchers.
+
+```{r}
+
+d <- read.csv("Working dataset Cappuccino.csv")
+
+d <- as_tibble(d)
+
+```
+
+Finally, we can give a brief overview over the imported data:
+
+```{r}
+
+print(d)
+
+```
+
+As we can see, the spreadsheet-like data set contains one row for each of the n=104 interviewed consumers. Furthermore, there are 13 variables as columns. The first variable houses the consumer ID, whereas the remaining columns comprise of the consumers' overall liking judgments ("OL") about the different product samples across the varying testing environments (scaled from 1 to 9). The abbreviations "Bar", "Lab", and "VR" thereby stand for the environments **Real Coffeehouse*"**, **Senory Lab**, and **Immersive Coffeehouse**. The abbreviations "Bar.1shot", "Bar.2shot", "Siz.1shot", and "Siz.2shot" mark the different product samples, namely cappuccinos made of different coffee brands (“Barista” and “Sizilianer Art”, according to the authors), and cappuccinos prepared with one or two shots of that coffee. 
+
+------------------------------------------------------------------------
+
+# Task 5.2.
+
+> Apply a repeated measures ANOVA to the overall liking scores to evaluate if you are able to also extract a significant difference in product acceptance across test environments (a so-called level effect).
+
+Here, we are asked to simply replicate the original analysis proposed by the authors. Thus, the easiest way to solve the task is to have a look at the analyses scripts provided on OSF. In task 5.1. we have seen that the OSF data component provides the *R* script **Sensory Acceptance Tests - Analysis Script.R**. We can review this script by downloading it.
+
+
+```{r}
+
+d$ID <- as_factor(d$ID)
+
+names(d)
+
+d_stacked <- pivot_longer(data = d, 
+                          cols = OL.Bar.1shot...Lab:OL.Siz.2shot...Fil, 
+                          names_to = "product_sample", 
+                          values_to = "liking")
+
+
+d_stacked <-  d_stacked %>% mutate(
+  sample = case_when(
+  str_detect(product_sample, "Bar.1shot") ~ 'Bar_1shot',
+  str_detect(product_sample, "Siz.1shot") ~ 'Siz_1shot',
+  str_detect(product_sample, "Siz.2shot") ~ 'Siz_2shot',
+  str_detect(product_sample, "Bar.2shot") ~ 'Bar_2shot'
+  ))
+
+d_stacked <-  d_stacked %>% mutate(
+  environment = case_when(
+  str_detect(product_sample, "Lab") ~ 'Sensory_Lab',
+  str_detect(product_sample, "VR") ~ 'Immersive_Coffeehouse',
+  str_detect(product_sample, "Fil") ~ 'Real_Coffeehouse'
+  ))
+
+d_stacked$sample <- as_factor(d_stacked$sample)
+
+d_stacked$environment <- as_factor(d_stacked$environment)
+
+print(d_stacked)
 
 
 ```
 
 
-The results tells us which lower Cohen's d to expect in the underlying population (`r round(d_lower95, digits = 2)`). This is an alternative to the classical t test. If we reach at a significant result here (i.e., the lower limit is not crossing 0), this means that the effect size obtained is significantly greater than 0. Put differently, the effect is assumed to exist in the underlying population. Researchers in the context effect domain are starting to report tests on effect sizes, especially, when their articles span over multiple studies [@Evangelidis.2018].
-
-We can briefly calculate how this will change our assumptions about the minimum sample size.
-We, again, use the *pwr.t.test()* function (see above). This time, we hand in **d_lower95** as the argument for the effect size parameter d.
 
 
-```{r results='asis'}
 
-results_worst_case <- pwr.t.test(d = d_lower95, n = NULL, type = "one.sample", sig.level = 0.05, power = 0.8, alternative = "greater") 
+```{r}
 
-results_worst_case 
+Cappuccino_rANOVA <- ezANOVA(
+  data = d_stacked, 
+  dv = liking, 
+  wid = ID, 
+  within = .(sample, environment), 
+  detailed = TRUE, 
+  return_aov = FALSE
+)
+
+print(Cappuccino_rANOVA, 
+      digits = 3)
+
+
+cappuccino_rANOVA <- anova_test(data = d_stacked,
+                                dv = liking,
+                                wid = ID,
+                                within = c(sample, environment),
+                                detailed = TRUE
+                                )
+
+print(cappuccino_rANOVA, 
+      digits = 3)
+
+
+tukey_hsd(cappuccino_rANOVA$ANOVA)
 
 ```
 
-> We can see that the more conservative sample size is `r ceiling(results_worst_case$n)`. Combined with the exclusion factor discussed above, we end at a (worst-case) gross sample n of `r ceiling(1.49*results_worst_case$n)`.
+------------------------------------------------------------------------
+
+# Task 5.3.
+
+> Use a different post-hoc test than the authors. Drawing on your chosen test, is the immersive environment still significantly different from the other two environments?
+
+At page 4 of the Web Appendix the authors state: *"[...] running a series of repeated measures analysis of variance analyses (rANOVAs) combined with post hoc Bonferroni-corrected within-subjects t-tests."* Thus, in the article the authors applied the Bonferroni correction  to account for multiple group comparisons. 
 
 
-************************************************************************
+```{r}
+
+
+
+
+```
+
+
+
+------------------------------------------------------------------------
 
 # List of References
-
-
-
