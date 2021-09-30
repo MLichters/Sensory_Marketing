@@ -201,9 +201,6 @@ print(cappuccino_rANOVA,
 
 
 
-post_hoc <- with(d_stacked, pairwise.t.test(x=liking, g=environment, p.adjust.method="holm", paired=T))
-post_hoc
-
 
 ```
 
@@ -213,18 +210,45 @@ post_hoc
 
 > Use a different post-hoc test than the authors. Drawing on your chosen test, is the immersive environment still significantly different from the other two environments?
 
-At page 4 of the Web Appendix the authors state: *"[...] running a series of repeated measures analysis of variance analyses (rANOVAs) combined with post hoc Bonferroni-corrected within-subjects t-tests."* Thus, in the article the authors applied the Bonferroni correction  to account for multiple group comparisons. 
+At page 4 of the Web Appendix the authors state: *"[...] running a series of repeated measures analysis of variance analyses (rANOVAs) combined with post hoc Bonferroni-corrected within-subjects t-tests."* Thus, in the article the authors applied the Bonferroni  correction  to account for multiple group comparisons. 
 
 
 ```{r}
 
+
+post_hoc <- with(d_stacked, pairwise.t.test(x=liking, 
+                                            g=environment, 
+                                            p.adjust.method="holm", 
+                                            paired=TRUE))
+post_hoc
 
 
 
 ```
 
 
+------------------------------------------------------------------------
 
+# Task 5.4.
+
+> Only focus on the real coffeehouse environment! If you choose a different post-hoc test as compared to the authors, do you find the same significant differences between products?
+
+This task is very similar to the previous one. The difference is that we have to focus only at the real coffeehouse environment. Furthermore, we are investigating post-hoc tests for the sample factor instead of the environment factor.
+ As an alternative to the authors' Bonferroni procedure, we below, again, draw on Holm's post-hoc test.
+ 
+ 
+```{r}
+
+
+
+```
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 ------------------------------------------------------------------------
 
 # List of References
