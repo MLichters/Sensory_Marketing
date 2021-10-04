@@ -82,11 +82,11 @@ sessionInfo()
 
 # Task 5.1. Loading data from OSF
 
-The article provides us with the link to a corresponding OSF project: <https://doi.org/10.17605/OSF.IO/VKZ4Y>. Here, we can find all data sets and *R*-scrips accompanying the manuscript in *Food Quality and Preference*. [OSF](https://osf.io/)  is a free web application that provides a space for researchers to collaboratively store, manage, and share their research materials (e.g. data, code, protocols). Most work on OSF is organized around projects, which include a cloud-based storage bucket where files can be stored and organized into directories. Please navigate to the corresponding project, using your web browser. We can see that the project contains a data component named *Data Sets and Analysis Scripts*. If we click on the data component, we are provided with its own url identifyer which is: <https://osf.io/kst7p> This data component is housing the product acceptance scores for the cappuccino category within the data set named **Working dataset Cappuccino.csv** within the directory path **Data and analysis scripts/Main studies**. 
+The article provides us with the link to a corresponding OSF project: <https://doi.org/10.17605/OSF.IO/VKZ4Y>. Here, we can find all data sets and *R*-scrips accompanying the manuscript in *Food Quality and Preference*. [OSF](https://osf.io/)  is a free web application that provides a space for researchers to collaboratively store, manage, and share their research materials (e.g. data, code, protocols). Most work on OSF is organized around projects, which include a cloud-based storage bucket where files can be stored and organized into directories. Please navigate to the corresponding project, using your web browser. We can see that the project contains a data component named *Data Sets and Analysis Scripts*. If we click on the data component, we are provided with its own *url* identifyer which is: <https://osf.io/kst7p> This data component is housing the product acceptance scores for the cappuccino category in the data set named **Working dataset Cappuccino.csv** within the directory path **Data and analysis scripts/Main studies**. 
 
 To load the data set we use functions provided by the *[osfr](https://cran.r-project.org/web/packages/osfr/index.html) package*.
 
-We first assess the corresponding OSF data component from *R*. For this purpose we apply the function *osf_retrieve_node()*, which expects us to hand-in an url to an existing resource. We assign the results of the function to an object named *OSF_project_segmenting_consumers*. 
+We first assess the corresponding OSF data component from *R*. For this purpose we apply the function *osf_retrieve_node()*, which expects us to hand-in an *url* to an existing resource. We assign the results of the function to an object named *OSF_project_segmenting_consumers*. 
 
 ```{r}
 
@@ -104,17 +104,17 @@ osf_ls_files(OSF_project_segmenting_consumers, path = "Data and analysis scripts
 ```
 
 This returns an *osf_tbl* object, which is the *data.frame*-like class the *osfr* package uses to represent items retrieved from OSF. This one contains 8 rows; one for each of the files stored on the OSF data component. 
-To download a local copy of the cappuccino data set (which is row 1 by the way), we use the *osf_download()* function. More specifically, we build a pipe of commands: First, we hand over our list of files stored in the OSF file path to a function *filter()*. This function helps us in selecting only the entry with the file named *Working dataset Cappuccino.csv*. The result of this step then goes as argument to the last command in the pipe, which is *osf_download()*.
+To download a local copy of the cappuccino data set (which is row 1 by the way), we use the *osf_download()* function. More specifically, we build a pipe of commands: First, we hand over our list of files stored in the OSF file path to a function *filter()*. This function helps us in selecting only the entry with the file named *Working dataset Cappuccino.csv*. We better use the notation **dplyr::filter()** to make sure that the *filter()* function from the [dplyr](https://cran.r-project.org/web/packages/dplyr/index.html)-package is used, since multiple other packages provide functions aith the same name. The result of this step then goes as argument to the last command in the pipe, which is *osf_download()*.
 
 ```{r}
 
 osf_ls_files(OSF_project_segmenting_consumers, path = "Data and analysis scripts/Main studies") %>%
-  filter(name == "Working dataset Cappuccino.csv") %>%
+  dplyr::filter(name == "Working dataset Cappuccino.csv") %>%
   osf_download(conflicts = "overwrite")
 
 ```
 
-As a result, the data set *Working dataset Cappuccino.csv* is stored to the current working directory of your *R*-project.
+As the result, the data set *Working dataset Cappuccino.csv* is stored to the current working directory of your *R*-project.
 All we need to do, is to import it to our current *R* analysis session. For this purpose, we use *read.csv()* function.
 We assign the data set to a new object **d**. In a last step, we convert the object to the [tibble] (https://tibble.tidyverse.org/) format, which is prominent among marketing researchers.
 
@@ -142,20 +142,37 @@ As we can see, the spreadsheet-like data set contains one row for each of the n=
 
 > Apply a repeated measures ANOVA to the overall liking scores to evaluate if you are able to also extract a significant difference in product acceptance across test environments (a so-called level effect).
 
-Here, we are asked to simply replicate the original analysis proposed by the authors. Thus, the easiest way to solve the task is to have a look at the analyses scripts provided on OSF. In task 5.1. we have seen that the OSF data component provides the *R* script **Sensory Acceptance Tests - Analysis Script.R**. We can review this script by downloading it.
+Here, we are asked to simply replicate the original analysis proposed by the authors. Thus, the easiest way to solve the task is to have a look at the analyses scripts provided on OSF. In the code below, however, we applied our own code.
+
+We first, tell *R* to handle the first column "ID" as a categorical factor variable instead of a numerical one. 
+
+Next, we use the function *[pivot_longer](https://tidyr.tidyverse.org/reference/pivot_longer.html)* to restructure our data set from the **wide format** (each consumer is one row), to the **long format** (each product judgement is one row). Thus, we are *stacking* the data. We are doing so, because the subsequent repeated measures ANOVA (rANOVA) is expecting the long instead of the wide format. Within the function call, we hand-in *d* as for the data argument. Further, we tell the function to use the columns named "OL.Bar.1shot...Lab" to "OL.Siz.2shot...Fil" for creating the longer format. The *names_to* argument tells the function which name to use for the new stacked variable collecting all product variant names. Finally, the *values_to* argument sets the name for the stacked product evaluations. The results are stored to a new object called *d_stacked*. 
 
 
 ```{r}
 
 d$ID <- as_factor(d$ID)
 
-names(d)
 
 d_stacked <- pivot_longer(data = d, 
                           cols = OL.Bar.1shot...Lab:OL.Siz.2shot...Fil, 
                           names_to = "product_sample", 
                           values_to = "liking")
 
+
+
+print(d_stacked)
+
+
+```
+
+The results (see above) present the stacked data set. Each consumer, now, has twelf rows, since each consumer has tasted 4 different product formulations within 3 different consumption environments.
+
+For the subsequent rANOVA we need to create additional columns indicating the different levels of the experimental factors of the study. This is done, by the code chunk below. Here we use a combination of the functions *mutate()*, *case_when()*, and *str_detect()* to create two new variables in d_stacked. For example, in the first code block we feed-in d_stacked to a *[mutate](https://dplyr.tidyverse.org/reference/mutate.html)* This function is a generic one, which can add new variables and preserves existing ones. Next, we have to tell *mutate()* a certain build logic for the new variable *sample*. Here, we use *[case_when()](https://dplyr.tidyverse.org/reference/case_when.html)*. Within *case_when()*, we can apply additional logic. The function then applies this logic to each row in d_stacked. Let's focus on one example **str_detect(product_sample, "Bar.1shot") ~ 'Bar_1shot'**. We use *[str_detect()](https://cran.r-project.org/web/packages/stringr/index.html)* from the *stringr* package to evaluate for each line of the variable *product_sample* whether it contains the string "Bar.1shot". If this is the case, the function is setting the value 'Bar_1shot' to the newly created variable *sample*. If no match is detected, no value will be set. In the end, we create two new variables *sample* and *environment*, which indicate for each row in d_stacked, where a consumer has evaluated which formula of cappuccino.
+
+The last two lines tell *R* to handle these variables as categorical factors. 
+
+```{r}
 
 d_stacked <-  d_stacked %>% mutate(
   sample = case_when(
@@ -173,36 +190,47 @@ d_stacked <-  d_stacked %>% mutate(
   ))
 
 d_stacked$sample <- as_factor(d_stacked$sample)
-
 d_stacked$environment <- as_factor(d_stacked$environment)
 
 print(d_stacked)
 
-
 ```
 
+Now, we are ready for conducting the rANOVA. For this purpose, we take advantage of the *anova_test()* function, which *[rstatix](https://cran.r-project.org/web/packages/rstatix/index.html)* package provides. We need to provide four arguments in our case:
 
+* data = the data set to use
+* dv = the dependent variable in the rANOVA (the variable *liking* in the present case)
+* wid = the variable indicating the case IDs of consumers (*ID* in our case)
+* within = a vector of variable names, for which the analysis assumes within-subjects oberseravtions
 
+We assign the results of our rANOVA to a new object named *cappuccino_rANOVA*.
 
+Lastly, we print the results, while limiting the display to 3 digits.
 
 ```{r}
-
-
 
 cappuccino_rANOVA <- anova_test(data = d_stacked,
                                 dv = liking,
                                 wid = ID,
-                                within = c(sample, environment),
-                                detailed = TRUE
-                                )
+                                within = c(sample, environment))
+                                
 
 print(cappuccino_rANOVA, 
       digits = 3)
 
 
-
-
 ```
+
+In an essence, the results are presented within 3 tables. 
+
+The first one contains the main results of the rANOVA. We can see that 3 effects where tested: (1) The main effect of sample (i.e., the different cappuccino recipes), (2) the main effect of environment (i.e., the difference in mean acceptability scores across consumption environments), and (3) the interaction of sample and environment (i.e., are different cappuccino recipes evaluated differently across environments. For example, one sample might be evaluated best in the lab, but worst in the real coffeehouse).
+
+We see that the main effects of sample and environment are both significant as the empirical p-values fall below 5%.
+Thus, we are able to replicate the authors' findings regarding the level effect across consumption environments. More precisely, the effect of *environment* $F_{2, 206}$ = `r round(cappuccino_rANOVA$ANOVA$F[2], digits = 2)`, p = `r round(cappuccino_rANOVA$ANOVA$p[2], digits = 3)` is significant with an effect size of generalized $\eta^{2}_{p}$ = `r round(cappuccino_rANOVA$ANOVA$ges[2], digits = 2)`. This perfectly mirrors the results reported in Web Appendix, dispite the fact, that the Web Appendix obviously reported the wrong value for the generalized $\eta^{2}_{p}$ (0.10 instead of 0.01).
+
+
+The two other tables reported above simply test one of the assumptions for rANOVA, namely whether the data exerts *[Sphericity](https://statistics.laerd.com/statistical-guides/sphericity-statistical-guide.php)* across measurement times. To make it short, the second table shows that this assumption is significantly violated for the main effect of *sample*,
+but not for the other effects under consideration. If the assumption is violated, the one has to pay attention to the third table. Here we can find two proposed correction methods (Hyunh-Feldt [HF] and Greenhouse-Geisser [GG]), of which the latter is most commonly applied.   
 
 ------------------------------------------------------------------------
 
@@ -210,16 +238,22 @@ print(cappuccino_rANOVA,
 
 > Use a different post-hoc test than the authors. Drawing on your chosen test, is the immersive environment still significantly different from the other two environments?
 
-At page 4 of the Web Appendix the authors state: *"[...] running a series of repeated measures analysis of variance analyses (rANOVAs) combined with post hoc Bonferroni-corrected within-subjects t-tests."* Thus, in the article the authors applied the Bonferroni  correction  to account for multiple group comparisons. 
+At page 4 of the Web Appendix the authors state: *"[...] running a series of repeated measures analysis of variance analyses (rANOVAs) combined with post hoc Bonferroni-corrected within-subjects t-tests."* Thus, in the article the authors applied the Bonferroni correction  to account for multiple group comparisons. Researchers in statistics have proposed countless [alternatives for post-hoc tests](https://www.statology.org/anova-post-hoc-tests/) to account for family-wise Alpha error, when comparing multiple groups (in our case the 3 environments). For illustration, we choose Holm's method for the code chunk below, which is less conservative (i.e., differences get significant faster) as compared to Bonferroni.
 
+We implement a combination of the two functions *with()* and *pairwise.t.test()* in the code below and assign the results of our post-hoc procedure to a new object named *post_hoc*. We first submit d_stacked to the *with()* function, which simply tells *R* to conduct several analysis steps with it. The specific analysis is specified next. Here, we call for a form of t-test within the function *pairwise.t.test()*. This function expects us to provide 4 arguments:
+
+* x = the dependent variable in the test (the product liking in our case)
+* g = the variable forming the groups in the pair-wise comparisons
+* 
 
 ```{r}
 
 
-post_hoc <- with(d_stacked, pairwise.t.test(x=liking, 
-                                            g=environment, 
-                                            p.adjust.method="holm", 
-                                            paired=TRUE))
+post_hoc <- d_stacked %>% 
+  with(., pairwise.t.test(x=liking, 
+                          g=environment, 
+                          p.adjust.method="holm", 
+                          paired=TRUE))
 post_hoc
 
 
@@ -234,12 +268,22 @@ post_hoc
 > Only focus on the real coffeehouse environment! If you choose a different post-hoc test as compared to the authors, do you find the same significant differences between products?
 
 This task is very similar to the previous one. The difference is that we have to focus only at the real coffeehouse environment. Furthermore, we are investigating post-hoc tests for the sample factor instead of the environment factor.
- As an alternative to the authors' Bonferroni procedure, we below, again, draw on Holm's post-hoc test.
+ As an alternative to the authors' Bonferroni procedure, we, again, draw on Holm's post-hoc test.
  
  
 ```{r}
 
 
+post_hoc_real_coffeehouse <- d_stacked %>% 
+  dplyr::filter(environment == "Real_Coffeehouse") %>%
+  with(., pairwise.t.test(
+    x=liking, 
+    g=sample, 
+    p.adjust.method="holm", 
+    paired=TRUE))
+
+
+post_hoc_real_coffeehouse
 
 ```
  
