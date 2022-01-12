@@ -295,6 +295,7 @@ print(post_hoc_real_coffeehouse, digits = 3)
  
 The resultant matrix presents the p-values of the 4 pair-wise comparisons. We see that at Alpha=5%, the acceptability scores of all product variants are significantly different from each other with the exception of the tests between *Bar_1shot and Siz_1shot*, as well as between *Bar_2shot and Siz_2shot*. In conclusion, applying Holm's instead of Bonferroni's post-hoc correction does not change the interpretation of the data within the real coffeehouse condition.
 
+
 ------------------------------------------------------------------------
 
 # List of References
