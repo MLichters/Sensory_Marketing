@@ -32,7 +32,7 @@ knitr::opts_chunk$set(echo = TRUE, cache = TRUE, warning=FALSE, message=FALSE, i
 
 [Connect with me on Open Science Framework](https://osf.io/u7hyz/) \| [Contact me via LinkedIn](https://www.linkedin.com/in/lichters/)
 
-*Depending on your machine it might be necessary to use right-click -\> open in new browser window.*
+*Depending on your machine it might be necessary to use right-click -> open in new browser window.*
 
 ------------------------------------------------------------------------
 
