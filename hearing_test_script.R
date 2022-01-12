@@ -16,8 +16,8 @@ ggplot(d, aes(x=Age, y=frequency, color=Gender)) +
   geom_smooth(method=lm , color="red", fill="#69b3a2", se=TRUE) +
   annotate(geom = "text", x = 27, y = 17000, label = paste("Model : ", 
                                                            round(model$coefficients[1], digits=2), 
-                                                           " + " , 
-                                                           round(model$coefficients[2], digits=2), 
+                                                           " - " , 
+                                                           abs(round(model$coefficients[2], digits=2)), 
                                                            "*years"  , "\n\n" , "R²(adjusted) = ", 
                                                            round(summary(model)$adj.r.squared, digits=2) 
                                                            ) , hjust = "left") +
