@@ -39,6 +39,7 @@ knitr::opts_chunk$set(echo = TRUE, cache = TRUE, warning=FALSE, message=FALSE, i
 R analysis script presenting the examples studied in Chapter 7 of the Sensory Marketing lecture
 
 > If this exercise grabs your attention, please check-out our study programs at the Chemnitz University of Technology by clicking on the logo (Germany): <a title="Chemnitz University of Technology" href="https://www.tu-chemnitz.de/wirtschaft/fakultaet/studiengaenge.php.en"><img src="TU_Chemnitz_Logo.png" alt="Chemnitz University of Technology"/></a>
+For example, our master study program in "Value-Chain-Management" (VCM) is covering a lecture on Sensory Marketing.
 
 # Loading packages that we will use
 
@@ -81,6 +82,23 @@ sessionInfo()
 ------------------------------------------------------------------------
 
 # Example for Discrimination test - Triangle test. 
+
+Triangle tests are very popular in sensory product research as tests for discrimination, and help to evaluate, whether consumers can significantly distinguish between product alternatives (see, e.g., @Lawless.2010, chap. 4.4). In our lecture example on Lasagna variants, we observe the following results on the basis of n=100 consumers:
+
+|                     | Correctly identified odd sample    | Incorrect response    |
+| ------------------- |:----------------------------------:| :------------------------:|
+| **Observed**        | 43 (O~1~)                          | 57 (O~2~)                 |
+| **Expected**        | 33.$\bar{3}$ (E~1~)                | 66.$\bar{6}$ (E~2~)       |
+
+In our example, analysis draw on $\chi^{2}$-test (without continuity correction).
+Here, the test statistic is calculated as follows:
+
+$\chi^{2}~(1)~=$
+
+$\sum_ t_i$
+
+Furthermore, we know from lectures in statistics that the df in a $\chi^{2}$-test equal: (number of rows -1) * (number of columns -1).
+Thus, df=(2-1)*(2-1)=1. The degrees of freedom are 1.
 
 ```{r}
 
