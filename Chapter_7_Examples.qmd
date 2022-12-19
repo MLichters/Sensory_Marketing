@@ -1,0 +1,212 @@
+---
+title-block-banner: true
+title: "Lecture Sensory Marketing at Chemnitz University of Technology"
+subtitle: "Chapter 7 - Examples for Selected Analyses"
+author: 
+  - name: Univ.-Prof. Dr. Marcel Lichters
+    url: https://www.tu-chemnitz.de/wirtschaft/bwl2/index.html
+    affiliation: Chemnitz University of Technology
+    affiliation-url: https://www.tu-chemnitz.de/index.html.en
+date: now
+date-format: full
+citation:
+  language: "en"
+  type: post
+  url: https://rpubs.com/M_Lichters/PSM
+  title: 'Lecture Sensory Marketing at Chemnitz University of Technology: Examples for Selected Analyses'
+format:
+  html:
+    toc: true
+    toc-location: left
+    code-fold: false
+    code-link: true
+    code-summary: "Show the code"
+    code-tools: true
+    code-copy: hover
+    number-sections: true
+    number-depth: 3
+    citations-hover: true
+    footnotes-hover: true
+email-obfuscation: javascript
+editor: source
+bibliography: references.bib
+editor_options: 
+  chunk_output_type: console
+google-scholar: true
+---
+
+<a title="Follow me on ResearchGate" href="https://www.researchgate.net/profile/Marcel_Lichters?cp=shp"><img src="https://www.researchgate.net/images/public/profile_share_badge.png" alt="Follow me on ResearchGate"/></a>
+
+[Connect with me on Open Science Framework](https://osf.io/u7hyz/) \| [Contact me via LinkedIn](https://www.linkedin.com/in/lichters/)
+
+*Depending on your machine it might be necessary to use right-click -\> open in new browser window.*
+
+------------------------------------------------------------------------
+
+R analysis script presenting the examples teached throuout chapter 7.
+
+::: callout-tip
+## If this graps your attention
+
+If this exercise grabs your attention, please check-out our study programs at the Chemnitz University of Technology by clicking on the logo (Germany)
+:::
+
+<a title="Chemnitz University of Technology" href="https://www.tu-chemnitz.de/wirtschaft/fakultaet/studiengaenge.php.en"><img src="TU_Chemnitz_Logo.png" alt="Chemnitz University of Technology" width="700cm"/></a>
+
+```{r}
+#| include: false
+
+
+#clear workspace
+rm(list = ls())
+
+
+# load packages
+if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
+
+library(pacman)
+
+pacman::p_load(haven, kableExtra, knitr, 
+               labelled, tidyverse, remotes)
+
+
+install_version('sensR', '1.5-2', repos = "https://cran.rstudio.com/")
+library(sensR)
+
+
+```
+
+# Loading packages
+
+::: callout-important
+## Beware!
+
+*R* is a context-sensitive language. Thus, 'data' will be interpreted not in the same way as 'Data' will.
+:::
+
+In *R* most functionality is provided by additional packages.\
+Most of the packages are well-documented, see: <https://cran.r-project.org/>
+
+1.  The code chunk below first evaluates if the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html) is already installed to your machine. If yes, the corresponding package will be loaded. If not, *R* will install the package.
+
+2.  Alternatively, you can do this manually first by executing *install.packages("pacman")* and then *library(pacman)*.
+
+3.  The second line then loads the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html).
+
+4.  The third line uses the function *p_load()* from the pacman package to install (if necessary) and loads all packages that we provide as arguments (e.g., [haven](https://cran.r-project.org/web/packages/haven/index.html), which provides functions to import foreign statistical data formats into *R*).
+
+5.  Some packages we will use are discontinued from being supported on CRAN. This is the case for [sensR](https://cran.r-project.org/web/packages/sensR/index.html) @sensR
+
+```{r}
+
+
+if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
+
+library(pacman)
+
+pacman::p_load(haven, kableExtra, knitr, 
+               labelled, tidyverse, remotes)
+
+install_version('sensR', '1.5-2', repos = "https://cran.rstudio.com/")
+library(sensR)
+
+
+```
+
+::: {.callout-caution collapse="true"}
+## Expand to learn more about calling functions
+
+In all code chunks throughout this script you are able to receive additional help on each used function by clicking on its name (or via right-click and then open in new browser tab). Alternatively, when coding, we can see which arguments a function understands by pressing 'F1' while setting the cursor into the function's name.
+:::
+
+------------------------------------------------------------------------
+
+Here is the *R* session info which gives you information on my machine, all loaded packages and their version:
+
+```{r  }
+
+sessionInfo()
+
+
+```
+
+------------------------------------------------------------------------
+
+# Example for Discrimination test - Triangle test.
+
+Triangle tests are very popular in sensory product research as tests for discrimination, and help to evaluate, whether consumers can significantly distinguish between product alternatives (see, e.g., \@Lawless.2010, chap. 4.4). In our lecture example on Lasagna variants, we observe the following results on the basis of n=100 consumers:
+
+|              | Correctly identified odd sample | Incorrect response  |
+|--------------|:-------------------------------:|:-------------------:|
+| **Observed** |            43 (O~1~)            |      57 (O~2~)      |
+| **Expected** |       33.$\bar{3}$ (E~1~)       | 66.$\bar{6}$ (E~2~) |
+
+In our example, analysis draw on $\chi^{2}$-test (without continuity correction). Here, the test statistic is calculated as follows:
+
+$\chi^{2}_{(1)}=\sum\frac{(observed-expected)^2}{expected}=[\frac{(O_{1}-E_{1})^2}{E_{1}}]+[\frac{(O_{2}-E_{2})^2}{E_{2}}]=[\frac{(43-33.\bar{3})^2}{33.\bar{3}}]+\frac{(57-66.\bar{6})^2}{66.\bar{6}}]=2.803+1.402=4.205$
+
+We know from lectures in statistics that the df in a $\chi^{2}$-test equal: (number of rows -1) \* (number of columns -1). Thus, df=(2-1)\*(2-1)=1. The degrees of freedom are 1.
+
+In *R*, for example the package [sensR](https://cran.r-project.org/web/packages/sensR/) is providing functions to handle nearly all types of discrimination tests, including Triangle tests (CITE). We will use the function **discrim()**. This function allows us to specify many arguments (see help by pressing 'F1'). We will do so for
+
+-   correct = the number of correct answers
+-   total = total number of responses
+-   conf.level = significance level (Type I error probability $\alpha$)
+-   method = the discrimination protocol applied (see lecture slides for the various options)
+-   statistic = The type of analysis strategy to apply for the data (whether one wants to use normal distribution or Chi² etc.)
+-   power = Power of test (1 minus Type II error probability)
+
+The function, furthermore, assumes us to set one of these arguments to **NULL**. By doing so, we tell the function to use the remaining 4 parameters to search for the value of the fifth. In our case, we are searching for 'N', therefore, we set 'N=NULL'.
+
+We assign the results of our power analysis to a new object named 'results'. Then we call for its content.
+
+```{r}
+
+triangle_test <- discrim(
+  correct= 43, 
+  total= 100,
+  conf.level = 0.95,
+  method = "triangle", 
+  statistic = "score",
+  test = "difference")
+
+
+print(triangle_test)
+
+
+#plot(triangle_test)
+
+
+
+
+```
+
+```{r, eval=FALSE, echo=FALSE}
+
+d.primePwr(d.primeA = 0.5454, 
+           d.prime0 = 0, 
+           sample.size = 100, 
+           alpha = 0.05,
+           method = "triangle", 
+           test = "difference", statistic = "exact")
+
+
+
+```
+
+# Your Turn
+
+Try to conduct a similar DEA with the other input variable provided by the data set (*online_advertisment*).
+
+# Using RStudio Cloud
+
+If you are new to the *R* universe (rumors say there are still folks outside), it is also an option to run all of the code presented in the script via [RStudio Cloud](https://rstudio.cloud/). This solution allows you to analyze your data using RStudio, directly from your web browser, which comes with several advantages:
+
+-   For you as student its for free (just sign up)
+-   No need to install *R* & *RStudio*
+-   No need to update *R* and packages
+-   All packages used are already installed and loaded in the corresponding *RStudio Cloud* project <https://rstudio.cloud/content/4152691>.
+
+::: callout-note
+Just make sure to create a copy of the provided project to your own account! Otherwise, results are not saved (it's a temporary project).
+:::
