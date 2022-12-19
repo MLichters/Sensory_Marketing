@@ -30,6 +30,7 @@ format:
 email-obfuscation: javascript
 editor: source
 bibliography: references.bib
+csl: apa-single-spaced.csl
 editor_options: 
   chunk_output_type: console
 google-scholar: true
@@ -48,10 +49,10 @@ R analysis script presenting the examples teached throuout chapter 7.
 ::: callout-tip
 ## If this graps your attention
 
-If this exercise grabs your attention, please check-out our study programs at the Chemnitz University of Technology by clicking on the logo (Germany)
+If this exercise grabs your attention, please check out our study programs at the Chemnitz University of Technology by clicking on the logo (Germany)
 :::
 
-<a title="Chemnitz University of Technology" href="https://www.tu-chemnitz.de/wirtschaft/fakultaet/studiengaenge.php.en"><img src="TU_Chemnitz_Logo.png" alt="Chemnitz University of Technology" width="700cm"/></a>
+<a title="Chemnitz University of Technology" href="https://www.tu-chemnitz.de/wirtschaft/fakultaet/studiengaenge.php.en">[![Chemnitz University of Technology](TU_Chemnitz_Logo.png){alt="Chemnitz University of Technology" width="7.7cm"}](https://www.tu-chemnitz.de/wirtschaft/fakultaet/studiengaenge.php.en)</a>
 
 ```{r}
 #| include: false
@@ -64,13 +65,16 @@ rm(list = ls())
 # load packages
 if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
+
 library(pacman)
 
-pacman::p_load(haven, kableExtra, knitr, 
-               labelled, tidyverse, remotes)
+pacman::p_load(
+  haven, kableExtra, knitr,
+  labelled, tidyverse, remotes
+)
 
+if (!"sensR" %in% rownames(installed.packages())) install_version("sensR", "1.5-2", repos = "https://cran.rstudio.com/")
 
-install_version('sensR', '1.5-2', repos = "https://cran.rstudio.com/")
 library(sensR)
 
 
@@ -87,27 +91,34 @@ library(sensR)
 In *R* most functionality is provided by additional packages.\
 Most of the packages are well-documented, see: <https://cran.r-project.org/>
 
-1.  The code chunk below first evaluates if the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html) is already installed to your machine. If yes, the corresponding package will be loaded. If not, *R* will install the package.
+1.  The code chunk below first evaluates if the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html) [@pacman] is already installed to your machine. If yes, the corresponding package will be loaded. If not, *R* will install the package. Alternatively, you can do this manually first by executing *install.packages("pacman")* and then *library(pacman)*.
 
-2.  Alternatively, you can do this manually first by executing *install.packages("pacman")* and then *library(pacman)*.
+2.  The second chunk then loads the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html).
 
-3.  The second line then loads the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html).
+3.  The third chunk uses the function *p_load()* from the pacman package to install (if necessary) and load all packages that we provide as arguments (e.g., [haven](https://cran.r-project.org/web/packages/haven/index.html) [@haven], which provides functions to import foreign statistical data formats into *R*).
 
-4.  The third line uses the function *p_load()* from the pacman package to install (if necessary) and loads all packages that we provide as arguments (e.g., [haven](https://cran.r-project.org/web/packages/haven/index.html), which provides functions to import foreign statistical data formats into *R*).
+4.  Some packages we will use are discontinued from being supported on CRAN. This is the case for [sensR](https://cran.r-project.org/web/packages/sensR/index.html) [@sensR]. Thus, the fourth chunk first checks whether sensR is already installed. IF not, the function *install_version()* from the package [remotes](https://cran.r-project.org/web/packages/remotes/index.html) [@remotes] is used to install the last supported version.
 
-5.  Some packages we will use are discontinued from being supported on CRAN. This is the case for [sensR](https://cran.r-project.org/web/packages/sensR/index.html) @sensR
+5.  Finally, the last command loads the sensR package.
 
 ```{r}
+#| eval: false
 
+if (!"pacman" %in% 
+    rownames(installed.packages())) install.packages("pacman")
 
-if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(haven, kableExtra, knitr, 
-               labelled, tidyverse, remotes)
+pacman::p_load(
+  haven, kableExtra, knitr,
+  labelled, tidyverse, remotes
+)
 
-install_version('sensR', '1.5-2', repos = "https://cran.rstudio.com/")
+if (!"sensR" %in% rownames(installed.packages())) install_version("sensR", 
+                                                                  "1.5-2", 
+                                                                  repos = "https://cran.rstudio.com/")
+
 library(sensR)
 
 
@@ -134,31 +145,29 @@ sessionInfo()
 
 # Example for Discrimination test - Triangle test.
 
-Triangle tests are very popular in sensory product research as tests for discrimination, and help to evaluate, whether consumers can significantly distinguish between product alternatives (see, e.g., \@Lawless.2010, chap. 4.4). In our lecture example on Lasagna variants, we observe the following results on the basis of n=100 consumers:
+Triangle tests are very popular in sensory product research as tests for discrimination, and help to evaluate, whether consumers can significantly distinguish between product alternatives (see, e.g., @lawless2010, chap. 4.4). In our lecture example on Lasagna variants, we observe the following results on the basis of n=100 consumers:
 
 |              | Correctly identified odd sample | Incorrect response  |
 |--------------|:-------------------------------:|:-------------------:|
 | **Observed** |            43 (O~1~)            |      57 (O~2~)      |
 | **Expected** |       33.$\bar{3}$ (E~1~)       | 66.$\bar{6}$ (E~2~) |
 
-In our example, analysis draw on $\chi^{2}$-test (without continuity correction). Here, the test statistic is calculated as follows:
+In most simplest case, analysis draws on a $\chi^{2}$-test (without continuity correction). Here, the test statistic is calculated as follows:
 
 $\chi^{2}_{(1)}=\sum\frac{(observed-expected)^2}{expected}=[\frac{(O_{1}-E_{1})^2}{E_{1}}]+[\frac{(O_{2}-E_{2})^2}{E_{2}}]=[\frac{(43-33.\bar{3})^2}{33.\bar{3}}]+\frac{(57-66.\bar{6})^2}{66.\bar{6}}]=2.803+1.402=4.205$
 
 We know from lectures in statistics that the df in a $\chi^{2}$-test equal: (number of rows -1) \* (number of columns -1). Thus, df=(2-1)\*(2-1)=1. The degrees of freedom are 1.
 
-In *R*, for example the package [sensR](https://cran.r-project.org/web/packages/sensR/) is providing functions to handle nearly all types of discrimination tests, including Triangle tests (CITE). We will use the function **discrim()**. This function allows us to specify many arguments (see help by pressing 'F1'). We will do so for
+In *R*, for example the package [sensR](https://cran.r-project.org/web/packages/sensR/) is providing functions to handle nearly all types of discrimination tests, including Triangle tests [@naes2010, chap. 7]. We will use the function **discrim()**. This function allows us to specify many arguments (see help by pressing 'F1'). We will do so for
 
--   correct = the number of correct answers
+-   correct = the number of correct answers observed
 -   total = total number of responses
 -   conf.level = significance level (Type I error probability $\alpha$)
 -   method = the discrimination protocol applied (see lecture slides for the various options)
 -   statistic = The type of analysis strategy to apply for the data (whether one wants to use normal distribution or Chi² etc.)
--   power = Power of test (1 minus Type II error probability)
+-   test = Whether to conduct a "difference" or "similarity" test.
 
-The function, furthermore, assumes us to set one of these arguments to **NULL**. By doing so, we tell the function to use the remaining 4 parameters to search for the value of the fifth. In our case, we are searching for 'N', therefore, we set 'N=NULL'.
-
-We assign the results of our power analysis to a new object named 'results'. Then we call for its content.
+We assign the results of our Discrimination Triangle test to a new object named 'triangle_test'. Then we call for its content.
 
 ```{r}
 
@@ -168,18 +177,17 @@ triangle_test <- discrim(
   conf.level = 0.95,
   method = "triangle", 
   statistic = "score",
-  test = "difference")
+  test = "difference"
+  )
 
-
-print(triangle_test)
-
-
-#plot(triangle_test)
-
-
+triangle_test
 
 
 ```
+
+
+
+
 
 ```{r, eval=FALSE, echo=FALSE}
 
