@@ -241,6 +241,10 @@ sample_sizes %>%
 We can see that with a sample size of n=200 and above, we realize a power of over 85%.
 :::
 
+------------------------------------------------------------------------
+
+
+
 # Using Posit Cloud (formerly RStudio Cloud)
 
 If you are new to the *R* universe (rumors say there are still folks outside), it is also an option to run all of the code presented in the script via [Posit Cloud](https://posit.cloud). This solution allows you to analyze your data using RStudio, directly from your web browser, which comes with several advantages:
