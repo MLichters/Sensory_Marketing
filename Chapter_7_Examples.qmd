@@ -25,7 +25,8 @@ format:
     code-fold: false
     code-link: true
     code-summary: "Show the code"
-    code-tools: true
+    code-overflow: wrap
+    code-tools: false
     code-copy: hover
     number-sections: true
     number-depth: 3
@@ -49,7 +50,7 @@ knitr::opts_chunk$set(echo = TRUE, cache = TRUE, warning=FALSE, message=FALSE, i
 
 R analysis script presenting the examples studied in Chapter 7 of the Sensory Marketing lecture
 
-In this exercise students should practice analyzing data with [*R*](https://cran.r-project.org/) and [*RStudio*](https://posit.co/products/open-source/rstudio/). These skills will serve them well in the progress of their study time and in the future. The internet provides countless further examples. Besides, there exist very good text books (e.g., @lê2015, @chapman2019).
+In this exercise students should practice analyzing data with [*R*](https://cran.r-project.org/) and [*RStudio*](https://posit.co/products/open-source/rstudio/). These skills will serve them well in the progress of their study time and in the future. The internet provides countless further examples. Besides, there exist very good text books (e.g., @naes2010a, @lê2015, @chapman2019).
 
 # Loading packages that we will use
 
@@ -85,9 +86,12 @@ if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(tidyverse, sensR, SensoMineR, remotes)
+pacman::p_load(tidyverse, SensoMineR, remotes, purrr)
 
-if (!"pacman" %in% rownames(installed.packages())) install_version(package = 'sensR', version = '1.5-2', repos = "https://cloud.r-project.org")
+if (!"sensR" %in% rownames(installed.packages())) 
+  install_version(package = 'sensR', 
+                  version = '1.5-2', 
+                  repos = "https://cloud.r-project.org")
 
 library(sensR)
 
@@ -101,10 +105,13 @@ if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(tidyverse, sensR, SensoMineR, remotes)
+pacman::p_load(tidyverse, SensoMineR, remotes, purrr)
 
-if (!"pacman" %in% rownames(installed.packages())) 
-  install_version(package = "sensR", version = "1.5-2", repos = "https://cloud.r-project.org")
+if (!"sensR" %in% rownames(installed.packages())) install_version(package = "sensR", 
+                  version = "1.5-2", 
+                  repos = "https://cloud.r-project.org")
+
+
 
 library(sensR)
 
@@ -125,7 +132,7 @@ sessionInfo()
 
 # Example for Discrimination test - Triangle test.
 
-Triangle tests are very popular in sensory product research as tests for discrimination, and help to evaluate, whether consumers can significantly distinguish between product alternatives (see, e.g., \@lawless2010, chap. 4.4). In our lecture example on Lasagna variants, we observe the following results on the basis of n=100 consumers:
+Triangle tests are very popular in sensory product research as tests for discrimination, and help to evaluate, whether consumers can significantly distinguish between product alternatives [see, e.g., @lawless2010, chap. 4.4]. In our lecture example on Lasagna variants, we observe the following results on the basis of n=100 consumers:
 
 |              | Correctly identified odd sample | Incorrect response  |
 |--------------|:-------------------------------:|:-------------------:|
@@ -167,39 +174,82 @@ triangle_test
 
 ```
 
-
 ::: callout-tip
-As the results of the $\chi^{2}$-test is significant (`r round(triangle_test$p.value, digits = 3)`), we have to reject H~0~. Thus, consumers can reliably distinguish between the new and the old lasagna. 
+## Interpretation
+
+As the results of the $\chi^{2}$-test is significant (`r round(triangle_test$p.value, digits = 3)`), we have to reject H~0~. Thus, consumers can reliably distinguish between the new and the old lasagna.
 :::
 
-In the output above, *pc* means the percentage of correct discriminators (43/100). pd stands for the estimated proportion of individuals in the (relevant) population that would detect the product difference. Which is in the case of a Triangle test: $pd=\frac{pc-1/3}{2/3}$. Note that the confidence
-interval for pd has an upper limit of `r round(triangle_test$coefficients[2, 4]*100, digits = 2)`%. Thus, in the worst case, the true proportion of discriminators is almost as high as 30%.
-The Thurstonian approach of transforming the number of correct answers into an estimate, called d-prime of the underlying (relative) sensory difference is an attempt to overcome the concepts of pc and pd, since these are dependent on the concrete test protocol one has applied (e.g., Triangle vs. 3-AFC tests). The value is significant as the confidence interval does not include 1.
-
+-   In the output above, *pc* means the percentage of correct discriminators (43/100).
+-   pd stands for the estimated proportion of individuals in the (relevant) population that would detect the product difference. Which is in the case of a Triangle test: $pd=\frac{pc-1/3}{2/3}$. Note that the confidence interval for pd has an upper limit of `r round(triangle_test$coefficients[2, 4]*100, digits = 2)`%. Thus, in the worst case, the true proportion of discriminators is almost as high as 30%. @schlich1993 proposed the following limits for *pd* as *small*, *medium*, *large* differences: 0.25, 0.375, and 0.50.
+-   The Thurstonian approach of transforming the number of correct answers into an estimate, called d-prime of the underlying (relative) sensory difference is an attempt to overcome the concepts of *pc* and *pd*, since these are dependent on the concrete test protocol one has applied (e.g., Triangle vs. 3-AFC tests). The higher the value the higher is the degree of difference between the two products that were tested.
 
 ------------------------------------------------------------------------
 
-# Example of a Post-hoc Power Anylsis for a Triangle Test
+# Example of a Post-hoc Power Analyis for a Triangle Test
 
-The [sensR](https://cran.r-project.org/web/packages/sensR/) package also provides functions that facilitate sample size planning for discrimination tests (i.e., statistical power analysis).
-To provide an example, we will use the d-prime estimate from the Triangle test on lasagna above as input the determine the statistical power of a Triangle test with n=100.
+To get an idea about the statistical Power in a Similarity or Dissimilarity test protocol, the [sensR](https://cran.r-project.org/web/packages/sensR/) package also provides functions that facilitate sample size planning for discrimination tests (i.e., statistical power analysis). To provide an example, we will use the d-prime estimate from the Triangle test on lasagna above `r round(triangle_test$coefficients[3, 1], digits = 2)` as input the determine the statistical power of the Triangle test with n=100.
 
-In the code chunk below, we use the obtained d-prime as input for the function *d.primePwr()*.
-Furthermore, we specify all other aspects of our exemplary Traingle test. 
+In the code chunk below, we use the obtained d-prime as input for the function *d.primePwr()*. Furthermore, we specify all other aspects of our exemplary Triangle test.
 
 ```{r}
 
-d.primePwr(d.primeA = 1.075, 
-           d.prime0 = 0, 
-           sample.size = 100, 
-           alpha = 0.05,
-           method = "triangle", 
-           test = "difference", statistic = "exact")
+power_triangle <- d.primePwr(
+  d.primeA = 1.075,
+  sample.size = 100,
+  alpha = 0.05,
+  method = "triangle",
+  test = "difference", statistic = "exact"
+)
 
+power_triangle
 
 
 ```
 
+::: callout-tip
+## Interpretation
+
+With the observed effect size for the difference, our Triangle test protocol only has a power of `r round(power_triangle*100, digits = 2)`. Thus, if the observed effect is the true effect in the underlying population, then we would have this chance to find a significant difference in a Triangle test with n=100 and $\alpha$=5%, which is insufficient.
+:::
+
+As a final remark, we can estimate how many consumers should be tested in order to obtain a sufficient statistical power based on the observed effect size for the difference, a Triangle test, and $\alpha$=5%. For this purpose, we first establish s list of varying sample sizes below. Afterwards, we use this list as input for the *sample.size* argument of the *d.primePwr()* function. Usually, this function does not accept a list of values as arguments. To handle this problem, we additionally apply the *map()* function provided by the [purrr](https://cran.r-project.org/web/packages/purrr/index.html) package [@purrr]. In the corresponding call of *d.primePwr()* we set **sample.size = .**, to tell the map function to use each element of the input list as input for the sample size argument in repeated calls of *d.primePwr()*.
+
+```{r}
+
+sample_sizes <- list(n100 = 100, 
+                     n200 = 200, 
+                     n300 = 300, 
+                     n400 = 400, 
+                     n500 = 500)
 
 
+sample_sizes %>%
+  map(~ d.primePwr(
+    d.primeA = 1.075,
+    sample.size = .,
+    alpha = 0.05,
+    method = "triangle",
+    test = "difference", statistic = "exact"
+  ))
 
+```
+
+::: callout-tip
+## Interpretation
+
+We can see that with a sample size of n=200 and above, we realize a power of over 85%.
+:::
+
+# Using Posit Cloud (formerly RStudio Cloud)
+
+If you are new to the *R* universe (rumors say there are still folks outside), it is also an option to run all of the code presented in the script via [Posit Cloud](https://posit.cloud). This solution allows you to analyze your data using RStudio, directly from your web browser, which comes with several advantages:
+
+-   For you as student its for free (just sign up)
+-   No need to install *R* & *RStudio*
+-   No need to update *R* and packages
+-   All packages used are already installed and loaded in the corresponding *Posit Cloud* project <https://posit.cloud/content/5201389>.
+
+::: callout-note
+Just make sure to create a copy of the provided project to your own account! Otherwise, results are not saved (it's a temporary project).
+:::
