@@ -69,7 +69,7 @@ Most of the packages are well-documented, See: <https://cran.r-project.org/>
 
 4.  The third line uses the function *p_load()* from the pacman package to install (if necessary) and load all packages that we provide as arguments (e.g., [tidyverse](https://cran.r-project.org/web/packages/tidyverse/)).
 
-5.  This only works if all packages are still available on *CRAN*. However, if a package is discontinued on *CRAN*, there is always the latest version in the archive. For our analysis we also draw on the discontinued package [*sensR*](https://cran.r-project.org/web/packages/sensR/index.html) [@sensR]. To install this outdated package, we use the function *install_version()* from [*remotes*](https://cran.r-project.org/web/packages/remotes/index.html) [@remotes], which expects us to provide th package name, the version we wish to install from *CRAN*s archive, and a *CRAN* mirror url.
+5.  This only works if all packages are still available on *CRAN*. However, if a package is discontinued on *CRAN*, there is always the latest version in the archive. For our analysis we also draw on the discontinued package [*sensR*](https://cran.r-project.org/web/packages/sensR/index.html) [@sensR]. To install this outdated package, we use the function *install_version()* from [*remotes*](https://cran.r-project.org/web/packages/remotes/index.html) [@remotes], which expects us to provide the package name, the version we wish to install from *CRAN*s archive, and a *CRAN* mirror url.
 
 6.  Finally, the last line (*library(sensR)*) loads the package.
 
@@ -132,7 +132,7 @@ sessionInfo()
 
 # Example for Discrimination test - Triangle test.
 
-Triangle tests are very popular in sensory product research as tests for discrimination, and help to evaluate, whether consumers can significantly distinguish between product alternatives [see, e.g., @lawless2010, chap. 4.4]. In our lecture example on Lasagna variants, we observe the following results on the basis of n=100 consumers:
+Triangle tests are very popular in sensory product research as tests for discrimination, and help to evaluate whether consumers can significantly distinguish between product alternatives [see, e.g., @lawless2010, chap. 4.4]. In our lecture example on Lasagna variants, we observe the following results on the basis of n=100 consumers:
 
 |              | Correctly identified odd sample | Incorrect response  |
 |--------------|:-------------------------------:|:-------------------:|
@@ -188,7 +188,7 @@ As the results of the $\chi^{2}$-test is significant (`r round(triangle_test$p.v
 
 # Example of a Post-hoc Power Analyis for a Triangle Test
 
-To get an idea about the statistical Power in a Similarity or Dissimilarity test protocol, the [sensR](https://cran.r-project.org/web/packages/sensR/) package also provides functions that facilitate sample size planning for discrimination tests (i.e., statistical power analysis). To provide an example, we will use the d-prime estimate from the Triangle test on lasagna above `r round(triangle_test$coefficients[3, 1], digits = 2)` as input the determine the statistical power of the Triangle test with n=100.
+To get an idea about the statistical Power of a Similarity or Dissimilarity test protocol, the [sensR](https://cran.r-project.org/web/packages/sensR/) package also provides functions that facilitate sample size planning for discrimination tests (i.e., statistical power analysis). To provide an example, we will use the d-prime estimate from the Triangle test on lasagna above (`r round(triangle_test$coefficients[3, 1], digits = 2)`) as input the determine the statistical power of the Triangle test with n=100.
 
 In the code chunk below, we use the obtained d-prime as input for the function *d.primePwr()*. Furthermore, we specify all other aspects of our exemplary Triangle test.
 
@@ -213,7 +213,7 @@ power_triangle
 With the observed effect size for the difference, our Triangle test protocol only has a power of `r round(power_triangle*100, digits = 2)`. Thus, if the observed effect is the true effect in the underlying population, then we would have this chance to find a significant difference in a Triangle test with n=100 and $\alpha$=5%, which is insufficient.
 :::
 
-As a final remark, we can estimate how many consumers should be tested in order to obtain a sufficient statistical power based on the observed effect size for the difference, a Triangle test, and $\alpha$=5%. For this purpose, we first establish s list of varying sample sizes below. Afterwards, we use this list as input for the *sample.size* argument of the *d.primePwr()* function. Usually, this function does not accept a list of values as arguments. To handle this problem, we additionally apply the *map()* function provided by the [purrr](https://cran.r-project.org/web/packages/purrr/index.html) package [@purrr]. In the corresponding call of *d.primePwr()* we set **sample.size = .**, to tell the map function to use each element of the input list as input for the sample size argument in repeated calls of *d.primePwr()*.
+As a final remark, we can estimate how many consumers should be tested in order to obtain a sufficient statistical power based on the observed effect size for the difference, a Triangle test, and $\alpha$=5%. For this purpose, we first establish a list of varying sample sizes below. Afterwards, we use this list as input for the *sample.size* argument of the *d.primePwr()* function. Usually, this function does not accept a list of values as arguments. To handle this problem, we additionally apply the *map()* function provided by the [purrr](https://cran.r-project.org/web/packages/purrr/index.html) package [@purrr]. In the corresponding call of *d.primePwr()* we set **sample.size = .**, to tell the map function to use each element of the input list as input for the sample size argument in repeated calls of *d.primePwr()*.
 
 ```{r}
 
