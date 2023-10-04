@@ -1,0 +1,87 @@
+---
+title-block-banner: true
+title: "Sensory Marketing & Product Innovation"
+subtitle: "Exercise 1 - The Light is Healthy Intuition"
+author: 
+  - name: Prof. Dr. Marcel Lichters
+    url: https://www.marketing.ovgu.de/
+    affiliation: Otto-von-Guericke-University Magdeburg
+    affiliation-url: https://www.ovgu.de/en/
+date: now
+date-format: full
+citation:
+  language: "en"
+  type: post
+  url: https://rpubs.com/M_Lichters/PSM
+  title: 'Sensory Marketing & Product Innovation: Exercise 1 - The Light is Healthy Intuition'
+format:
+  html:
+    toc: true
+    toc-location: left
+    code-fold: false
+    code-link: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-tools: false
+    code-copy: hover
+    number-sections: true
+    number-depth: 3
+    citations-hover: true
+    footnotes-hover: true
+email-obfuscation: javascript
+editor: source
+bibliography: references.bib
+editor_options: 
+  chunk_output_type: console
+google-scholar: true
+---
+
+```{r setup, include=FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE, warning=FALSE, message=FALSE, include = TRUE)
+
+
+```
+
+# Quarto
+
+
+**************************************************************
+
+<a title="Follow me on ResearchGate" href="https://www.researchgate.net/profile/Marcel_Lichters?cp=shp"><img src="https://www.researchgate.net/images/public/profile_share_badge.png" alt="Follow me on ResearchGate" /></a>
+
+[Connect with me on Open Science Framework](https://osf.io/u7hyz/) | 
+[Contact me via LinkedIn](https://www.linkedin.com/in/lichters/) 
+
+*Depending on your machine it might be necessary to use right-click -> open in new browser window.*
+
+**************************************************************
+
+
+R analysis script presenting the solutions for the exercise in Sensory Marketing regarding Li, Heuvinck, & Pandelaere [-@Li.2021]. In one of the questions students are asked to estimate the appropriate samples size for a replication of Study 1's findings (under $\alpha$=5%, Power=0.8).
+
+> If this exercise grabs your attention, please check-out our study programs at the Chemnitz University of Technology by clicking on the logo (Germany): 
+<a title="Chemnitz University of Technology" href="https://www.tu-chemnitz.de/wirtschaft/fakultaet/studiengaenge.php.en"><img src="TU_Chemnitz_Logo.png" alt="Chemnitz University of Technology" /></a>
+
+
+
+
+
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this 
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
