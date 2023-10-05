@@ -1,0 +1,4 @@
+- source: Exercise_The_Light_Healthy.qmd
+  quarto-pub:
+    - id: d0026f7e-a29f-4875-be27-fc1833ed2c21
+      url: 'https://lichters.quarto.pub/sensory-marketing-and-product-innovation'

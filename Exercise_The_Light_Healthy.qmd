@@ -1,6 +1,6 @@
 ---
 title-block-banner: true
-title: "Sensory Marketing & Product Innovation"
+title: "Sensory Marketing and Product Innovation"
 subtitle: "Exercise 1 - The Light is Healthy Intuition"
 author: 
   - name: 
@@ -19,16 +19,16 @@ author:
     orcid: 0000-0002-3710-2292
 date: now
 date-format: full
+csl: apa-old-doi-prefix.csl
 citation:
   language: "en"
   type: post
-  url: https://rpubs.com/M_Lichters/SMPIExercise1
+  url: https://marcel-lichters.quarto.pub/smpiexercise1/
   title: 'Sensory Marketing & Product Innovation: Exercise 1 - The Light is Healthy Intuition'
 appendix-cite-as: display
 format:
   html:
     theme: cosmo
-    background-color: rgb(93, 142, 166)
     toc: true
     toc-location: left
     code-fold: false
