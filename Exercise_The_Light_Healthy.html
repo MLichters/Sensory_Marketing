@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.3.450">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
 <meta name="author" content="Prof.&nbsp;Dr.&nbsp;Marcel Lichters">
-
 <title>Sensory Marketing &amp; Product Innovation</title>
 <style>
 code{white-space: pre-wrap;}
@@ -55,8 +52,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
-
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 <script src="Exercise_The_Light_Healthy_files/libs/clipboard/clipboard.min.js"></script>
 <script src="Exercise_The_Light_Healthy_files/libs/quarto-html/quarto.js"></script>
@@ -67,34 +82,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="Exercise_The_Light_Healthy_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="Exercise_The_Light_Healthy_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="Exercise_The_Light_Healthy_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="Exercise_The_Light_Healthy_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
+<link href="Exercise_The_Light_Healthy_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 <meta name="citation_title" content="Sensory Marketing &amp;amp; Product Innovation: Exercise 1 - The Light is Healthy Intuition">
 <meta name="citation_author" content="Prof. Dr. Marcel Lichters">
-<meta name="citation_publication_date" content="2023-10-04">
-<meta name="citation_cover_date" content="2023-10-04">
+<meta name="citation_publication_date" content="2023-10-05">
+<meta name="citation_cover_date" content="2023-10-05">
 <meta name="citation_year" content="2023">
-<meta name="citation_online_date" content="2023-10-04">
+<meta name="citation_online_date" content="2023-10-05">
 <meta name="citation_fulltext_html_url" content="https://rpubs.com/M_Lichters/PSM">
 <meta name="citation_language" content="en">
-<meta name="citation_reference" content="citation_title=sensR—an r-package for sensory discrimination;,citation_author=R. H. B. Christensen;,citation_author=P. B. Brockhoff;,citation_publication_date=2020;,citation_cover_date=2020;,citation_year=2020;,citation_fulltext_html_url=https://cran.r-project.org/web/packages/sensR/index.html;">
-<meta name="citation_reference" content="citation_title=Sensory evaluation of food: Principles and practices;,citation_author=Harry T. Lawless;,citation_author=Hildegarde Heymann;,citation_publication_date=2010;,citation_cover_date=2010;,citation_year=2010;">
-<meta name="citation_reference" content="citation_title=Statistics for sensory and consumer science;,citation_author=Tormod Naes;,citation_author=Per B. Brockhoff;,citation_author=Oliver Tomic;,citation_publication_date=2010;,citation_cover_date=2010;,citation_year=2010;,citation_doi=10.1002/9780470669181;">
-<meta name="citation_reference" content="citation_title=Analyzing sensory data with r;,citation_author=Sébastien Lê;,citation_author=Thierry Worch;,citation_publication_date=2015;,citation_cover_date=2015;,citation_year=2015;,citation_series_title=Chapman &amp;amp;amp; hall / CRC the r series;">
-<meta name="citation_reference" content="citation_title=R for marketing research and analytics;,citation_author=Chris Chapman;,citation_author=Elea McDonnell Feit;,citation_publication_date=2019;,citation_cover_date=2019;,citation_year=2019;,citation_series_title=Use r!;">
-<meta name="citation_reference" content="citation_title=Remotes: R package installation from remote repositories, including ’GitHub’;,citation_author=Gábor Csárdi;,citation_author=Jim Hester;,citation_author=Hadley Wickham;,citation_author=Winston Chang;,citation_author=Martin Morgan;,citation_author=Dan Tenenbaum;,citation_publication_date=2021;,citation_cover_date=2021;,citation_year=2021;,citation_fulltext_html_url=https://CRAN.R-project.org/package=remotes;">
-<meta name="citation_reference" content="citation_title=Statistics for sensory and consumer science;,citation_author=Tormod Naes;,citation_author=Per B. Brockhoff;,citation_author=Oliver Tomic;,citation_publication_date=2010;,citation_cover_date=2010;,citation_year=2010;,citation_doi=10.1002/9780470669181;">
-<meta name="citation_reference" content="citation_title=Risk tables for discrimination tests;,citation_author=Pascal Schlich;,citation_publication_date=1993-01;,citation_cover_date=1993-01;,citation_year=1993;,citation_fulltext_html_url=http://dx.doi.org/10.1016/0950-3293(93)90157-2;,citation_issue=3;,citation_doi=10.1016/0950-3293(93)90157-2;,citation_volume=4;,citation_language=en;,citation_journal_title=Food Quality and Preference;">
-<meta name="citation_reference" content="citation_title=Purrr: Functional programming tools;,citation_author=Lionel Henry;,citation_author=Hadley Wickham;,citation_publication_date=2020;,citation_cover_date=2020;,citation_year=2020;,citation_fulltext_html_url=https://CRAN.R-project.org/package=purrr;">
+<meta name="citation_reference" content="citation_title=The Light=Healthy Intuition;,citation_author=Yi Li;,citation_author=Nico Heuvinck;,citation_author=Mario Pandelaere;,citation_publication_date=2021-06-06;,citation_cover_date=2021-06-06;,citation_year=2021;,citation_fulltext_html_url=http://dx.doi.org/10.1002/jcpy.1249;,citation_issue=2;,citation_doi=10.1002/jcpy.1249;,citation_volume=32;,citation_language=en;,citation_journal_title=Journal of Consumer Psychology;">
+<meta name="citation_reference" content="citation_title=Pacman: Package management for r;,citation_author=Tyler W. Rinker;,citation_author=Dason Kurkiewicz;,citation_publication_date=2018;,citation_cover_date=2018;,citation_year=2018;,citation_fulltext_html_url=http://github.com/trinker/pacman;">
+<meta name="citation_reference" content="citation_title=Pwr: Basic functions for power analysis;,citation_author=Stephane Champely;,citation_publication_date=2020;,citation_cover_date=2020;,citation_year=2020;,citation_fulltext_html_url=https://CRAN.R-project.org/package=pwr;">
+<meta name="citation_reference" content="citation_title=Statistical significance, effect size and statistical power;,citation_author=Louis Cohen;,citation_author=Lawrence Manion;,citation_author=Keith Morrison;,citation_publication_date=2017-10-12;,citation_cover_date=2017-10-12;,citation_year=2017;,citation_fulltext_html_url=http://dx.doi.org/10.4324/9781315456539-39;,citation_doi=10.4324/9781315456539-39;,citation_inbook_title=undefined;">
+<meta name="citation_reference" content="citation_title=G*Power 3: A flexible statistical power analysis program for the social, behavioral, and biomedical sciences;,citation_author=Franz Faul;,citation_author=Edgar Erdfelder;,citation_author=Albert-Georg Lang;,citation_author=Axel Buchner;,citation_publication_date=2007-05;,citation_cover_date=2007-05;,citation_year=2007;,citation_fulltext_html_url=http://dx.doi.org/10.3758/BF03193146;,citation_issue=2;,citation_doi=10.3758/bf03193146;,citation_volume=39;,citation_language=en;,citation_journal_title=Behavior Research Methods;">
 </head>
-
 <body>
 
-<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full"><div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <h1 class="title">Sensory Marketing &amp; Product Innovation</h1>
             <p class="subtitle lead">Exercise 1 - The Light is Healthy Intuition</p>
@@ -123,7 +128,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">Wednesday, October 4, 2023</p>
+        <p class="date">Thursday, October 5, 2023</p>
       </div>
     </div>
     
@@ -133,69 +138,202 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   
   </header><div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
 <div id="quarto-sidebar-toc-left" class="sidebar toc-left">
-  <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
+  <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#quarto" id="toc-quarto" class="nav-link active" data-scroll-target="#quarto"><span class="header-section-number">1</span> Quarto</a>
+<li><a href="#loading-packages" id="toc-loading-packages" class="nav-link active" data-scroll-target="#loading-packages"><span class="header-section-number">1</span> Loading packages</a></li>
+  <li>
+<a href="#finding-an-answer-to-question-4" id="toc-finding-an-answer-to-question-4" class="nav-link" data-scroll-target="#finding-an-answer-to-question-4"><span class="header-section-number">2</span> Finding an answer to question #4</a>
   <ul class="collapse">
-  <li><a href="#running-code" id="toc-running-code" class="nav-link" data-scroll-target="#running-code"><span class="header-section-number">1.1</span> Running Code</a></li>
-  </ul></li>
+<li><a href="#extract-information-on-the-effect-size-cohens-d-and-the-statistical-analysis-procedure" id="toc-extract-information-on-the-effect-size-cohens-d-and-the-statistical-analysis-procedure" class="nav-link" data-scroll-target="#extract-information-on-the-effect-size-cohens-d-and-the-statistical-analysis-procedure"><span class="header-section-number">2.1</span> Extract information on the effect size Cohen’s d and the statistical analysis procedure</a></li>
+  <li><a href="#conduct-a-priori-power-analysis-to-search-for-minimum-n" id="toc-conduct-a-priori-power-analysis-to-search-for-minimum-n" class="nav-link" data-scroll-target="#conduct-a-priori-power-analysis-to-search-for-minimum-n"><span class="header-section-number">2.2</span> Conduct a priori power analysis to search for minimum n</a></li>
   </ul>
-</nav>
+</li>
+  </ul></nav>
 </div>
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
 </div>
-<main class="content quarto-banner-title-block" id="quarto-document-content">
-
-
-
-
-<section id="quarto" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Quarto</h1>
-<hr>
+<main class="content quarto-banner-title-block" id="quarto-document-content"><hr>
 <p><a title="Follow me on ResearchGate" href="https://www.researchgate.net/profile/Marcel_Lichters?cp=shp"><img src="https://www.researchgate.net/images/public/profile_share_badge.png" alt="Follow me on ResearchGate"></a></p>
 <p><a href="https://osf.io/u7hyz/">Connect with me on Open Science Framework</a> | <a href="https://www.linkedin.com/in/lichters/">Contact me via LinkedIn</a></p>
-<p><em>Depending on your machine it might be necessary to use right-click -&gt; open in new browser window.</em></p>
+<p>It might be necessary to use right-click -&gt; open in a new browser window depending on your machine<em>.</em></p>
 <hr>
-<p>R analysis script presenting the solutions for the exercise in Sensory Marketing regarding Li, Heuvinck, &amp; Pandelaere <span class="citation" data-cites="Li.2021">(<a href="#ref-Li.2021" role="doc-biblioref"><strong>Li.2021?</strong></a>)</span>. In one of the questions students are asked to estimate the appropriate samples size for a replication of Study 1’s findings (under <span class="math inline">\(\alpha\)</span>=5%, Power=0.8).</p>
-<blockquote class="blockquote">
-<p>If this exercise grabs your attention, please check-out our study programs at the Chemnitz University of Technology by clicking on the logo (Germany): <a title="Chemnitz University of Technology" href="https://www.tu-chemnitz.de/wirtschaft/fakultaet/studiengaenge.php.en"><img src="TU_Chemnitz_Logo.png" alt="Chemnitz University of Technology"></a></p>
-</blockquote>
-<p>Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <a href="https://quarto.org" class="uri">https://quarto.org</a>.</p>
-<section id="running-code" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="running-code"><span class="header-section-number">1.1</span> Running Code</h2>
-<p>When you click the <strong>Render</strong> button a document will be generated that includes both content and the output of embedded code. You can embed code like this:</p>
-<div class="cell" data-hash="Exercise_The_Light_Healthy_cache/html/unnamed-chunk-1_92f5770d301427a14d6c1f2e7f221a7f">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>R analysis script presenting part of the solutions for exercise #1 in Sensory Marketing and Product Innovation regarding Li, Heuvinck, &amp; Pandelaere <span class="citation" data-cites="li2021">(<a href="#ref-li2021" role="doc-biblioref">2021</a>)</span>. In one of the questions, students are asked to estimate the appropriate sample size to replicate Study 1’s findings (under <span class="math inline">\(\alpha\)</span>=5%, Power=0.8).</p>
+<p>The purpose of this script does not solely lay in answering the exercise question. Moreover, studying these scripts should students make become familiar with some aspects of working in <em>R</em>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+If this grabs your attention
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If this exercise grabs your attention, please check out our master study programs at the Otto-von-Guericke-University in Magdeburg (Germany) by clicking on the logo:</p>
+</div>
+</div>
+<p><a title="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" href="https://www.ovgu.de/unimagdeburg/en/Master-p-48820.html"><img src="Signet_WW_3.jpg" alt="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" width="600"></a></p>
+<section id="loading-packages" class="level1" data-number="1"><h1 data-number="1">
+<span class="header-section-number">1</span> Loading packages</h1>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Beware!
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>R</em> is a context-sensitive language. Thus, ‘data’ will be interpreted not in the same way as ‘Data’ will.</p>
+</div>
+</div>
+<p>In <em>R</em> most functionality is provided by additional packages.<br>
+Most of the packages are well-documented, see: <a href="https://cran.r-project.org/" class="uri">https://cran.r-project.org/</a></p>
+<ol type="1">
+<li><p>The code chunk below first evaluates if the package <a href="https://cran.r-project.org/web/packages/pacman/index.html">pacman</a> <span class="citation" data-cites="pacman">(<a href="#ref-pacman" role="doc-biblioref">Rinker and Kurkiewicz 2018</a>)</span> is already installed on your machine. If yes, the corresponding package will be loaded. If not, <em>R</em> will install the package.</p></li>
+<li><p>Alternatively, you can do this manually first by executing <em>install.packages(“pacman”)</em> and then <em>library(pacman)</em>.</p></li>
+<li><p>The second line then loads the package <a href="https://cran.r-project.org/web/packages/pacman/index.html">pacman</a>.</p></li>
+<li><p>The third line uses the function <em>p_load()</em> from the pacman package to install (if necessary) and loads all packages that we provide as arguments (e.g., <a href="https://cran.r-project.org/web/packages/pwr/">pwr</a> <span class="citation" data-cites="pwr">(<a href="#ref-pwr" role="doc-biblioref">Champely 2020</a>)</span>, which provides functions for statistical power calculations).</p></li>
+</ol>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="st">"pacman"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/installed.packages.html">installed.packages</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"pacman"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/trinker/pacman">pacman</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html">p_load</a></span><span class="op">(</span><span class="va">tidyverse</span>, <span class="va">pwr</span>, <span class="va">compute.es</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Expand to learn more about calling functions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>In all code chunks throughout this script, you can receive additional help on each used function by clicking on its name (or via right-click and then opening in a new browser tab). Alternatively, when coding, we can see which arguments a function understands by pressing ‘F1’ while setting the cursor to the function’s name.</p>
+</div>
+</div>
+</div>
+<hr>
+<p>Here is the <em>R</em> session info which gives you information on my machine, all loaded packages, and their version:</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
-</div>
-</div>
-<p>You can add options to executable code like this</p>
-<div class="cell" data-hash="Exercise_The_Light_Healthy_cache/html/unnamed-chunk-2_79233f590d50f15f9dc60b3f5b08c801">
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 4</code></pre>
-</div>
-</div>
-<p>The <code>echo: false</code> option disables the printing of code (only output is displayed).</p>
-</section>
-</section>
+<pre><code>R version 4.3.1 (2023-06-16 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 11 x64 (build 22621)
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@misc{dr. marcel lichters2023,
+Matrix products: default
+
+
+locale:
+[1] LC_COLLATE=German_Germany.utf8  LC_CTYPE=German_Germany.utf8   
+[3] LC_MONETARY=German_Germany.utf8 LC_NUMERIC=C                   
+[5] LC_TIME=German_Germany.utf8    
+
+time zone: Europe/Berlin
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] compute.es_0.2-5 pwr_1.3-0        htmltools_0.5.6  quarto_1.3      
+ [5] ggpubr_0.6.0     lubridate_1.9.3  forcats_1.0.0    stringr_1.5.0   
+ [9] dplyr_1.1.3      purrr_1.0.2      readr_2.1.4      tidyr_1.3.0     
+[13] tibble_3.2.1     ggplot2_3.4.3    tidyverse_2.0.0  labelled_2.12.0 
+[17] knitr_1.44       kableExtra_1.3.4 haven_2.5.3      pacman_0.5.1    
+
+loaded via a namespace (and not attached):
+ [1] gtable_0.3.4      xfun_0.40         processx_3.8.2    rstatix_0.7.2    
+ [5] tzdb_0.4.0        vctrs_0.6.3       tools_4.3.1       ps_1.7.5         
+ [9] generics_0.1.3    fansi_1.0.4       pkgconfig_2.0.3   webshot_0.5.5    
+[13] lifecycle_1.0.3   compiler_4.3.1    munsell_0.5.0     carData_3.0-5    
+[17] yaml_2.3.7        pillar_1.9.0      later_1.3.1       car_3.1-2        
+[21] abind_1.4-5       tidyselect_1.2.0  rvest_1.0.3       digest_0.6.33    
+[25] stringi_1.7.12    fastmap_1.1.1     grid_4.3.1        colorspace_2.1-0 
+[29] cli_3.6.1         magrittr_2.0.3    utf8_1.2.3        broom_1.0.5      
+[33] withr_2.5.1       scales_1.2.1      backports_1.4.1   timechange_0.2.0 
+[37] rmarkdown_2.25    httr_1.4.7        ggsignif_0.6.4    hms_1.1.3        
+[41] evaluate_0.22     viridisLite_0.4.2 rlang_1.1.1       Rcpp_1.0.11      
+[45] glue_1.6.2        xml2_1.3.5        svglite_2.1.1     rstudioapi_0.15.0
+[49] jsonlite_1.8.7    R6_2.5.1          systemfonts_1.0.4</code></pre>
+</div>
+</div>
+<hr></section><section id="finding-an-answer-to-question-4" class="level1" data-number="2"><h1 data-number="2">
+<span class="header-section-number">2</span> Finding an answer to question #4</h1>
+<p>For your master thesis, it could be an idea to replicate the IAT findings of Study 1 (D-score &gt; 0, t-test). Based on a power analysis (Assumptions: <span class="math inline">\(\alpha\)</span>=5%, Power=0.8), how many subjects should you recruit for such a study?</p>
+<section id="extract-information-on-the-effect-size-cohens-d-and-the-statistical-analysis-procedure" class="level2" data-number="2.1"><h2 data-number="2.1" class="anchored" data-anchor-id="extract-information-on-the-effect-size-cohens-d-and-the-statistical-analysis-procedure">
+<span class="header-section-number">2.1</span> Extract information on the effect size Cohen’s d and the statistical analysis procedure</h2>
+<p>Information the article provides on page 3:</p>
+<p><em>The D-score was significantly greater than 0 (D = 0.45, SD = 0.47, t(133) = 10.98, p &lt; .001, 95% CI = [0.37, 0.53], Cohen’s d = 0.95), suggesting that participants responded significantly faster in assigning the stimuli when healthy and light were grouped together.</em></p>
+<p>From this, we are able to extract:</p>
+<ul>
+<li>The effect size measure Cohen’s d equals 0.95.</li>
+<li>For analysis, the authors applied a one-sample t-test, which tests against the constant value of 0.</li>
+</ul></section><section id="conduct-a-priori-power-analysis-to-search-for-minimum-n" class="level2" data-number="2.2"><h2 data-number="2.2" class="anchored" data-anchor-id="conduct-a-priori-power-analysis-to-search-for-minimum-n">
+<span class="header-section-number">2.2</span> Conduct a priori power analysis to search for minimum n</h2>
+<p>In the question, we are asked for a statistical power of 80% (a commonly used threshold in social sciences).</p>
+<p>To estimate a minimum sample size <em>n</em> for the replication, we apply the <em>pwr.t.test()</em> function from the <a href="https://cran.r-project.org/web/packages/pwr/index.html">pwr</a> package. This function needs us to provide 6 arguments to fill its parameters. These are (see help by pressing ‘F1’ when setting the cursor into the function’s name):</p>
+<ul>
+<li>d = Effect size Cohen’s d (see, e.g., Cohen <span class="citation" data-cites="cohen2017">(<a href="#ref-cohen2017" role="doc-biblioref">2017</a>)</span>)</li>
+<li>n = Total number of observations</li>
+<li>sig.level = Significance level (Type I error probability <span class="math inline">\(\alpha\)</span>)</li>
+<li>power = Power of test (1 minus Type II error probability)</li>
+<li>type = Type of t-test: one- (“one.sample”) two- (“two.sample”) or paired-samples (“paired”)</li>
+<li>alternative = parameter indicating the test strategy: one of “two.sided” (default), “greater” or “less”</li>
+</ul>
+<p>The function, furthermore, assumes us to set one of the arguments (d, n, sig.level, or power) to <strong>NULL</strong>. By doing so, we tell the function to use the remaining 5 parameters to search for the value of the sixth. In our case, we are searching for ‘n’, therefore, we set ‘n=NULL’. Furthermore, we are using a one sample t-test and the original study expects the d score to be greater than 0. Therefore, we set alternative to “greater”.</p>
+<p>We assign the results of our power analysis to a new object named ‘results’. Then we call for its content.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">pwr.t.test</span><span class="op">(</span>d <span class="op">=</span> <span class="fl">0.95</span>, n <span class="op">=</span> <span class="cn">NULL</span>, type <span class="op">=</span> <span class="st">"one.sample"</span>, sig.level <span class="op">=</span> <span class="fl">0.05</span>, power <span class="op">=</span> <span class="fl">0.8</span>, alternative <span class="op">=</span> <span class="st">"greater"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">results</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code> One-sample t test power calculation 
+
+          n = 8.379928
+          d = 0.95
+  sig.level = 0.05
+      power = 0.8
+alternative = greater</code></pre>
+<blockquote class="blockquote">
+<p>We can see that the (conservatively rounded) calculated sample size 9 perfectly mirrors the one we have seen in G*Power 3 <span class="citation" data-cites="faul2007">(<a href="#ref-faul2007" role="doc-biblioref">Faul et al. 2007</a>)</span>. As discussed in our exercise, the authors of the study applied standard exclusion criteria for IAT procedures. Therefore, 1.49 times the sample size estimate (1.49 times 9 = 14) would be necessary to end at n = 9 in the net sample.</p>
+</blockquote>
+<p>Keep in mind: if an original study comes with a very large effect size, then a replication with a power of 80% often needs fewer subjects as compared to the original study. However, studies reporting only small effects usually need many more participants for a successful replication.</p>
+
+</section></section><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-pwr" class="csl-entry" role="listitem">
+Champely, Stephane. 2020. <span>“Pwr: Basic Functions for Power Analysis.”</span> <a href="https://CRAN.R-project.org/package=pwr">https://CRAN.R-project.org/package=pwr</a>.
+</div>
+<div id="ref-cohen2017" class="csl-entry" role="listitem">
+Cohen, Louis, Lawrence Manion, and Keith Morrison. 2017. <span>“Statistical Significance, Effect Size and Statistical Power.”</span> In, 739–52. Routledge. <a href="https://doi.org/10.4324/9781315456539-39">https://doi.org/10.4324/9781315456539-39</a>.
+</div>
+<div id="ref-faul2007" class="csl-entry" role="listitem">
+Faul, Franz, Edgar Erdfelder, Albert-Georg Lang, and Axel Buchner. 2007. <span>“G*Power 3: A Flexible Statistical Power Analysis Program for the Social, Behavioral, and Biomedical Sciences.”</span> <em>Behavior Research Methods</em> 39 (2): 175–91. <a href="https://doi.org/10.3758/bf03193146">https://doi.org/10.3758/bf03193146</a>.
+</div>
+<div id="ref-li2021" class="csl-entry" role="listitem">
+Li, Yi, Nico Heuvinck, and Mario Pandelaere. 2021. <span>“The Light<span></span>=<span></span>Healthy Intuition.”</span> <em>Journal of Consumer Psychology</em> 32 (2): 326–35. <a href="https://doi.org/10.1002/jcpy.1249">https://doi.org/10.1002/jcpy.1249</a>.
+</div>
+<div id="ref-pacman" class="csl-entry" role="listitem">
+Rinker, Tyler W., and Dason Kurkiewicz. 2018. <span>“<span></span>Pacman<span></span>: <span></span>P<span></span>ackage Management for <span></span>r<span></span>.”</span> <a href="http://github.com/trinker/pacman">http://github.com/trinker/pacman</a>.
+</div>
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@misc{dr. marcel lichters2023,
   author = {Dr. Marcel Lichters, Prof.},
   title = {Sensory {Marketing} \&amp; {Product} {Innovation:} {Exercise} 1 -
     {The} {Light} Is {Healthy} {Intuition}},
-  date = {2023-10-04},
+  date = {2023-10-05},
   url = {https://rpubs.com/M_Lichters/PSM},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-dr. marcel lichters2023" class="csl-entry quarto-appendix-citeas" role="listitem">
 Dr. Marcel Lichters, Prof. 2023. <span>“Sensory Marketing &amp; Product
 Innovation: Exercise 1 - The Light Is Healthy Intuition.”</span> <a href="https://rpubs.com/M_Lichters/PSM">https://rpubs.com/M_Lichters/PSM</a>.
-</div></div></section></div></main>
-<!-- /main column -->
-<script id="quarto-html-after-body" type="application/javascript">
+</div></div></section></div></main><!-- /main column --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
