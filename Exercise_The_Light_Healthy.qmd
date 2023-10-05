@@ -3,10 +3,20 @@ title-block-banner: true
 title: "Sensory Marketing & Product Innovation"
 subtitle: "Exercise 1 - The Light is Healthy Intuition"
 author: 
-  - name: Prof. Dr. Marcel Lichters
+  - name: 
+      given: Marcel
+      family: Lichters
+      non-dropping-particle: Prof. Dr.
     url: https://www.marketing.ovgu.de/
-    affiliation: Otto-von-Guericke-University Magdeburg
+    email: marcel.lichters@ovgu.de
+    corresponding: true
+    affiliation: 
+    - name: Otto-von-Guericke-University Magdeburg
+      city: Magdeburg
+      state: Saxony-Anhalt
+      country: Germany
     affiliation-url: https://www.ovgu.de/en/
+    orcid: 0000-0002-3710-2292
 date: now
 date-format: full
 citation:
@@ -14,6 +24,7 @@ citation:
   type: post
   url: https://rpubs.com/M_Lichters/PSM
   title: 'Sensory Marketing & Product Innovation: Exercise 1 - The Light is Healthy Intuition'
+appendix-cite-as: display
 format:
   html:
     toc: true
@@ -34,6 +45,9 @@ bibliography: references.bib
 editor_options: 
   chunk_output_type: console
 google-scholar: true
+copyright: 
+  holder: Prof. Dr. Marcel Lichters
+  year: 2023
 ---
 
 ------------------------------------------------------------------------
@@ -147,7 +161,7 @@ In the question, we are asked for a statistical power of 80% (a commonly used th
 
 To estimate a minimum sample size *n* for the replication, we apply the *pwr.t.test()* function from the [pwr](https://cran.r-project.org/web/packages/pwr/index.html) package. This function needs us to provide 6 arguments to fill its parameters. These are (see help by pressing 'F1' when setting the cursor into the function's name):
 
--   d = Effect size Cohen's d (see, e.g., Cohen [-@cohen2017])
+-   d = Effect size Cohen's d (see, e.g., Cohen [-@cohen2013])
 -   n = Total number of observations
 -   sig.level = Significance level (Type I error probability $\alpha$)
 -   power = Power of test (1 minus Type II error probability)
@@ -169,3 +183,66 @@ results
 We can see that the (conservatively rounded) calculated sample size `r ceiling(results$n)` perfectly mirrors the one we have seen in G\*Power 3 [@faul2007]. As discussed in our exercise, the authors of the study applied standard exclusion criteria for IAT procedures. Therefore, 1.49 times the sample size estimate (1.49 times 9 = `r ceiling(1.49*9)`) would be necessary to end at n = 9 in the net sample.
 
 Keep in mind: if an original study comes with a very large effect size, then a replication with a power of 80% often needs fewer subjects as compared to the original study. However, studies reporting only small effects usually need many more participants for a successful replication.
+
+------------------------------------------------------------------------
+
+# Additional reading *(not relevant for the exam)*
+
+In the above-discussed example, we were planning a replication of the original findings. In doing so, we have made certain assumptions:
+
+We assume that the observed effect size Cohen's d = 0.95 is the true effect size to find. Strictly speaking, this is wrong. Our calculated value is only a sample estimate of the true effect size in the underlying population. Under the assumption of knowing the true effect size, we calculated that we need at least n=`r ceiling(9*1.49)` participants for a replication of the original findings with a power of 80%. This means that we will have approximately the chance of 80% to find the effect to be significant at $\alpha$=0.05. Because, the true effect to find might, however, be smaller, this calculation may present an overly optimistic approach. Therefore, other researchers prefer to focus on the confidence intervals for the estimate of effect size measures [@thompson2002].
+
+To estimate the lower limit of the observed Cohen's d, we can apply a formula proposed by Hedges & Olkin [-@Hedges1985]:
+
+$d \pm se * z_{crit}$
+
+Where *se* is the standard error given by:
+
+$se = \sqrt{\frac{1}{n}+\frac{d^{2}}{2n}}$
+
+and $z_{crit}$ is given by the standard normal distribution at p = 0.95 ($\alpha$ = 5%).
+
+Let us first calculate **se**. Table 4 in the article informs that n = 134 participants were used for analysis.
+
+```{r}
+
+se <- sqrt((1/134)+((0.95*0.95)/(2*134)))
+
+se
+
+```
+
+Next, let us determine the critical z-value ($\alpha$ = 5%). For this purpose, we use the *qnorm()* function. We only have to provide the probability (95%) as well as the mean and standard deviation.
+
+```{r}
+
+z_crit <- qnorm(p = 0.95, mean = 0, sd = 1, lower.tail = TRUE)
+
+z_crit
+
+```
+
+Finally, we calculate the lower limit of the 95% confidence interval of Cohen's d:
+
+```{r}
+
+d_lower95 <- 0.95 -se*z_crit
+
+d_lower95
+
+
+```
+
+The results tell us which lower Cohen's d to expect in the underlying population (`r round(d_lower95, digits = 2)`). This is an alternative to the classical t-test. If we reach a significant result here (i.e., the lower limit is not crossing 0), this means that the effect size obtained is significantly greater than 0. Put differently, the effect is assumed to exist in the underlying population. Researchers in the context effect domain are starting to report tests on effect sizes, especially, when their articles span over multiple studies [@evangelidis2018].
+
+We can briefly calculate how this will change our assumptions about the minimum sample size. We, again, use the *pwr.t.test()* function (see above). This time, we hand in **d_lower95** as the argument for the effect size parameter d.
+
+```{r results='asis'}
+
+results_worst_case <- pwr.t.test(d = d_lower95, n = NULL, type = "one.sample", sig.level = 0.05, power = 0.8, alternative = "greater") 
+
+results_worst_case 
+
+```
+
+We can see that the more conservative sample size is `r ceiling(results_worst_case$n)`. Combined with the exclusion factor discussed above, we end at a (worst-case) gross sample n of `r ceiling(1.49*results_worst_case$n)`.
