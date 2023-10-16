@@ -223,7 +223,7 @@ print(d_stacked)
 
 The results (see above) present the stacked data set. Each consumer now has 12 rows since each consumer has tasted 4 different product formulations within 3 different consumption environments.
 
-For the subsequent rANOVA we need to create additional columns indicating the different levels of the experimental factors of the study. This is done by the code chunk below. Here, we use a combination of the functions *mutate()*, *case_when()*, and *str_detect()* to create two new variables in d_stacked. For example, in the first code block, we feed in d_stacked to [*mutate*](https://dplyr.tidyverse.org/reference/mutate.html "See how mutate() is function")*().* This function is a generic one, which can add new variables and preserve existing ones. Next, we have to tell *mutate()* a certain build logic for the new variable *sample*. Here, we use [*case_when()*](https://dplyr.tidyverse.org/reference/case_when.html). Within *case_when()*, we can apply additional logic. The function then applies this logic to each row in d_stacked. Let's focus on one example **str_detect(product_sample, "Bar.1shot") \~ 'Bar_1shot'**. We use [*str_detect()*](https://cran.r-project.org/web/packages/stringr/index.html) from the *stringr* package [@stringr] to evaluate for each line of the variable *product_sample* whether it contains the string "Bar.1shot". If this is the case, the function is setting the value 'Bar_1shot' to the newly created variable *sample*. If no match is detected, no value will be set. In the end, we create two new variables *sample* and *environment*, which indicate for each row in d_stacked, where a consumer has evaluated which formula of cappuccino.
+For the subsequent rANOVA, we need to create additional columns indicating the different levels of the experimental factors of the study. This is done by the code chunk below. Here, we use a combination of the functions *mutate()*, *case_when()*, and *str_detect()* to create two new variables in d_stacked. For example, in the first code block, we feed in d_stacked to [*mutate*](https://dplyr.tidyverse.org/reference/mutate.html "See how mutate() is function")*().* This function is a generic one, which can add new variables and preserve existing ones. Next, we have to tell *mutate()* a certain build logic for the new variable *sample*. Here, we use [*case_when()*](https://dplyr.tidyverse.org/reference/case_when.html). Within *case_when()*, we can apply additional logic. The function then applies this logic to each row in d_stacked. Let's focus on one example **str_detect(product_sample, "Bar.1shot") \~ 'Bar_1shot'**. We use [*str_detect()*](https://cran.r-project.org/web/packages/stringr/index.html) from the *stringr* package [@stringr] to evaluate for each line of the variable *product_sample* whether it contains the string "Bar.1shot". If this is the case, the function is setting the value 'Bar_1shot' to the newly created variable *sample*. If no match is detected, no value will be set. In the end, we create two new variables *sample* and *environment*, which indicate for each row in d_stacked, where a consumer has evaluated which formula of cappuccino.
 
 The last two lines tell *R* to handle these variables as categorical factors.
 
@@ -251,7 +251,7 @@ print(d_stacked)
 
 ```
 
-Now, we are ready for conducting the rANOVA. For this purpose, we take advantage of the *anova_test()* function, which the [*rstatix*](https://cran.r-project.org/web/packages/rstatix/index.html) package provides. We need to provide four arguments in our case:
+Now, we are ready to conduct the rANOVA. For this purpose, we take advantage of the *anova_test()* function, which the [*rstatix*](https://cran.r-project.org/web/packages/rstatix/index.html) package provides. We need to provide four arguments in our case:
 
 -   data = the data set to use
 -   dv = the dependent variable in the rANOVA (the variable *liking* in the present case)
@@ -260,7 +260,7 @@ Now, we are ready for conducting the rANOVA. For this purpose, we take advantage
 
 We assign the results of our rANOVA to a new object named *cappuccino_rANOVA*.
 
-Lastly, we print the results, while limiting the display to 3 digits.
+Lastly, we print the results while limiting the display to 3 digits.
 
 ```{r}
 
@@ -270,18 +270,64 @@ cappuccino_rANOVA <- anova_test(data = d_stacked,
                                 within = c(sample, environment))
                                 
 
-print(cappuccino_rANOVA, 
-      digits = 3)
+print(cappuccino_rANOVA, digits = 3)
 
 
 ```
 
-In an essence, the results are presented within 3 tables.
+In essence, the results are presented in 3 tables.
 
-The first one contains the main results of the rANOVA. We can see that 3 effects where tested: (1) The main effect of *sample* (i.e., the different cappuccino recipes), (2) the main effect of *environment* (i.e., the difference in mean acceptability scores across consumption environments), and (3) the interaction of sample and environment (i.e., are different cappuccino recipes evaluated differently across environments). For example, one sample might be evaluated best in the lab, but worst in the real coffeehouse).
+The first one contains the main results of the rANOVA. We can see that 3 effects were tested: (1) The main effect of *sample* (i.e., the different cappuccino recipes), (2) the main effect of the *environment* (i.e., the difference in mean acceptability scores across consumption environments), and (3) the interaction of sample and environment (i.e., are different cappuccino recipes evaluated differently across environments). For example, one sample might be evaluated best in the sensory lab but worst in the real coffeehouse).
 
-We see that the main effects of *sample* and *environment* are both significant as the empirical p-values fall below 5%. Thus, we are able to replicate the authors' findings regarding the level effect across consumption environments. More precisely, the effect of *environment* $F_{2, 206}$ = `r round(cappuccino_rANOVA$ANOVA$F[2], digits = 2)`, p = `r round(cappuccino_rANOVA$ANOVA$p[2], digits = 3)` is significant with an effect size of generalized $\eta^{2}_{p}$ = `r round(cappuccino_rANOVA$ANOVA$ges[2], digits = 2)`, a small effect [@Bakeman.2005; @Olejnik.2003]. This perfectly mirrors the results reported in Web Appendix, despite the fact, that the Web Appendix obviously reported the wrong value for the generalized $\eta^{2}_{p}$ (0.10 instead of 0.01).
+::: callout-tip
+## Main results
 
-The two other tables reported above simply test one of the assumptions for rANOVA, namely whether the data exerts [*Sphericity*](https://statistics.laerd.com/statistical-guides/sphericity-statistical-guide.php) across measurement times [@Field.2012, p. 551]. To make it short, the second table shows that this assumption is significantly violated for the main effect of *sample*, but not for the other effects under consideration. If the assumption is violated, the one has to pay attention to the third table. Here we can find two proposed correction methods (Hyunh-Feldt \[HF\] and Greenhouse-Geisser \[GG\]), of which the latter is most commonly applied [@Field.2012, p. 554].
+We see that the main effects of *sample* and *environment* are both significant as the empirical p-values fall below 5%. Thus, we are able to replicate the authors' findings regarding the "level effect" across consumption environments.
+:::
+
+More precisely, the main effect of the *environment* $F_{2, 206}$ = `r round(cappuccino_rANOVA$ANOVA$F[2], digits = 2)`, p = `r round(cappuccino_rANOVA$ANOVA$p[2], digits = 3)` is significant with an effect size of generalized $\eta^{2}_{p}$ = `r round(cappuccino_rANOVA$ANOVA$ges[2], digits = 2)`, a small effect [@olejnik2003; @bakeman2005]. This perfectly mirrors the results reported in the Web Appendix, despite the fact that the Web Appendix obviously reported the wrong value for the generalized $\eta^{2}_{p}$ (0.10 instead of 0.01).
+
+The two other tables reported above simply test one of the assumptions for rANOVA, namely whether the data exerts [*Sphericity*](https://statistics.laerd.com/statistical-guides/sphericity-statistical-guide.php) across measurement times [@Field.2012, p. 551]. To make it short, the second table shows that this assumption is significantly violated for the main effect of *sample*, but not for the other effects under consideration. If the assumption is violated, one has to pay attention to the third table. Here, we can find two proposed correction methods (Hyunh-Feldt \[HF\] and Greenhouse-Geisser \[GG\]), of which the latter is most commonly applied [@Field.2012, p. 551]. However, we see that both main effects' p-values also fall below 5% with the Greenhouse-Geisser correction (column *p\[GG\]*).
+
+------------------------------------------------------------------------
+
+# Task 5.3.
+
+::: callout-note
+## Your task
+
+Use a different post-hoc test than the authors. Drawing on your chosen test, is the immersive environment still significantly different from the other two environments?
+:::
+
+On page 4 of the Web Appendix the authors state: *"\[...\] running a series of repeated measures analysis of variance analyses (rANOVAs) combined with post hoc Bonferroni-corrected within-subjects t-tests".*
+
+Thus, in the article, the authors applied the Bonferroni correction [@Bonferroni.1936] to account for multiple group comparisons. Researchers in statistics have proposed countless [alternatives for post-hoc tests](https://www.statology.org/anova-post-hoc-tests/) to account for family-wise Alpha error when comparing multiple groups (in our case, the 3 environments). For illustration, we choose Holm's method [@Holm.1979] for the code chunk below, which is less conservative (i.e., differences get significant faster) as compared to Bonferroni .
+
+BIS HIER GEKOMMEN
+
+We implement a combination of the two functions *with()* and *pairwise.t.test()* in the code below and assign the results of our post-hoc procedure to a new object named *post_hoc*. We first submit d_stacked to the *with()* function, which simply tells *R* to conduct several analysis steps with it. The specific analysis is specified next. Here, we call for a form of t-test within the function *pairwise.t.test()*. This function expects us to provide 4 arguments:
+
+-   x = the dependent variable in the test (the product liking in our case)
+-   g = the variable forming the groups in the pair-wise comparisons (environment in the present task)
+-   p.adjust.method = the post-hoc procedure to apply in order to control for multiple comparisons (try *?p.adjust()* to see which options are available)
+-   paired == a logical indicator flagged as TRUE to highlight that the observations are not independent (thus, a paired t-test is applied)
+
+```{r}
+
+
+
+post_hoc <- d_stacked %>% 
+  with(., pairwise.t.test(x=liking, 
+                          g=environment, 
+                          p.adjust.method="holm", 
+                          paired=TRUE))
+
+print(post_hoc, digits = 3)
+
+
+
+```
+
+The resultant matrix presents the p-values of the 3 pair-wise comparisons. We see that at Alpha=5%, the mean product likings of the immersive coffeehouse condition are significantly different from both, the sensory lab and the real coffeehouse. Therefore, that reported results of the article are robust, even when using Holm's correction instead of Bonferroni.
 
 ------------------------------------------------------------------------
