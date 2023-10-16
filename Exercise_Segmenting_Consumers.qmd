@@ -1,0 +1,287 @@
+---
+title-block-banner: true
+title: "Sensory Marketing and Product Innovation"
+subtitle: "Exercise 5 - Segmenting consumers based on sensory acceptance tests in sensory labs, immersive environments, and natural consumption settings"
+author: 
+  - name: 
+      given: Marcel
+      family: Lichters
+      non-dropping-particle: Prof. Dr.
+    url: https://www.marketing.ovgu.de/
+    email: marcel.lichters@ovgu.de
+    corresponding: true
+    affiliation: 
+    - name: Otto-von-Guericke-University Magdeburg
+      city: Magdeburg
+      state: Saxony-Anhalt
+      country: Germany
+    affiliation-url: https://www.ovgu.de/en/
+    orcid: 0000-0002-3710-2292
+date: now
+date-format: full
+csl: apa-old-doi-prefix.csl
+citation:
+  language: "en"
+  type: post
+  url: https://rpubs.com/M_Lichters/smpiexercise5
+  title: 'Sensory Marketing & Product Innovation: Exercise 5 - Segmenting consumers based on sensory acceptance tests in sensory labs, immersive environments, and natural consumption settings'
+appendix-cite-as: display
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-location: left
+    code-fold: false
+    code-link: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-tools: false
+    code-copy: hover
+    number-sections: true
+    number-depth: 3
+    citations-hover: true
+    footnotes-hover: true
+email-obfuscation: javascript
+editor: source
+bibliography: references.bib
+editor_options: 
+  chunk_output_type: console
+google-scholar: true
+copyright: 
+  holder: Prof. Dr. Marcel Lichters
+  year: 2023
+---
+
+------------------------------------------------------------------------
+
+<a title="Follow me on ResearchGate" href="https://www.researchgate.net/profile/Marcel_Lichters?cp=shp"><img src="https://www.researchgate.net/images/public/profile_share_badge.png" alt="Follow me on ResearchGate"/></a>
+
+[Connect with me on Open Science Framework](https://osf.io/u7hyz/) \| [Contact me via LinkedIn](https://www.linkedin.com/in/lichters/)
+
+It might be necessary to right-click -\> open in a new browser window, depending on your machine*.*
+
+------------------------------------------------------------------------
+
+R analysis script presenting the solutions for the exercise in Sensory Marketing regarding Lichters et al. [-@lichters2021].
+
+The purpose of this script does not solely lay in answering the exercise question. Moreover, studying these scripts should help students become familiar with some aspects of working in *R*.
+
+::: callout-tip
+## If this grabs your attention
+
+If this exercise grabs your attention, please check out our master study programs at the Otto-von-Guericke-University in Magdeburg (Germany) by clicking on the logo!
+:::
+
+<a title="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" href="https://www.ovgu.de/unimagdeburg/en/Master-p-48820.html"><img src="Signet_WW_3.jpg" alt="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" width="600"/></a>
+
+```{r}
+#| include: false
+
+
+#clear workspace
+rm(list = ls())
+
+
+#load packages
+if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
+
+library(pacman)
+
+pacman::p_load(haven, kableExtra, knitr, labelled, tidyverse, ggpubr, quarto, htmltools, pwr, compute.es, rstatix, osfr)
+
+
+```
+
+# Loading packages
+
+::: callout-important
+## Beware!
+
+*R* is a context-sensitive language. Thus, 'data' will not be interpreted the same way as 'Data' will.
+:::
+
+In *R,* most functionality is provided by additional packages.\
+Most of the packages are well-documented; see: <https://cran.r-project.org/>
+
+1.  The code chunk below first evaluates if the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html) [@pacman] is already installed on your machine. If yes, the corresponding package will be loaded. If not, *R* will install the package.
+
+2.  Alternatively, you can do this manually first by executing *install.packages("pacman")* and then *library(pacman)*.
+
+3.  The second line then loads the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html).
+
+4.  The third line uses the function *p_load()* from the pacman package to install (if necessary) and loads all packages that we provide as arguments (e.g., [rstatix](https://cran.r-project.org/web/packages/rstatix/index.html) [@rstatix], which provides functions for performing basic statistical tests}
+
+    if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
+
+    library(pacman)
+
+    pacman::p_load(tidyverse, osfr, r
+
+::: {.callout-caution collapse="true"}
+## Expand to learn more about calling functions
+
+In all code chunks throughout this script, you can receive additional help on each used function by clicking on its name (or via right-click and then opening in a new browser tab). Alternatively, when coding, we can see which arguments a function understands by pressing 'F1' while setting the cursor to the function's name.
+:::
+
+------------------------------------------------------------------------
+
+Here is the *R* session info, which gives you information on my machine, all loaded packages, and their version:
+
+```{r  }
+
+sessionInfo()
+
+
+```
+
+------------------------------------------------------------------------
+
+# Task 5.1. Loading data from the Open Science Framework (OSF)
+
+The article provides the link to a corresponding OSF project: <https://doi.org/10.17605/OSF.IO/VKZ4Y>. Here, we can find all data sets and *R*-scripts accompanying the [Food Quality and Preference](https://journals.elsevier.com/food-quality-and-preference%20 "link to journal") manuscript. [OSF](https://osf.io/) is a free web application that allows researchers to collaboratively store, manage, and share their research materials (e.g., data, code, protocols). Most work on OSF is organized around projects, which include a cloud-based storage bucket where files can be stored and organized into directories. Please navigate to the corresponding project using your web browser. We can see that the project contains a data component named *Data Sets and Analysis Scripts*. If we click on the data component, we are provided with its own *URL* identifier, which is <https://osf.io/kst7p>. This data component houses the product acceptance ratings for the cappuccino category in the data set named **Working dataset Cappuccino.csv** within the directory path **Data and analysis scripts/Main studies**.
+
+To load the data set, we use functions provided by the [*osfr*](https://cran.r-project.org/web/packages/osfr/index.html) *package* [@osfr].
+
+We first assess the corresponding OSF data component from *R*. For this purpose, we apply the function *osf_retrieve_node()*, which expects us to hand in a *url* to an existing resource. We assign the results of the function to an object named *OSF_project_segmenting_consumers*.
+
+```{r}
+
+OSF_project_segmenting_consumers <- osf_retrieve_node("https://osf.io/kst7p/")
+
+```
+
+The code chunk above opens a, so to say, table of contents for the corresponding OSF data component. Let's list all the files uploaded to the path **Data and analysis scripts/Main studies**. This is done by the *osf_ls_files()* function:
+
+```{r}
+
+osf_ls_files(OSF_project_segmenting_consumers, path = "Data and analysis scripts/Main studies")
+
+```
+
+This returns an *osf_tbl* object, which is the *data.frame*-like class the *osfr* package uses to represent items retrieved from OSF. This one contains eight rows, one for each file stored on the OSF data component. To download a local copy of the cappuccino data set (row 1, by the way), we use the *osf_download()* function. More specifically, we build a pipeline of commands: First, we hand over our list of files stored in the OSF file path to a function *filter()*. This function helps us select only the entry with the file named *Working dataset Cappuccino.csv*. We better use the notation **dplyr::filter()** to ensure that the *filter()* function from the [dplyr](https://cran.r-project.org/web/packages/dplyr/index.html)-package [@dplyr] is used since multiple other packages provide functions with the same name. The result of this step then goes as an argument to the last command in the pipe, which is *osf_download()*.
+
+```{r}
+
+osf_ls_files(OSF_project_segmenting_consumers, path = "Data and analysis scripts/Main studies") %>%
+  dplyr::filter(name == "Working dataset Cappuccino.csv") %>%
+  osf_download(conflicts = "overwrite")
+
+```
+
+As a result, the data set *Working dataset Cappuccino.csv* is stored in the current working directory of your *R*-project. All we need to do is to import it to our current *R* analysis session. For this purpose, we use *read.csv()* function. We assign the data set to a new object, **d**. In the last step, we convert the object to the \[tibble\] (https://tibble.tidyverse.org/) format, which is prominent among marketing researchers.
+
+```{r}
+
+d <- read.csv("Working dataset Cappuccino.csv")
+
+d <- as_tibble(d)
+
+```
+
+Finally, we can give a brief overview of the imported data:
+
+```{r}
+
+print(d)
+
+```
+
+As we can see, the spreadsheet-like data set contains one row for each of the n=104 interviewed consumers. Furthermore, there are 13 variables as columns. The first variable houses the consumer ID, whereas the remaining columns comprise the consumers' overall liking judgments ("OL") about the different product samples across the varying testing environments (scaled from 1 to 9). The abbreviations "Bar", "Lab", and "VR" thereby stand for the environments \*\*Real Coffeehouse\*"**,** Sensory Lab**, and** Immersive Coffeehouse\*\*. The abbreviations"Bar.1shot", "Bar.2shot", "Siz.1shot", and "Siz.2shot" mark the different product samples, namely cappuccinos made of varying coffee brands ("Barista" and "Sizilianer Art", according to the authors), and cappuccinos prepared with one or two shots of that coffee.
+
+------------------------------------------------------------------------
+
+# Task 5.2.
+
+::: callout-note
+## Your task
+
+Apply a repeated measures ANOVA to the overall liking scores to evaluate if you are able to also find a significant difference in mean product acceptance across test environments (a so-called level effect).
+:::
+
+Here, we are asked to simply replicate the original analysis proposed by the authors. Thus, the easiest way to solve the task is to have a look at the analysis scripts provided on OSF. In the code below, however, we applied our own code.
+
+We first tell *R* to handle the first column, "ID" as a categorical factor variable instead of a numerical one.
+
+Next, we use the function [*pivot_longer*](https://tidyr.tidyverse.org/reference/pivot_longer.html) to restructure our data set from the **wide format** (each consumer is one row) to the **long format** (each product judgment is one row). Thus, we are *stacking* the data. We are doing so because the subsequent repeated measures ANOVA (rANOVA) is expecting the long instead of the wide format. Within the function call, we hand in *d* for the data argument. Further, we tell the function to use the columns named "OL.Bar.1shot...Lab" to "OL.Siz.2shot...Fil" for creating the longer format. The *names_to* argument tells the function which name to use for the new stacked variable collecting all product variant names. Finally, the *values_to* argument sets the name for the stacked product evaluations. The results are stored in a new object called *d_stacked*.
+
+```{r}
+
+d$ID <- as_factor(d$ID)
+
+
+d_stacked <- pivot_longer(data = d, 
+                          cols = OL.Bar.1shot...Lab:OL.Siz.2shot...Fil, 
+                          names_to = "product_sample", 
+                          values_to = "liking")
+
+
+
+print(d_stacked)
+
+
+```
+
+The results (see above) present the stacked data set. Each consumer now has 12 rows since each consumer has tasted 4 different product formulations within 3 different consumption environments.
+
+For the subsequent rANOVA we need to create additional columns indicating the different levels of the experimental factors of the study. This is done by the code chunk below. Here, we use a combination of the functions *mutate()*, *case_when()*, and *str_detect()* to create two new variables in d_stacked. For example, in the first code block, we feed in d_stacked to [*mutate*](https://dplyr.tidyverse.org/reference/mutate.html "See how mutate() is function")*().* This function is a generic one, which can add new variables and preserve existing ones. Next, we have to tell *mutate()* a certain build logic for the new variable *sample*. Here, we use [*case_when()*](https://dplyr.tidyverse.org/reference/case_when.html). Within *case_when()*, we can apply additional logic. The function then applies this logic to each row in d_stacked. Let's focus on one example **str_detect(product_sample, "Bar.1shot") \~ 'Bar_1shot'**. We use [*str_detect()*](https://cran.r-project.org/web/packages/stringr/index.html) from the *stringr* package [@stringr] to evaluate for each line of the variable *product_sample* whether it contains the string "Bar.1shot". If this is the case, the function is setting the value 'Bar_1shot' to the newly created variable *sample*. If no match is detected, no value will be set. In the end, we create two new variables *sample* and *environment*, which indicate for each row in d_stacked, where a consumer has evaluated which formula of cappuccino.
+
+The last two lines tell *R* to handle these variables as categorical factors.
+
+```{r}
+
+d_stacked <-  d_stacked %>% mutate(
+  sample = case_when(
+  str_detect(product_sample, "Bar.1shot") ~ 'Bar_1shot',
+  str_detect(product_sample, "Siz.1shot") ~ 'Siz_1shot',
+  str_detect(product_sample, "Siz.2shot") ~ 'Siz_2shot',
+  str_detect(product_sample, "Bar.2shot") ~ 'Bar_2shot'
+  ))
+
+d_stacked <-  d_stacked %>% mutate(
+  environment = case_when(
+  str_detect(product_sample, "Lab") ~ 'Sensory_Lab',
+  str_detect(product_sample, "VR") ~ 'Immersive_Coffeehouse',
+  str_detect(product_sample, "Fil") ~ 'Real_Coffeehouse'
+  ))
+
+d_stacked$sample <- as_factor(d_stacked$sample)
+d_stacked$environment <- as_factor(d_stacked$environment)
+
+print(d_stacked)
+
+```
+
+Now, we are ready for conducting the rANOVA. For this purpose, we take advantage of the *anova_test()* function, which the [*rstatix*](https://cran.r-project.org/web/packages/rstatix/index.html) package provides. We need to provide four arguments in our case:
+
+-   data = the data set to use
+-   dv = the dependent variable in the rANOVA (the variable *liking* in the present case)
+-   wid = the variable indicating the case IDs of consumers (*ID* in our case)
+-   within = a vector of variable names, for which the analysis assumes within-subjects observations
+
+We assign the results of our rANOVA to a new object named *cappuccino_rANOVA*.
+
+Lastly, we print the results, while limiting the display to 3 digits.
+
+```{r}
+
+cappuccino_rANOVA <- anova_test(data = d_stacked,
+                                dv = liking,
+                                wid = ID,
+                                within = c(sample, environment))
+                                
+
+print(cappuccino_rANOVA, 
+      digits = 3)
+
+
+```
+
+In an essence, the results are presented within 3 tables.
+
+The first one contains the main results of the rANOVA. We can see that 3 effects where tested: (1) The main effect of *sample* (i.e., the different cappuccino recipes), (2) the main effect of *environment* (i.e., the difference in mean acceptability scores across consumption environments), and (3) the interaction of sample and environment (i.e., are different cappuccino recipes evaluated differently across environments). For example, one sample might be evaluated best in the lab, but worst in the real coffeehouse).
+
+We see that the main effects of *sample* and *environment* are both significant as the empirical p-values fall below 5%. Thus, we are able to replicate the authors' findings regarding the level effect across consumption environments. More precisely, the effect of *environment* $F_{2, 206}$ = `r round(cappuccino_rANOVA$ANOVA$F[2], digits = 2)`, p = `r round(cappuccino_rANOVA$ANOVA$p[2], digits = 3)` is significant with an effect size of generalized $\eta^{2}_{p}$ = `r round(cappuccino_rANOVA$ANOVA$ges[2], digits = 2)`, a small effect [@Bakeman.2005; @Olejnik.2003]. This perfectly mirrors the results reported in Web Appendix, despite the fact, that the Web Appendix obviously reported the wrong value for the generalized $\eta^{2}_{p}$ (0.10 instead of 0.01).
+
+The two other tables reported above simply test one of the assumptions for rANOVA, namely whether the data exerts [*Sphericity*](https://statistics.laerd.com/statistical-guides/sphericity-statistical-guide.php) across measurement times [@Field.2012, p. 551]. To make it short, the second table shows that this assumption is significantly violated for the main effect of *sample*, but not for the other effects under consideration. If the assumption is violated, the one has to pay attention to the third table. Here we can find two proposed correction methods (Hyunh-Feldt \[HF\] and Greenhouse-Geisser \[GG\]), of which the latter is most commonly applied [@Field.2012, p. 554].
+
+------------------------------------------------------------------------
