@@ -123,8 +123,6 @@ Most of the packages are well-documented; see: <https://cran.r-project.org/>
 
 ```
 
-
-
 ::: {.callout-caution collapse="true"}
 ## Expand to learn more about calling functions
 
