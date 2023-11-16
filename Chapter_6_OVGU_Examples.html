@@ -51,7 +51,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 <script src="Chapter_6_OVGU_Examples_files/libs/clipboard/clipboard.min.js"></script>
 <script src="Chapter_6_OVGU_Examples_files/libs/quarto-html/quarto.js"></script>
@@ -98,6 +117,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="citation_reference" content="citation_title=Discovering statistics using r;,citation_author=Andy P. Field;,citation_author=Jeremy Miles;,citation_author=Zoë Field;,citation_publication_date=2012;,citation_cover_date=2012;,citation_year=2012;,citation_isbn=9781446200452;">
 <meta name="citation_reference" content="citation_title=Teoria statistica delle classi e calcolo delle probabilità;,citation_author=Carlo Emilio Bonferroni;,citation_publication_date=1936;,citation_cover_date=1936;,citation_year=1936;,citation_volume=8;,citation_series_title=Pubblicazioni del r. Istituto superiore di scienze economiche e commerciali di firenze;">
 <meta name="citation_reference" content="citation_title=A simple sequentially rejective multiple test procedure;,citation_abstract=This paper presents a simple and widely applicable multiple test procedure of the sequentially rejective type, i.e. hypotheses are rejected one at a time until no further rejections can be done. It is shown that the test has a prescribed level of significance protection against error of the first kind for any combination of true hypotheses. The power properties of the test and a number of possible applications are also discussed.;,citation_author=Sture Holm;,citation_publication_date=1979;,citation_cover_date=1979;,citation_year=1979;,citation_fulltext_html_url=http://www.jstor.org/stable/4615733;,citation_issue=2;,citation_issn=03036898, 14679469;,citation_volume=6;,citation_journal_title=Scandinavian Journal of Statistics;">
+<meta name="citation_reference" content="citation_title=Statistics for sensory and consumer science;,citation_author=Tormod Næs;,citation_author=Per B. Brockhoff;,citation_author=Oliver Tomic;,citation_publication_date=2010-06-18;,citation_cover_date=2010-06-18;,citation_year=2010;,citation_fulltext_html_url=http://dx.doi.org/10.1002/9780470669181;,citation_doi=10.1002/9780470669181;">
+<meta name="citation_reference" content="citation_title=Analyzing sensory data with r;,citation_author=Sébastien Lê;,citation_author=Thierry Worch;,citation_publication_date=2018-12-14;,citation_cover_date=2018-12-14;,citation_year=2018;,citation_fulltext_html_url=http://dx.doi.org/10.1201/9781315373416;,citation_doi=10.1201/9781315373416;">
+<meta name="citation_reference" content="citation_title=R for marketing research and analytics;,citation_author=Chris Chapman;,citation_author=Elea McDonnell Feit;,citation_publication_date=2019;,citation_cover_date=2019;,citation_year=2019;,citation_fulltext_html_url=http://dx.doi.org/10.1007/978-3-030-14316-9;,citation_doi=10.1007/978-3-030-14316-9;">
+<meta name="citation_reference" content="citation_title=Pacman: Package management for r;,citation_author=Tyler W. Rinker;,citation_author=Dason Kurkiewicz;,citation_publication_date=2018;,citation_cover_date=2018;,citation_year=2018;,citation_fulltext_html_url=http://github.com/trinker/pacman;">
+<meta name="citation_reference" content="citation_title=Welcome to the tidyverse;,citation_author=Hadley Wickham;,citation_author=Mara Averick;,citation_author=Jennifer Bryan;,citation_author=Winston Chang;,citation_author=Lucy D’Agostino McGowan;,citation_author=Romain François;,citation_author=Garrett Grolemund;,citation_author=Alex Hayes;,citation_author=Lionel Henry;,citation_author=Jim Hester;,citation_author=Max Kuhn;,citation_author=Thomas Lin Pedersen;,citation_author=Evan Miller;,citation_author=Stephan Milton Bache;,citation_author=Kirill Müller;,citation_author=Jeroen Ooms;,citation_author=David Robinson;,citation_author=Dana Paige Seidel;,citation_author=Vitalie Spinu;,citation_author=Kohske Takahashi;,citation_author=Davis Vaughan;,citation_author=Claus Wilke;,citation_author=Kara Woo;,citation_author=Hiroaki Yutani;,citation_publication_date=2019;,citation_cover_date=2019;,citation_year=2019;,citation_doi=10.21105/joss.01686;,citation_volume=4;">
+<meta name="citation_reference" content="citation_title=Sensory evaluation of food: Principles and practices;,citation_author=Harry T. Lawless;,citation_author=Hildegarde Heymann;,citation_publication_date=2010;,citation_cover_date=2010;,citation_year=2010;">
+<meta name="citation_reference" content="citation_title=sensR: Thurstonian models for sensory discrimination;,citation_author=Rune Haubo Bojesen Christensen;,citation_author=Per Bruun Brockhoff;,citation_publication_date=2023;,citation_cover_date=2023;,citation_year=2023;,citation_fulltext_html_url=https://CRAN.R-project.org/package=sensR;">
+<meta name="citation_reference" content="citation_title=Remotes: R package installation from remote repositories, including ’GitHub’;,citation_author=Gábor Csárdi;,citation_author=Jim Hester;,citation_author=Hadley Wickham;,citation_author=Winston Chang;,citation_author=Martin Morgan;,citation_author=Dan Tenenbaum;,citation_publication_date=2023;,citation_cover_date=2023;,citation_year=2023;,citation_fulltext_html_url=https://CRAN.R-project.org/package=remotes;">
+<meta name="citation_reference" content="citation_title=Risk tables for discrimination tests;,citation_author=Pascal Schlich;,citation_publication_date=1993-01;,citation_cover_date=1993-01;,citation_year=1993;,citation_fulltext_html_url=http://dx.doi.org/10.1016/0950-3293(93)90157-2;,citation_issue=3;,citation_doi=10.1016/0950-3293(93)90157-2;,citation_volume=4;,citation_language=en;,citation_journal_title=Food Quality and Preference;">
+<meta name="citation_reference" content="citation_title=Purrr: Functional programming tools;,citation_author=Hadley Wickham;,citation_author=Lionel Henry;,citation_publication_date=2023;,citation_cover_date=2023;,citation_year=2023;,citation_fulltext_html_url=https://CRAN.R-project.org/package=purrr;">
 </head>
 <body>
 
@@ -146,7 +175,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><a href="#loading-packages-that-we-will-use" id="toc-loading-packages-that-we-will-use" class="nav-link active" data-scroll-target="#loading-packages-that-we-will-use"><span class="header-section-number">1</span> Loading packages that we will use</a></li>
   <li><a href="#example-for-discrimination-test---triangle-test." id="toc-example-for-discrimination-test---triangle-test." class="nav-link" data-scroll-target="#example-for-discrimination-test---triangle-test."><span class="header-section-number">2</span> Example for Discrimination test - Triangle test.</a></li>
   <li><a href="#example-of-a-post-hoc-power-analyis-for-a-triangle-test" id="toc-example-of-a-post-hoc-power-analyis-for-a-triangle-test" class="nav-link" data-scroll-target="#example-of-a-post-hoc-power-analyis-for-a-triangle-test"><span class="header-section-number">3</span> Example of a Post-hoc Power Analyis for a Triangle Test</a></li>
-  <li><a href="#using-posit-cloud-formerly-rstudio-cloud" id="toc-using-posit-cloud-formerly-rstudio-cloud" class="nav-link" data-scroll-target="#using-posit-cloud-formerly-rstudio-cloud"><span class="header-section-number">4</span> Using Posit Cloud (formerly RStudio Cloud)</a></li>
   </ul></nav>
 </div>
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
@@ -171,8 +199,9 @@ If this grabs your attention
 </div>
 <p><a title="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" href="https://www.ovgu.de/unimagdeburg/en/Master-p-48820.html"><img src="Signet_WW_3.jpg" alt="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" width="600"></a></p>
 <hr>
-<p>R analysis script presenting the examples studied in Chapter 7 of the Sensory Marketing lecture</p>
-<p>In this exercise students should practice analyzing data with <a href="https://cran.r-project.org/"><em>R</em></a> and <a href="https://posit.co/products/open-source/rstudio/"><em>RStudio</em></a>. These skills will serve them well in the progress of their study time and in the future. The internet provides countless further examples. Besides, there exist very good text books (e.g., <span class="citation" data-cites="naes2010a">(<a href="#ref-naes2010a" role="doc-biblioref"><strong>naes2010a?</strong></a>)</span>, <span class="citation" data-cites="lê2015">(<a href="#ref-l%C3%AA2015" role="doc-biblioref"><strong>lê2015?</strong></a>)</span>, <span class="citation" data-cites="chapman2019">(<a href="#ref-chapman2019" role="doc-biblioref"><strong>chapman2019?</strong></a>)</span>).</p>
+<p>R analysis script presenting the examples studied in Chapter 6 of the Sensory Marketing lecture</p>
+<p>In this exercise students should practice analyzing data with <a href="https://cran.r-project.org/"><em>R</em></a> and <a href="https://posit.co/products/open-source/rstudio/"><em>RStudio</em></a>. These skills will serve them well in the progress of their study time and in the future. The internet provides countless further examples. Besides, there exist very good text books <span class="citation" data-cites="næs2010 lê2018 chapman2019">(<a href="#ref-chapman2019" role="doc-biblioref">Chapman &amp; Feit, 2019</a>; <a href="#ref-l%C3%AA2018" role="doc-biblioref">Lê &amp; Worch, 2018</a>; <a href="#ref-n%C3%A6s2010" role="doc-biblioref">Næs, Brockhoff, &amp; Tomic, 2010</a>)</span>.</p>
+<hr>
 <section id="loading-packages-that-we-will-use" class="level1" data-number="1"><h1 data-number="1">
 <span class="header-section-number">1</span> Loading packages that we will use</h1>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -191,11 +220,11 @@ Note
 <p>In <em>R</em> most functionality is provided by additional packages.<br>
 Most of the packages are well-documented, See: <a href="https://cran.r-project.org/" class="uri">https://cran.r-project.org/</a></p>
 <ol type="1">
-<li><p>The code chunk below first evaluates if the package <a href="https://cran.r-project.org/web/packages/pacman/index.html">pacman</a> is already installed to your machine. If yes, the corresponding package will be loaded. If not, <em>R</em> will install the package (as long as the package is still maintained on the <strong>C</strong>omprehensive <strong>R</strong> <strong>A</strong>rchive <strong>N</strong>etwork <a href="https://cran.r-project.org/"><em>CRAN</em></a>.</p></li>
+<li><p>The code chunk below first evaluates if the package <a href="https://cran.r-project.org/web/packages/pacman/index.html">pacman</a> <span class="citation" data-cites="pacman-2">(<a href="#ref-pacman-2" role="doc-biblioref">Rinker &amp; Kurkiewicz, 2018</a>)</span> is already installed to your machine. If yes, the corresponding package will be loaded. If not, <em>R</em> will install the package (as long as the package is still maintained on the <strong>C</strong>omprehensive <strong>R</strong> <strong>A</strong>rchive <strong>N</strong>etwork <a href="https://cran.r-project.org/"><em>CRAN</em></a>.</p></li>
 <li><p>Alternatively, you can do this manually first by executing <em>install.packages(“pacman”)</em> and then <em>library(pacman)</em>.</p></li>
 <li><p>The second line then loads the package <em>pacman</em></p></li>
-<li><p>The third line uses the function <em>p_load()</em> from the pacman package to install (if necessary) and load all packages that we provide as arguments (e.g., <a href="https://cran.r-project.org/web/packages/tidyverse/">tidyverse</a>).</p></li>
-<li><p>This only works if all packages are still available on <em>CRAN</em>. However, if a package is discontinued on <em>CRAN</em>, there is always the latest version in the archive. For our analysis we also draw on the discontinued package <a href="https://cran.r-project.org/web/packages/sensR/index.html"><em>sensR</em></a> <span class="citation" data-cites="sensR">(<a href="#ref-sensR" role="doc-biblioref"><strong>sensR?</strong></a>)</span>. To install this outdated package, we use the function <em>install_version()</em> from <a href="https://cran.r-project.org/web/packages/remotes/index.html"><em>remotes</em></a> <span class="citation" data-cites="remotes">(<a href="#ref-remotes" role="doc-biblioref"><strong>remotes?</strong></a>)</span>, which expects us to provide the package name, the version we wish to install from <em>CRAN</em>s archive, and a <em>CRAN</em> mirror url.</p></li>
+<li><p>The third line uses the function <em>p_load()</em> from the pacman package to install (if necessary) and load all packages that we provide as arguments (e.g., <a href="https://cran.r-project.org/web/packages/tidyverse/">tidyverse</a> <span class="citation" data-cites="tidyverse">(<a href="#ref-tidyverse" role="doc-biblioref">Wickham et al., 2019</a>)</span>).</p></li>
+<li><p>This only works if all packages are still available on <em>CRAN</em>. However, if a package is discontinued on <em>CRAN</em>, there is always the latest version in the archive. For our analysis we also draw on the discontinued package <a href="https://cran.r-project.org/web/packages/sensR/index.html"><em>sensR</em></a> <span class="citation" data-cites="sensR">(<a href="#ref-sensR" role="doc-biblioref">Christensen &amp; Brockhoff, 2023</a>)</span>. To install this outdated package, we use the function <em>install_version()</em> from <a href="https://cran.r-project.org/web/packages/remotes/index.html"><em>remotes</em></a> <span class="citation" data-cites="remotes">(<a href="#ref-remotes" role="doc-biblioref">Csárdi et al., 2023</a>)</span>, which expects us to provide the package name, the version we wish to install from <em>CRAN</em>s archive, and a <em>CRAN</em> mirror url.</p></li>
 <li><p>Finally, the last line (<em>library(sensR)</em>) loads the package.</p></li>
 </ol>
 <div class="cell">
@@ -218,7 +247,7 @@ Most of the packages are well-documented, See: <a href="https://cran.r-project.o
 <div class="cell">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16 ucrt)
+<pre><code>R version 4.3.2 (2023-10-31 ucrt)
 Platform: x86_64-w64-mingw32/x64 (64-bit)
 Running under: Windows 11 x64 (build 22631)
 
@@ -249,18 +278,18 @@ loaded via a namespace (and not attached):
  [4] TH.data_1.1-2        digest_0.6.33        timechange_0.2.0    
  [7] estimability_1.4.1   lifecycle_1.0.4      cluster_2.1.4       
 [10] multcompView_0.1-9   survival_3.5-7       processx_3.8.2      
-[13] magrittr_2.0.3       compiler_4.3.1       rlang_1.1.2         
-[16] tools_4.3.1          utf8_1.2.4           yaml_2.3.7          
+[13] magrittr_2.0.3       compiler_4.3.2       rlang_1.1.2         
+[16] tools_4.3.2          utf8_1.2.4           yaml_2.3.7          
 [19] ggsignif_0.6.4       htmlwidgets_1.6.2    scatterplot3d_0.3-44
 [22] plyr_1.8.9           xml2_1.3.5           KernSmooth_2.23-22  
 [25] abind_1.4-5          multcomp_1.4-25      numDeriv_2016.8-1.1 
-[28] withr_2.5.2          grid_4.3.1           fansi_1.0.5         
+[28] withr_2.5.2          grid_4.3.2           fansi_1.0.5         
 [31] AlgDesign_1.2.1      xtable_1.8-4         colorspace_2.1-0    
 [34] gtools_3.9.4         emmeans_1.8.9        scales_1.2.1        
 [37] MASS_7.3-60          flashClust_1.01-2    cli_3.6.1           
 [40] mvtnorm_1.2-3        rmarkdown_2.25       generics_0.1.3      
 [43] rstudioapi_0.15.0    reshape2_1.4.4       httr_1.4.7          
-[46] tzdb_0.4.0           splines_4.3.1        rvest_1.0.3         
+[46] tzdb_0.4.0           splines_4.3.2        rvest_1.0.3         
 [49] vctrs_0.6.4          webshot_0.5.5        Matrix_1.6-3        
 [52] sandwich_3.0-2       jsonlite_1.8.7       carData_3.0-5       
 [55] car_3.1-2            hms_1.1.3            rstatix_0.7.2       
@@ -276,7 +305,7 @@ loaded via a namespace (and not attached):
 </div>
 <hr></section><section id="example-for-discrimination-test---triangle-test." class="level1" data-number="2"><h1 data-number="2">
 <span class="header-section-number">2</span> Example for Discrimination test - Triangle test.</h1>
-<p>Triangle tests are very popular in sensory product research as tests for discrimination, and help to evaluate whether consumers can significantly distinguish between product alternatives <span class="citation" data-cites="lawless2010">(see, e.g., <a href="#ref-lawless2010" role="doc-biblioref"><strong>lawless2010?</strong></a>)</span>. In our lecture example on Lasagna variants, we observe the following results on the basis of n=100 consumers:</p>
+<p>Triangle tests are very popular in sensory product research as tests for discrimination, and help to evaluate whether consumers can significantly distinguish between product alternatives <span class="citation" data-cites="Lawless.2010">(see, e.g., <a href="#ref-Lawless.2010" role="doc-biblioref">Lawless &amp; Heymann, 2010, Chapter 4.4</a>)</span>. In our lecture example on Lasagna variants, we observe the following results on the basis of n=100 consumers:</p>
 <table class="table">
 <thead><tr class="header">
 <th></th>
@@ -351,7 +380,7 @@ Interpretation
 </div>
 <ul>
 <li>In the output above, <em>pc</em> means the percentage of correct discriminators (43/100).</li>
-<li>pd stands for the estimated proportion of individuals in the (relevant) population that would detect the product difference. Which is in the case of a Triangle test: <span class="math inline">\(pd=\frac{pc-1/3}{2/3}\)</span>. Note that the confidence interval for pd has an upper limit of 29.92%. Thus, in the worst case, the true proportion of discriminators is almost as high as 30%. <span class="citation" data-cites="schlich1993">(<a href="#ref-schlich1993" role="doc-biblioref"><strong>schlich1993?</strong></a>)</span> proposed the following limits for <em>pd</em> as <em>small</em>, <em>medium</em>, <em>large</em> differences: 0.25, 0.375, and 0.50.</li>
+<li>pd stands for the estimated proportion of individuals in the (relevant) population that would detect the product difference. Which is in the case of a Triangle test: <span class="math inline">\(pd=\frac{pc-1/3}{2/3}\)</span>. Note that the confidence interval for pd has an upper limit of 29.92%. Thus, in the worst case, the true proportion of discriminators is almost as high as 30%. <span class="citation" data-cites="schlich1993">Schlich (<a href="#ref-schlich1993" role="doc-biblioref">1993</a>)</span> proposed the following limits for <em>pd</em> as <em>small</em>, <em>medium</em>, <em>large</em> differences: <em>0.25</em>, <em>0.375</em>, and <em>0.50</em>.</li>
 <li>The Thurstonian approach of transforming the number of correct answers into an estimate, called d-prime of the underlying (relative) sensory difference is an attempt to overcome the concepts of <em>pc</em> and <em>pd</em>, since these are dependent on the concrete test protocol one has applied (e.g., Triangle vs.&nbsp;3-AFC tests). The higher the value the higher is the degree of difference between the two products that were tested.</li>
 </ul>
 <hr></section><section id="example-of-a-post-hoc-power-analyis-for-a-triangle-test" class="level1" data-number="3"><h1 data-number="3">
@@ -382,10 +411,10 @@ Interpretation
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>With the observed effect size for the difference, our Triangle test protocol only has a power of 61.76. Thus, if the observed effect is the true effect in the underlying population, then we would have this chance to find a significant difference in a Triangle test with n=100 and <span class="math inline">\(\alpha\)</span>=5%, which is insufficient.</p>
+<p>With the observed effect size for the difference, our Triangle test protocol only has a power of 61.76%. Thus, if the observed effect is the true effect in the underlying population, then we would have this chance to find a significant difference in a Triangle test with n=100 and <span class="math inline">\(\alpha\)</span>=5%, which is insufficient.</p>
 </div>
 </div>
-<p>As a final remark, we can estimate how many consumers should be tested in order to obtain a sufficient statistical power based on the observed effect size for the difference, a Triangle test, and <span class="math inline">\(\alpha\)</span>=5%. For this purpose, we first establish a list of varying sample sizes below. Afterwards, we use this list as input for the <em>sample.size</em> argument of the <em>d.primePwr()</em> function. Usually, this function does not accept a list of values as arguments. To handle this problem, we additionally apply the <em>map()</em> function provided by the <a href="https://cran.r-project.org/web/packages/purrr/index.html">purrr</a> package <span class="citation" data-cites="purrr">(<a href="#ref-purrr" role="doc-biblioref"><strong>purrr?</strong></a>)</span>. In the corresponding call of <em>d.primePwr()</em> we set <strong>sample.size = .</strong>, to tell the map function to use each element of the input list as input for the sample size argument in repeated calls of <em>d.primePwr()</em>.</p>
+<p>As a final remark, we can estimate how many consumers should be tested in order to obtain a sufficient statistical power based on the observed effect size for the difference, a Triangle test, and <span class="math inline">\(\alpha\)</span>=5%. For this purpose, we first establish a list of varying sample sizes below. Afterwards, we use this list as input for the <em>sample.size</em> argument of the <em>d.primePwr()</em> function. Usually, this function does not accept a list of values as arguments. To handle this problem, we additionally apply the <em>map()</em> function provided by the <a href="https://cran.r-project.org/web/packages/purrr/index.html">purrr</a> package <span class="citation" data-cites="purrr">(<a href="#ref-purrr" role="doc-biblioref">Wickham &amp; Henry, 2023</a>)</span>. In the corresponding call of <em>d.primePwr()</em> we set <strong>sample.size = .</strong>, to tell the map function to use each element of the input list as input for the sample size argument in repeated calls of <em>d.primePwr()</em>.</p>
 <div class="cell">
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">sample_sizes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>n100 <span class="op">=</span> <span class="fl">100</span>, </span>
 <span>                     n200 <span class="op">=</span> <span class="fl">200</span>, </span>
@@ -432,30 +461,40 @@ Interpretation
 <p>We can see that with a sample size of n=200 and above, we realize a power of over 85%.</p>
 </div>
 </div>
-<hr></section><section id="using-posit-cloud-formerly-rstudio-cloud" class="level1" data-number="4"><h1 data-number="4">
-<span class="header-section-number">4</span> Using Posit Cloud (formerly RStudio Cloud)</h1>
-<p>If you are new to the <em>R</em> universe (rumors say there are still folks outside), it is also an option to run all of the code presented in the script via <a href="https://posit.cloud">Posit Cloud</a>. This solution allows you to analyze your data using RStudio, directly from your web browser, which comes with several advantages:</p>
-<ul>
-<li>For you as student its for free (just sign up)</li>
-<li>No need to install <em>R</em> &amp; <em>RStudio</em>
-</li>
-<li>No need to update <em>R</em> and packages</li>
-<li>All packages used are already installed and loaded in the corresponding <em>Posit Cloud</em> project <a href="https://posit.cloud/content/5201389" class="uri">https://posit.cloud/content/5201389</a>.</li>
-</ul>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<hr>
+
+</section><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="list">
+<div id="ref-chapman2019" class="csl-entry" role="listitem">
+Chapman, C., &amp; Feit, E. M. (2019). <em>R for marketing research and analytics</em>. doi: <a href="https://doi.org/10.1007/978-3-030-14316-9">10.1007/978-3-030-14316-9</a>
 </div>
-<div class="callout-title-container flex-fill">
-Note
+<div id="ref-sensR" class="csl-entry" role="listitem">
+Christensen, R. H. B., &amp; Brockhoff, P. B. (2023). <em>sensR: Thurstonian models for sensory discrimination</em>. Retrieved from <a href="https://CRAN.R-project.org/package=sensR">https://CRAN.R-project.org/package=sensR</a>
 </div>
+<div id="ref-remotes" class="csl-entry" role="listitem">
+Csárdi, G., Hester, J., Wickham, H., Chang, W., Morgan, M., &amp; Tenenbaum, D. (2023). <em>Remotes: R package installation from remote repositories, including ’GitHub’</em>. Retrieved from <a href="https://CRAN.R-project.org/package=remotes">https://CRAN.R-project.org/package=remotes</a>
 </div>
-<div class="callout-body-container callout-body">
-<p>Just make sure to create a copy of the provided project to your own account! Otherwise, results are not saved (it’s a temporary project).</p>
+<div id="ref-Lawless.2010" class="csl-entry" role="listitem">
+Lawless, H. T., &amp; Heymann, H. (2010). <em>Sensory evaluation of food: Principles and practices</em> (2nd ed.). New York, Dordrecht, Heidelberg, London: Springer.
 </div>
+<div id="ref-lê2018" class="csl-entry" role="listitem">
+Lê, S., &amp; Worch, T. (2018). <em>Analyzing sensory data with r</em>. doi: <a href="https://doi.org/10.1201/9781315373416">10.1201/9781315373416</a>
 </div>
-</section><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-lichters2023" class="csl-entry quarto-appendix-citeas" role="listitem">
+<div id="ref-næs2010" class="csl-entry" role="listitem">
+Næs, T., Brockhoff, P. B., &amp; Tomic, O. (2010). <em>Statistics for sensory and consumer science</em>. doi: <a href="https://doi.org/10.1002/9780470669181">10.1002/9780470669181</a>
+</div>
+<div id="ref-pacman-2" class="csl-entry" role="listitem">
+Rinker, T. W., &amp; Kurkiewicz, D. (2018). <em><span></span>Pacman<span></span>: <span></span>P<span></span>ackage management for <span></span>r<span></span></em>. Retrieved from <a href="http://github.com/trinker/pacman">http://github.com/trinker/pacman</a>
+</div>
+<div id="ref-schlich1993" class="csl-entry" role="listitem">
+Schlich, P. (1993). Risk tables for discrimination tests. <em>Food Quality and Preference</em>, <em>4</em>(3), 141–151. doi: <a href="https://doi.org/10.1016/0950-3293(93)90157-2">10.1016/0950-3293(93)90157-2</a>
+</div>
+<div id="ref-tidyverse" class="csl-entry" role="listitem">
+Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L. D., François, R., … Yutani, H. (2019). <em>Welcome to the <span></span>tidyverse<span></span></em>. <em>4</em>, 1686. doi: <a href="https://doi.org/10.21105/joss.01686">10.21105/joss.01686</a>
+</div>
+<div id="ref-purrr" class="csl-entry" role="listitem">
+Wickham, H., &amp; Henry, L. (2023). <em>Purrr: Functional programming tools</em>. Retrieved from <a href="https://CRAN.R-project.org/package=purrr">https://CRAN.R-project.org/package=purrr</a>
+</div>
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-lichters2023" class="csl-entry quarto-appendix-citeas" role="listitem">
 Prof. Dr. Lichters, M. (2023, November 16). Sensory Marketing &amp;
 Product Innovation: Chapter 6 - Sensory Product Research - Examples.
 Retrieved from <a href="https://rpubs.com/M_Lichters/smpiexercise3">https://rpubs.com/M_Lichters/smpiexercise3</a>

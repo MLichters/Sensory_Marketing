@@ -90,9 +90,11 @@ pacman::p_load(haven, kableExtra, knitr, labelled, tidyverse, ggpubr, quarto, ht
 
 ------------------------------------------------------------------------
 
-R analysis script presenting the examples studied in Chapter 7 of the Sensory Marketing lecture
+R analysis script presenting the examples studied in Chapter 6 of the Sensory Marketing lecture
 
-In this exercise students should practice analyzing data with [*R*](https://cran.r-project.org/) and [*RStudio*](https://posit.co/products/open-source/rstudio/). These skills will serve them well in the progress of their study time and in the future. The internet provides countless further examples. Besides, there exist very good text books (e.g., @naes2010a, @lê2015, @chapman2019).
+In this exercise students should practice analyzing data with [*R*](https://cran.r-project.org/) and [*RStudio*](https://posit.co/products/open-source/rstudio/). These skills will serve them well in the progress of their study time and in the future. The internet provides countless further examples. Besides, there exist very good text books [@næs2010; @lê2018; @chapman2019].
+
+------------------------------------------------------------------------
 
 # Loading packages that we will use
 
@@ -103,13 +105,13 @@ In this exercise students should practice analyzing data with [*R*](https://cran
 In *R* most functionality is provided by additional packages.\
 Most of the packages are well-documented, See: <https://cran.r-project.org/>
 
-1.  The code chunk below first evaluates if the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html) is already installed to your machine. If yes, the corresponding package will be loaded. If not, *R* will install the package (as long as the package is still maintained on the **C**omprehensive **R** **A**rchive **N**etwork [*CRAN*](https://cran.r-project.org/).
+1.  The code chunk below first evaluates if the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html) [@pacman-2] is already installed to your machine. If yes, the corresponding package will be loaded. If not, *R* will install the package (as long as the package is still maintained on the **C**omprehensive **R** **A**rchive **N**etwork [*CRAN*](https://cran.r-project.org/).
 
 2.  Alternatively, you can do this manually first by executing *install.packages("pacman")* and then *library(pacman)*.
 
 3.  The second line then loads the package *pacman*
 
-4.  The third line uses the function *p_load()* from the pacman package to install (if necessary) and load all packages that we provide as arguments (e.g., [tidyverse](https://cran.r-project.org/web/packages/tidyverse/)).
+4.  The third line uses the function *p_load()* from the pacman package to install (if necessary) and load all packages that we provide as arguments (e.g., [tidyverse](https://cran.r-project.org/web/packages/tidyverse/) [@tidyverse]).
 
 5.  This only works if all packages are still available on *CRAN*. However, if a package is discontinued on *CRAN*, there is always the latest version in the archive. For our analysis we also draw on the discontinued package [*sensR*](https://cran.r-project.org/web/packages/sensR/index.html) [@sensR]. To install this outdated package, we use the function *install_version()* from [*remotes*](https://cran.r-project.org/web/packages/remotes/index.html) [@remotes], which expects us to provide the package name, the version we wish to install from *CRAN*s archive, and a *CRAN* mirror url.
 
@@ -174,7 +176,7 @@ sessionInfo()
 
 # Example for Discrimination test - Triangle test.
 
-Triangle tests are very popular in sensory product research as tests for discrimination, and help to evaluate whether consumers can significantly distinguish between product alternatives [see, e.g., @lawless2010, chap. 4.4]. In our lecture example on Lasagna variants, we observe the following results on the basis of n=100 consumers:
+Triangle tests are very popular in sensory product research as tests for discrimination, and help to evaluate whether consumers can significantly distinguish between product alternatives [see, e.g., @Lawless.2010, chap. 4.4]. In our lecture example on Lasagna variants, we observe the following results on the basis of n=100 consumers:
 
 |              | Correctly identified odd sample | Incorrect response  |
 |--------------|:-------------------------------:|:-------------------:|
@@ -223,7 +225,7 @@ As the results of the $\chi^{2}$-test is significant (`r round(triangle_test$p.v
 :::
 
 -   In the output above, *pc* means the percentage of correct discriminators (43/100).
--   pd stands for the estimated proportion of individuals in the (relevant) population that would detect the product difference. Which is in the case of a Triangle test: $pd=\frac{pc-1/3}{2/3}$. Note that the confidence interval for pd has an upper limit of `r round(triangle_test$coefficients[2, 4]*100, digits = 2)`%. Thus, in the worst case, the true proportion of discriminators is almost as high as 30%. @schlich1993 proposed the following limits for *pd* as *small*, *medium*, *large* differences: 0.25, 0.375, and 0.50.
+-   pd stands for the estimated proportion of individuals in the (relevant) population that would detect the product difference. Which is in the case of a Triangle test: $pd=\frac{pc-1/3}{2/3}$. Note that the confidence interval for pd has an upper limit of `r round(triangle_test$coefficients[2, 4]*100, digits = 2)`%. Thus, in the worst case, the true proportion of discriminators is almost as high as 30%. @schlich1993 proposed the following limits for *pd* as *small*, *medium*, *large* differences: *0.25*, *0.375*, and *0.50*.
 -   The Thurstonian approach of transforming the number of correct answers into an estimate, called d-prime of the underlying (relative) sensory difference is an attempt to overcome the concepts of *pc* and *pd*, since these are dependent on the concrete test protocol one has applied (e.g., Triangle vs. 3-AFC tests). The higher the value the higher is the degree of difference between the two products that were tested.
 
 ------------------------------------------------------------------------
@@ -252,7 +254,7 @@ power_triangle
 ::: callout-tip
 ## Interpretation
 
-With the observed effect size for the difference, our Triangle test protocol only has a power of `r round(power_triangle*100, digits = 2)`. Thus, if the observed effect is the true effect in the underlying population, then we would have this chance to find a significant difference in a Triangle test with n=100 and $\alpha$=5%, which is insufficient.
+With the observed effect size for the difference, our Triangle test protocol only has a power of `r round(power_triangle*100, digits = 2)`%. Thus, if the observed effect is the true effect in the underlying population, then we would have this chance to find a significant difference in a Triangle test with n=100 and $\alpha$=5%, which is insufficient.
 :::
 
 As a final remark, we can estimate how many consumers should be tested in order to obtain a sufficient statistical power based on the observed effect size for the difference, a Triangle test, and $\alpha$=5%. For this purpose, we first establish a list of varying sample sizes below. Afterwards, we use this list as input for the *sample.size* argument of the *d.primePwr()* function. Usually, this function does not accept a list of values as arguments. To handle this problem, we additionally apply the *map()* function provided by the [purrr](https://cran.r-project.org/web/packages/purrr/index.html) package [@purrr]. In the corresponding call of *d.primePwr()* we set **sample.size = .**, to tell the map function to use each element of the input list as input for the sample size argument in repeated calls of *d.primePwr()*.
@@ -284,16 +286,3 @@ We can see that with a sample size of n=200 and above, we realize a power of ove
 :::
 
 ------------------------------------------------------------------------
-
-# Using Posit Cloud (formerly RStudio Cloud)
-
-If you are new to the *R* universe (rumors say there are still folks outside), it is also an option to run all of the code presented in the script via [Posit Cloud](https://posit.cloud). This solution allows you to analyze your data using RStudio, directly from your web browser, which comes with several advantages:
-
--   For you as student its for free (just sign up)
--   No need to install *R* & *RStudio*
--   No need to update *R* and packages
--   All packages used are already installed and loaded in the corresponding *Posit Cloud* project <https://posit.cloud/content/5201389>.
-
-::: callout-note
-Just make sure to create a copy of the provided project to your own account! Otherwise, results are not saved (it's a temporary project).
-:::
