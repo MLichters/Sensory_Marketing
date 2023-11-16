@@ -23,7 +23,7 @@ csl: apa-old-doi-prefix.csl
 citation:
   language: "en"
   type: post
-  url: https://rpubs.com/M_Lichters/smpiexercise3
+  url: https://rpubs.com/M_Lichters/smpichap6
   title: 'Sensory Marketing & Product Innovation: Chapter 6 - Sensory Product Research - Examples'
 appendix-cite-as: display
 format:
@@ -111,11 +111,7 @@ Most of the packages are well-documented, See: <https://cran.r-project.org/>
 
 3.  The second line then loads the package *pacman*
 
-4.  The third line uses the function *p_load()* from the pacman package to install (if necessary) and load all packages that we provide as arguments (e.g., [tidyverse](https://cran.r-project.org/web/packages/tidyverse/) [@tidyverse]).
-
-5.  This only works if all packages are still available on *CRAN*. However, if a package is discontinued on *CRAN*, there is always the latest version in the archive. For our analysis we also draw on the discontinued package [*sensR*](https://cran.r-project.org/web/packages/sensR/index.html) [@sensR]. To install this outdated package, we use the function *install_version()* from [*remotes*](https://cran.r-project.org/web/packages/remotes/index.html) [@remotes], which expects us to provide the package name, the version we wish to install from *CRAN*s archive, and a *CRAN* mirror url.
-
-6.  Finally, the last line (*library(sensR)*) loads the package.
+4.  The third line uses the function *p_load()* from the pacman package to install (if necessary) and load all packages that we provide as arguments (e.g., [tidyverse](https://cran.r-project.org/web/packages/tidyverse/) [@tidyverse], [sensR](https://cran.r-project.org/web/packages/sensR/ "Link to CRAN") [@sensR], [SensoMineR](https://cran.r-project.org/web/packages/SensoMineR/index.html "Link to CRAN") [@SensoMineR]). This only works if all packages are still available on *CRAN.*
 
 ```{r}
 #| include: false
@@ -130,15 +126,7 @@ if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(tidyverse, SensoMineR, remotes, purrr)
-
-if (!"sensR" %in% rownames(installed.packages())) 
-  install_version(package = 'sensR', 
-                  version = '1.5-2', 
-                  repos = "https://cloud.r-project.org")
-
-library(sensR)
-
+pacman::p_load(tidyverse, SensoMineR, purrr, sensR)
 
 ```
 
@@ -149,15 +137,7 @@ if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(tidyverse, SensoMineR, remotes, purrr)
-
-if (!"sensR" %in% rownames(installed.packages())) install_version(package = "sensR", 
-                  version = "1.5-2", 
-                  repos = "https://cloud.r-project.org")
-
-
-
-library(sensR)
+pacman::p_load(tidyverse, SensoMineR, purrr, sensR)
 
 ```
 
