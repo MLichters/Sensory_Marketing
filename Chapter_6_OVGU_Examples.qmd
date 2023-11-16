@@ -1,0 +1,299 @@
+---
+title-block-banner: true
+title: "Sensory Marketing and Product Innovation"
+subtitle: "Chapter 6 - Sensory Product Research - Examples"
+author: 
+  - name: 
+      given: Marcel
+      family: Lichters
+      non-dropping-particle: Prof. Dr.
+    url: https://www.marketing.ovgu.de/
+    email: marcel.lichters@ovgu.de
+    corresponding: true
+    affiliation: 
+    - name: Otto-von-Guericke-University Magdeburg
+      city: Magdeburg
+      state: Saxony-Anhalt
+      country: Germany
+    affiliation-url: https://www.ovgu.de/en/
+    orcid: 0000-0002-3710-2292
+date: now
+date-format: full
+csl: apa-old-doi-prefix.csl
+citation:
+  language: "en"
+  type: post
+  url: https://rpubs.com/M_Lichters/smpiexercise3
+  title: 'Sensory Marketing & Product Innovation: Chapter 6 - Sensory Product Research - Examples'
+appendix-cite-as: display
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-location: left
+    code-fold: false
+    code-link: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-tools: false
+    code-copy: hover
+    number-sections: true
+    number-depth: 3
+    citations-hover: true
+    footnotes-hover: true
+email-obfuscation: javascript
+editor: source
+bibliography: references.bib
+editor_options: 
+  chunk_output_type: console
+google-scholar: true
+copyright: 
+  holder: Prof. Dr. Marcel Lichters
+  year: 2023
+---
+
+------------------------------------------------------------------------
+
+<a title="Follow me on ResearchGate" href="https://www.researchgate.net/profile/Marcel_Lichters?cp=shp"><img src="https://www.researchgate.net/images/public/profile_share_badge.png" alt="Follow me on ResearchGate"/></a>
+
+[Connect with me on Open Science Framework](https://osf.io/u7hyz/) \| [Contact me via LinkedIn](https://www.linkedin.com/in/lichters/)
+
+It might be necessary to use right-click -\> open in a new browser window depending on your machine*.*
+
+------------------------------------------------------------------------
+
+::: callout-tip
+## If this grabs your attention
+
+If this exercise grabs your attention, please check out our master study programs at the Otto-von-Guericke-University in Magdeburg (Germany) by clicking on the logo!
+:::
+
+<a title="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" href="https://www.ovgu.de/unimagdeburg/en/Master-p-48820.html"><img src="Signet_WW_3.jpg" alt="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" width="600"/></a>
+
+```{r}
+#| include: false
+
+
+#clear workspace
+rm(list = ls())
+
+
+#load packages
+if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
+
+library(pacman)
+
+pacman::p_load(haven, kableExtra, knitr, labelled, tidyverse, ggpubr, quarto, htmltools, pwr, compute.es)
+
+
+```
+
+------------------------------------------------------------------------
+
+R analysis script presenting the examples studied in Chapter 7 of the Sensory Marketing lecture
+
+In this exercise students should practice analyzing data with [*R*](https://cran.r-project.org/) and [*RStudio*](https://posit.co/products/open-source/rstudio/). These skills will serve them well in the progress of their study time and in the future. The internet provides countless further examples. Besides, there exist very good text books (e.g., @naes2010a, @lê2015, @chapman2019).
+
+# Loading packages that we will use
+
+::: callout-note
+*R* is a context-sensitive language. Thus, 'data' will be interpreted not in the same way as 'Data' will.
+:::
+
+In *R* most functionality is provided by additional packages.\
+Most of the packages are well-documented, See: <https://cran.r-project.org/>
+
+1.  The code chunk below first evaluates if the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html) is already installed to your machine. If yes, the corresponding package will be loaded. If not, *R* will install the package (as long as the package is still maintained on the **C**omprehensive **R** **A**rchive **N**etwork [*CRAN*](https://cran.r-project.org/).
+
+2.  Alternatively, you can do this manually first by executing *install.packages("pacman")* and then *library(pacman)*.
+
+3.  The second line then loads the package *pacman*
+
+4.  The third line uses the function *p_load()* from the pacman package to install (if necessary) and load all packages that we provide as arguments (e.g., [tidyverse](https://cran.r-project.org/web/packages/tidyverse/)).
+
+5.  This only works if all packages are still available on *CRAN*. However, if a package is discontinued on *CRAN*, there is always the latest version in the archive. For our analysis we also draw on the discontinued package [*sensR*](https://cran.r-project.org/web/packages/sensR/index.html) [@sensR]. To install this outdated package, we use the function *install_version()* from [*remotes*](https://cran.r-project.org/web/packages/remotes/index.html) [@remotes], which expects us to provide the package name, the version we wish to install from *CRAN*s archive, and a *CRAN* mirror url.
+
+6.  Finally, the last line (*library(sensR)*) loads the package.
+
+```{r}
+#| include: false
+
+
+#clear workspace
+rm(list = ls())
+
+
+#load packages
+if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
+
+library(pacman)
+
+pacman::p_load(tidyverse, SensoMineR, remotes, purrr)
+
+if (!"sensR" %in% rownames(installed.packages())) 
+  install_version(package = 'sensR', 
+                  version = '1.5-2', 
+                  repos = "https://cloud.r-project.org")
+
+library(sensR)
+
+
+```
+
+```{r}
+#| eval: false
+
+if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
+
+library(pacman)
+
+pacman::p_load(tidyverse, SensoMineR, remotes, purrr)
+
+if (!"sensR" %in% rownames(installed.packages())) install_version(package = "sensR", 
+                  version = "1.5-2", 
+                  repos = "https://cloud.r-project.org")
+
+
+
+library(sensR)
+
+```
+
+------------------------------------------------------------------------
+
+Here is the *R* session info which gives you information on my machine, all loaded packages and their version:
+
+```{r  }
+
+sessionInfo()
+
+
+```
+
+------------------------------------------------------------------------
+
+# Example for Discrimination test - Triangle test.
+
+Triangle tests are very popular in sensory product research as tests for discrimination, and help to evaluate whether consumers can significantly distinguish between product alternatives [see, e.g., @lawless2010, chap. 4.4]. In our lecture example on Lasagna variants, we observe the following results on the basis of n=100 consumers:
+
+|              | Correctly identified odd sample | Incorrect response  |
+|--------------|:-------------------------------:|:-------------------:|
+| **Observed** |            43 (O~1~)            |      57 (O~2~)      |
+| **Expected** |       33.$\bar{3}$ (E~1~)       | 66.$\bar{6}$ (E~2~) |
+
+In our example, analysis draws on a (Pearson) $\chi^{2}$-test (without continuity correction). Here, the test statistic is calculated as follows:
+
+$\chi^{2}_{(1)}=\sum\frac{(observed-expected)^2}{expected}=[\frac{(O_{1}-E_{1})^2}{E_{1}}]+[\frac{(O_{2}-E_{2})^2}{E_{2}}]=[\frac{(43-33.\bar{3})^2}{33.\bar{3}}]+\frac{(57-66.\bar{6})^2}{66.\bar{6}}]=2.803+1.402=4.205$
+
+We know from lectures in statistics that the *df* in a $\chi^{2}$-test equal: (number of rows -1) \* (number of columns -1). Thus, df=(2-1)\*(2-1)=1. The degrees of freedom are 1.
+
+The package [sensR](https://cran.r-project.org/web/packages/sensR/) is providing functions to handle nearly all types of discrimination tests, including Triangle tests. We will use the function **discrim()**. This function allows us to specify many arguments (see help by pressing 'F1'). We will do so for
+
+-   correct = the number of correct answers
+-   total = total number of responses
+-   conf.level = significance level (Type I error probability $\alpha$)
+-   method = the discrimination protocol applied (see lecture slides for the various options)
+-   statistic = The type of analysis strategy to apply for the data (whether one wants to use normal distribution or Chi² etc.)
+-   test = Whether a test for similarity or difference should be obtained.
+
+Below, we assign the results of our Triangle Discrimination test to a new object named 'triangle_test'. Then we call for its content.
+
+```{r}
+
+triangle_test <- discrim(
+  correct= 43, 
+  total= 100,
+  conf.level = 0.95,
+  method = "triangle", 
+  statistic = "score",
+  test = "difference")
+
+
+triangle_test
+
+
+
+
+```
+
+::: callout-tip
+## Interpretation
+
+As the results of the $\chi^{2}$-test is significant (`r round(triangle_test$p.value, digits = 3)`), we have to reject H~0~. Thus, consumers can reliably distinguish between the new and the old lasagna.
+:::
+
+-   In the output above, *pc* means the percentage of correct discriminators (43/100).
+-   pd stands for the estimated proportion of individuals in the (relevant) population that would detect the product difference. Which is in the case of a Triangle test: $pd=\frac{pc-1/3}{2/3}$. Note that the confidence interval for pd has an upper limit of `r round(triangle_test$coefficients[2, 4]*100, digits = 2)`%. Thus, in the worst case, the true proportion of discriminators is almost as high as 30%. @schlich1993 proposed the following limits for *pd* as *small*, *medium*, *large* differences: 0.25, 0.375, and 0.50.
+-   The Thurstonian approach of transforming the number of correct answers into an estimate, called d-prime of the underlying (relative) sensory difference is an attempt to overcome the concepts of *pc* and *pd*, since these are dependent on the concrete test protocol one has applied (e.g., Triangle vs. 3-AFC tests). The higher the value the higher is the degree of difference between the two products that were tested.
+
+------------------------------------------------------------------------
+
+# Example of a Post-hoc Power Analyis for a Triangle Test
+
+To get an idea about the statistical Power of a Similarity or Dissimilarity test protocol, the [sensR](https://cran.r-project.org/web/packages/sensR/) package also provides functions that facilitate sample size planning for discrimination tests (i.e., statistical power analysis). To provide an example, we will use the d-prime estimate from the Triangle test on lasagna above (`r round(triangle_test$coefficients[3, 1], digits = 2)`) as input the determine the statistical power of the Triangle test with n=100.
+
+In the code chunk below, we use the obtained d-prime as input for the function *d.primePwr()*. Furthermore, we specify all other aspects of our exemplary Triangle test.
+
+```{r}
+
+power_triangle <- d.primePwr(
+  d.primeA = 1.075,
+  sample.size = 100,
+  alpha = 0.05,
+  method = "triangle",
+  test = "difference", statistic = "exact"
+)
+
+power_triangle
+
+
+```
+
+::: callout-tip
+## Interpretation
+
+With the observed effect size for the difference, our Triangle test protocol only has a power of `r round(power_triangle*100, digits = 2)`. Thus, if the observed effect is the true effect in the underlying population, then we would have this chance to find a significant difference in a Triangle test with n=100 and $\alpha$=5%, which is insufficient.
+:::
+
+As a final remark, we can estimate how many consumers should be tested in order to obtain a sufficient statistical power based on the observed effect size for the difference, a Triangle test, and $\alpha$=5%. For this purpose, we first establish a list of varying sample sizes below. Afterwards, we use this list as input for the *sample.size* argument of the *d.primePwr()* function. Usually, this function does not accept a list of values as arguments. To handle this problem, we additionally apply the *map()* function provided by the [purrr](https://cran.r-project.org/web/packages/purrr/index.html) package [@purrr]. In the corresponding call of *d.primePwr()* we set **sample.size = .**, to tell the map function to use each element of the input list as input for the sample size argument in repeated calls of *d.primePwr()*.
+
+```{r}
+
+sample_sizes <- list(n100 = 100, 
+                     n200 = 200, 
+                     n300 = 300, 
+                     n400 = 400, 
+                     n500 = 500)
+
+
+sample_sizes %>%
+  map(~ d.primePwr(
+    d.primeA = 1.075,
+    sample.size = .,
+    alpha = 0.05,
+    method = "triangle",
+    test = "difference", statistic = "exact"
+  ))
+
+```
+
+::: callout-tip
+## Interpretation
+
+We can see that with a sample size of n=200 and above, we realize a power of over 85%.
+:::
+
+------------------------------------------------------------------------
+
+# Using Posit Cloud (formerly RStudio Cloud)
+
+If you are new to the *R* universe (rumors say there are still folks outside), it is also an option to run all of the code presented in the script via [Posit Cloud](https://posit.cloud). This solution allows you to analyze your data using RStudio, directly from your web browser, which comes with several advantages:
+
+-   For you as student its for free (just sign up)
+-   No need to install *R* & *RStudio*
+-   No need to update *R* and packages
+-   All packages used are already installed and loaded in the corresponding *Posit Cloud* project <https://posit.cloud/content/5201389>.
+
+::: callout-note
+Just make sure to create a copy of the provided project to your own account! Otherwise, results are not saved (it's a temporary project).
+:::
