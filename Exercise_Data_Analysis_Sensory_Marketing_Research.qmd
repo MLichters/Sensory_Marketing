@@ -1,0 +1,316 @@
+---
+title-block-banner: true
+title: "Sensory Marketing and Product Innovation"
+subtitle: "Exercise 6 - Practicing Data Analysis in Sensory Marketing Research"
+author: 
+  - name: 
+      given: Marcel
+      family: Lichters
+      non-dropping-particle: Prof. Dr.
+    url: https://www.marketing.ovgu.de/
+    email: marcel.lichters@ovgu.de
+    corresponding: true
+    affiliation: 
+    - name: Otto-von-Guericke-University Magdeburg
+      city: Magdeburg
+      state: Saxony-Anhalt
+      country: Germany
+    affiliation-url: https://www.ovgu.de/en/
+    orcid: 0000-0002-3710-2292
+date: now
+date-format: full
+csl: apa-old-doi-prefix.csl
+citation:
+  language: "en"
+  type: post
+  url: https://rpubs.com/M_Lichters/smpiexercise6
+  title: 'Sensory Marketing & Product Innovation: Exercise 6 - Practicing Data Analysis in Sensory Marketing Research'
+appendix-cite-as: display
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-location: left
+    code-fold: false
+    code-link: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-tools: false
+    code-copy: hover
+    number-sections: true
+    number-depth: 3
+    citations-hover: true
+    footnotes-hover: true
+email-obfuscation: javascript
+editor: source
+bibliography: references.bib
+editor_options: 
+  chunk_output_type: console
+google-scholar: true
+copyright: 
+  holder: Prof. Dr. Marcel Lichters
+  year: 2023
+---
+
+------------------------------------------------------------------------
+
+<a title="Follow me on ResearchGate" href="https://www.researchgate.net/profile/Marcel_Lichters?cp=shp"><img src="https://www.researchgate.net/images/public/profile_share_badge.png" alt="Follow me on ResearchGate"/></a>
+
+[Connect with me on Open Science Framework](https://osf.io/u7hyz/) \| [Contact me via LinkedIn](https://www.linkedin.com/in/lichters/)
+
+It might be necessary to use right-click -\> open in a new browser window depending on your machine*.*
+
+------------------------------------------------------------------------
+
+R analysis script presenting the solutions for exercise 6 in Sensory Marketing and Product Innovation
+
+The purpose of this script does not solely lay in answering the exercise question. Moreover, studying these scripts should students make become familiar with some aspects of working in *R*.
+
+::: callout-tip
+## If this grabs your attention
+
+If this exercise grabs your attention, please check out our master study programs at the Otto-von-Guericke-University in Magdeburg (Germany) by clicking on the logo!
+:::
+
+<a title="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" href="https://www.ovgu.de/unimagdeburg/en/Master-p-48820.html"><img src="Signet_WW_3.jpg" alt="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" width="600"/></a>
+
+```{r}
+#| include: false
+
+
+#clear workspace
+rm(list = ls())
+
+
+#load packages
+if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
+
+library(pacman)
+
+pacman::p_load(haven, kableExtra, knitr, labelled, tidyverse, ggpubr, quarto, htmltools, pwr, compute.es)
+
+
+```
+
+# Loading packages
+
+::: callout-important
+## Beware!
+
+*R* is a context-sensitive language. Thus, 'data' will be interpreted not in the same way as 'Data' will.
+:::
+
+In *R* most functionality is provided by additional packages.\
+Most of the packages are well-documented, see: <https://cran.r-project.org/>
+
+1.  The code chunk below first evaluates if the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html) [@pacman] is already installed on your machine. If yes, the corresponding package will be loaded. If not, *R* will install the package.
+
+2.  Alternatively, you can do this manually first by executing *install.packages("pacman")* and then *library(pacman)*.
+
+3.  The second line then loads the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html).
+
+4.  The third line uses the function *p_load()* from the pacman package to install (if necessary) and loads all packages that we provide as arguments (e.g., [pwr](https://cran.r-project.org/web/packages/pwr/) [@pwr], which provides functions for statistical power calculations, or [sensR](https://cran.r-project.org/web/packages/sensR/ "Link to CRAN") [@sensR], which provides access to many functions usful in sensory product research).
+
+```{r}
+#| include: false
+
+
+#clear workspace
+rm(list = ls())
+
+
+#load packages
+if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
+
+library(pacman)
+
+pacman::p_load(tidyverse, SensoMineR, sensR, pwr)
+
+```
+
+```{r}
+#| eval: false
+
+if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
+
+library(pacman)
+
+pacman::p_load(tidyverse, SensoMineR, sensR, pwr)
+
+```
+
+------------------------------------------------------------------------
+
+::: {.callout-caution collapse="true"}
+## Expand to learn more about calling functions
+
+In all code chunks throughout this script, you can receive additional help on each used function by clicking on its name (or via right-click and then opening in a new browser tab). Alternatively, when coding, we can see which arguments a function understands by pressing 'F1' while setting the cursor to the function's name.
+:::
+
+------------------------------------------------------------------------
+
+Here is the *R* session info which gives you information on my machine, all loaded packages, and their version:
+
+```{r  }
+
+sessionInfo()
+
+
+```
+
+------------------------------------------------------------------------
+
+# Finding an answer to case #1 - Discrimination testing -- The case of Jägermeister's grated deer horn
+
+## Task 2 - Analyze whether the test results support the notion that consumers can detect the product differences between both variants.
+
+Jägermeister was conducting an unspecified Duo-trio test for product differences with 206 regular consumers of Jägermeister. In such a test procedure, consumers are asked to compare two product variants (Jägermeister Original vs. Jägermeister Grated Deer Horn). A reference product is first served. Then, consumers have to decide which of two other product samples matches the reference product. The reference product is sometimes Jägermeister Original, and sometimes Jägermeister Grated Deer Horn. Also, the positions of the two product samples are counterbalanced across consumers following an experimental design.
+
+The company was observing 121 (out of 206) correct matches within the test.
+
+The package [sensR](https://cran.r-project.org/web/packages/sensR/) is providing functions to handle nearly all types of discrimination tests, including Duo-trio tests. We will use the function **discrim()**. This function allows us to specify many arguments (see help by pressing 'F1'). We will do so for
+
+-   correct = the number of correct answers
+-   total = total number of responses
+-   conf.level = significance level (Type I error probability $\alpha$), usually 0.95 corresponding to 95%.
+-   method = the discrimination protocol applied (see lecture slides for the various options)
+-   statistic = The type of analysis strategy to apply for the data (whether one wants to use normal distribution or Chi² etc.)
+-   test = Whether a test for similarity or difference should be obtained.
+
+Below, we assign the results of our Discrimination test to a new object named 'duo_trio_test'. Then we call for its content.
+
+```{r}
+
+duo_trio_test <- discrim(
+  correct= 121, 
+  total= 206,
+  conf.level = 0.95,
+  method = "duotrio", 
+  statistic = "score",
+  test = "difference")
+
+
+duo_trio_test
+
+```
+
+::: callout-tip
+## Interpretation
+
+As the results of the $\chi^{2}$-test is significant p=(`r round(duo_trio_test$p.value, digits = 3)`), we have to reject H~0~. Thus, consumers can reliably distinguish between the new and the old Jägermeister recipe. Of course this is not answering the question of whether the grated horn variant tastes better than Jägermeister Original.
+:::
+
+-   In the output above, *pc* means the percentage of correct discriminators (121/206).
+-   *pd* stands for the estimated proportion of individuals in the (relevant) population that would detect the product difference (`r round(duo_trio_test$coefficients[2,1]*100, digits = 3)`%). In the case of a Duo-trio test this is: $pd=\frac{pc-1/2}{1/2}$. Note that the confidence interval for pd has an upper limit of `r round(duo_trio_test$coefficients[2, 4]*100, digits = 2)`%. Thus, in the worst case, the true proportion of discriminators is almost as high as 31%.
+-   The Thurstonian approach of transforming the number of correct answers into an estimate, called d-prime of the underlying (relative) sensory difference is an attempt to overcome the concepts of *pc* and *pd*, since these are dependent on the concrete test protocol one has applied (e.g., Triangle vs. 3-AFC tests). The higher the value the higher is the degree of difference between the two products that were tested.
+
+## Task 3 - Analyze whether a Triangle or a Duo-trio test has higher statistical power to detect the product differences between both variants.
+
+We, again, use functions from the [sensR](https://cran.r-project.org/web/packages/sensR/) package. Further we assume that the observed d-prime from Task 2 is the true effect size in the underlying population. Consequently, we will use this d-prime estimate (`r round(duo_trio_test$coefficients[3, 1], digits = 2)`) as input the compare the statistical power of Triangle test vs. the Duo-trio test (each with n=201).
+
+We start with the Duo-trio test. In the code chunk below, we use the obtained d-prime as input for the function *d.primePwr()*. Furthermore, we specify all other aspects of our test.
+
+```{r}
+
+power_duo_trio <- d.primePwr(
+  d.primeA = duo_trio_test$coefficients[3, 1],
+  sample.size = 206,
+  alpha = 0.05,
+  method = "duotrio",
+  test = "difference", statistic = "exact"
+)
+
+power_duo_trio
+
+
+```
+
+::: callout-tip
+## Interpretation
+
+With the observed effect size for the difference, our Duo-trio test protocol only has a power of `r round(power_duo_trio*100, digits = 2)`%. Thus, if the observed effect is the true effect in the underlying population, then we would have this chance to find a significant difference in a Duo-trio test with n=206 and $\alpha$=5%, which falls below the common advice of having a statistical power of at least 80% [@Cohen.1988]. Thus, Jägermeister should allocate more money to such tests to be able to recruit more consumers.
+:::
+
+Next, we proceed with the Triangle test.
+
+
+```{r}
+
+power_triangle <- d.primePwr(
+  d.primeA = duo_trio_test$coefficients[3, 1],
+  sample.size = 206,
+  alpha = 0.05,
+  method = "triangle",
+  test = "difference", statistic = "exact"
+)
+
+power_triangle
+
+
+```
+::: callout-tip
+## Interpretation
+
+A Triangle test protocol would have a higher power of `r round(power_triangle*100, digits = 2)`%. Therefore, if the observed effect is the true effect in the underlying population and Jägermeister can not afford to have larger sample size than n=206, then the company should switch from a Duo-trio to a Triangle test protocol.
+
+:::
+
+For sake of completeness, I have visualized the development of the statistical power given a d-prime of `r round(duo_trio_test$coefficients[3, 1], digits = 2)` and an allowed $\alpha$ = 5% for both test variants.
+
+```{r}
+
+sample_sizes <- list(n50 = 50,
+                     n100 = 100,
+                     n150 = 150,
+                     n200 = 200,
+                     n250 = 250,
+                     n300 = 300,
+                     n350 = 350,
+                     n400 = 400,
+                     n450 = 450,
+                     n500 = 500,
+                     n550 = 550)
+
+power_duo_trio_list <- sample_sizes %>%
+  map(~ d.primePwr(
+    d.primeA = duo_trio_test$coefficients[3, 1],
+    sample.size = .,
+    alpha = 0.05,
+    method = "duotrio",
+    test = "difference", statistic = "exact"
+  ))
+
+power_triangle_list <- sample_sizes %>%
+  map(~ d.primePwr(
+    d.primeA = duo_trio_test$coefficients[3, 1],
+    sample.size = .,
+    alpha = 0.05,
+    method = "triangle",
+    test = "difference", statistic = "exact"
+  ))
+
+power <- tibble(sample_size = c(50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550), duo_trio = power_duo_trio_list, triangle = power_triangle_list)
+
+power_long <- power %>% pivot_longer(cols = c(duo_trio, triangle), names_to = "method", values_to = "power")
+
+power_long$power <- unlist(power_long$power)
+
+power_long %>% ggplot(
+  aes(
+    x = sample_size,
+    y = power,
+    shape = method,
+    color = method
+  )
+) +
+  geom_line(color = "grey") +
+  geom_point(size = 4)
+
+```
+
+
+------------------------------------------------------------------------
+
+
+
+------------------------------------------------------------------------
