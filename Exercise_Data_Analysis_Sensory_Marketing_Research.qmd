@@ -303,13 +303,20 @@ power_long %>% ggplot(
     color = method
   )
 ) +
-  geom_line(color = "grey") +
-  geom_point(size = 4)
+  geom_line(color = "black") +
+  geom_point(size = 3)
 
 ```
 
-
 ------------------------------------------------------------------------
+
+# Finding an answer to case #2 - Hearing test
+
+## Task 1 - Use a linear regression to evaluate if hearing capabilities are decreasing with increasing age in years.
+
+###Downloading the data
+
+
 
 
 
