@@ -58,13 +58,13 @@ copyright:
 
 [Connect with me on Open Science Framework](https://osf.io/u7hyz/) \| [Contact me via LinkedIn](https://www.linkedin.com/in/lichters/)
 
-It might be necessary to use right-click -\> open in a new browser window depending on your machine*.*
+It might be necessary to right-click -\> open in a new browser window, depending on your machine*.*
 
 ------------------------------------------------------------------------
 
 R analysis script presenting the solutions for exercise 6 in Sensory Marketing and Product Innovation
 
-The purpose of this script does not solely lay in answering the exercise question. Moreover, studying these scripts should students make become familiar with some aspects of working in *R*.
+The purpose of this script does not lie solely in answering the exercise question. Moreover, studying these scripts should help students become familiar with some aspects of working in *R*.
 
 ::: callout-tip
 ## If this grabs your attention
@@ -79,10 +79,10 @@ If this exercise grabs your attention, please check out our master study program
 ::: callout-important
 ## Beware!
 
-*R* is a context-sensitive language. Thus, 'data' will be interpreted not in the same way as 'Data' will.
+*R* is a context-sensitive language. Thus, 'data' will not be interpreted in the same way as 'Data' will.
 :::
 
-In *R* most functionality is provided by additional packages.\
+In *R,* most functionality is provided by additional packages.\
 Most of the packages are well-documented, see: <https://cran.r-project.org/>
 
 1.  The code chunk below first evaluates if the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html) [@pacman] is already installed on your machine. If yes, the corresponding package will be loaded. If not, *R* will install the package.
@@ -91,7 +91,7 @@ Most of the packages are well-documented, see: <https://cran.r-project.org/>
 
 3.  The second line then loads the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html).
 
-4.  The third line uses the function *p_load()* from the pacman package to install (if necessary) and loads all packages that we provide as arguments (e.g., [pwr](https://cran.r-project.org/web/packages/pwr/) [@pwr], which provides functions for statistical power calculations, or [sensR](https://cran.r-project.org/web/packages/sensR/ "Link to CRAN") [@sensR], which provides access to many functions usful in sensory product research).
+4.  The third line uses the function *p_load()* from the pacman package to install (if necessary) and load all packages that we provide as arguments (e.g., [pwr](https://cran.r-project.org/web/packages/pwr/) [@pwr], which provides functions for statistical power calculations, or [sensR](https://cran.r-project.org/web/packages/sensR/ "Link to CRAN") [@sensR], which provides access to many functions useful in sensory product research).
 
 ```{r}
 #| include: false
@@ -106,7 +106,7 @@ if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(tidyverse, SensoMineR, sensR, pwr, downloadthis, openxlsx)
+pacman::p_load(tidyverse, SensoMineR, sensR, pwr, downloadthis, openxlsx, labelled)
 
 ```
 
@@ -117,7 +117,7 @@ if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(tidyverse, SensoMineR, sensR, pwr, openxlsx)
+pacman::p_load(tidyverse, SensoMineR, sensR, pwr, openxlsx, labelled)
 
 ```
 
@@ -131,7 +131,7 @@ In all code chunks throughout this script, you can receive additional help on ea
 
 ------------------------------------------------------------------------
 
-Here is the *R* session info which gives you information on my machine, all loaded packages, and their version:
+Here is the *R* session info, which gives you information on my machine, all loaded packages, and their version:
 
 ```{r  }
 
@@ -146,20 +146,20 @@ sessionInfo()
 
 ## Task 2 - Analyze whether the test results support the notion that consumers can detect the product differences between both variants.
 
-Jägermeister was conducting an unspecified Duo-trio test for product differences with 206 regular consumers of Jägermeister. In such a test procedure, consumers are asked to compare two product variants (Jägermeister Original vs. Jägermeister Grated Deer Horn). A reference product is first served. Then, consumers have to decide which of two other product samples matches the reference product. The reference product is sometimes Jägermeister Original, and sometimes Jägermeister Grated Deer Horn. Also, the positions of the two product samples are counterbalanced across consumers following an experimental design.
+Jägermeister was conducting an unspecified Duo-trio test for product differences with 206 regular Jägermeister consumers. In such a test procedure, consumers are asked to compare two product variants (Jägermeister Original vs. Jägermeister Grated Deer Horn). A reference product is first served. Then, consumers must decide which of the two other product samples matches the reference product. The reference product is sometimes Jägermeister Original and sometimes Jägermeister Grated Deer Horn. Also, the positions of the two product samples are counterbalanced across consumers following an experimental design.
 
-The company was observing 121 (out of 206) correct matches within the test.
+The company observed 121 (out of 206) correct matches within the test.
 
-The package [sensR](https://cran.r-project.org/web/packages/sensR/) is providing functions to handle nearly all types of discrimination tests, including Duo-trio tests. We will use the function **discrim()**. This function allows us to specify many arguments (see help by pressing 'F1'). We will do so for
+The package [sensR](https://cran.r-project.org/web/packages/sensR/) provides functions to handle nearly all types of discrimination tests, including Duo-trio tests. We will use the function **discrim()**. This function allows us to specify many arguments (see help by pressing 'F1'). We will do so for
 
 -   correct = the number of correct answers
 -   total = total number of responses
--   conf.level = significance level (Type I error probability $\alpha$), usually 0.95 corresponding to 95%.
+-   conf.level = significance level (Type I error probability $\alpha$), usually 0.95, corresponding to 95%.
 -   method = the discrimination protocol applied (see lecture slides for the various options)
--   statistic = The type of analysis strategy to apply for the data (whether one wants to use normal distribution or Chi² etc.)
+-   statistic = The analysis strategy for the data (whether one wants to use normal distribution or Chi², etc.)
 -   test = Whether a test for similarity or difference should be obtained.
 
-Below, we assign the results of our Discrimination test to a new object named 'duo_trio_test'. Then we call for its content.
+Below, we assign the results of our Discrimination test to a new object named 'duo_trio_test'. Then, we call for its content.
 
 ```{r}
 
@@ -179,16 +179,16 @@ duo_trio_test
 ::: callout-tip
 ## Interpretation
 
-As the results of the $\chi^{2}$-test is significant p=(`r round(duo_trio_test$p.value, digits = 3)`), we have to reject H~0~. Thus, consumers can reliably distinguish between the new and the old Jägermeister recipe. Of course this is not answering the question of whether the grated horn variant tastes better than Jägermeister Original.
+As the results of the $\chi^{2}$-test are significant p=(`r round(duo_trio_test$p.value, digits = 3)`), we must reject H~0~. Thus, consumers can reliably distinguish between the new and the old Jägermeister recipe. Of course, this does not answer whether the grated horn variant tastes better than Jägermeister Original.
 :::
 
 -   In the output above, *pc* means the percentage of correct discriminators (121/206).
--   *pd* stands for the estimated proportion of individuals in the (relevant) population that would detect the product difference (`r round(duo_trio_test$coefficients[2,1]*100, digits = 3)`%). In the case of a Duo-trio test this is: $pd=\frac{pc-1/2}{1/2}$. Note that the confidence interval for pd has an upper limit of `r round(duo_trio_test$coefficients[2, 4]*100, digits = 2)`%. Thus, in the worst case, the true proportion of discriminators is almost as high as 31%.
--   The Thurstonian approach of transforming the number of correct answers into an estimate, called d-prime of the underlying (relative) sensory difference is an attempt to overcome the concepts of *pc* and *pd*, since these are dependent on the concrete test protocol one has applied (e.g., Triangle vs. 3-AFC tests). The higher the value the higher is the degree of difference between the two products that were tested.
+-   *pd* stands for the estimated proportion of individuals in the (relevant) population that would detect the product difference (`r round(duo_trio_test$coefficients[2,1]*100, digits = 3)`%). In the case of a Duo-trio test, this is: $pd=\frac{pc-1/2}{1/2}$. Note that the confidence interval for pd has an upper limit of `r round(duo_trio_test$coefficients[2, 4]*100, digits = 2)`%. Thus, in the worst case, the true proportion of discriminators is almost as high as 31%.
+-   The Thurstonian approach of transforming the number of correct answers into an estimate, called d-prime of the underlying (relative) sensory difference is an attempt to overcome the concepts of *pc* and *pd* since these are dependent on the concrete test protocol one has applied (e.g., Triangle vs. 3-AFC tests). The higher the value, the higher the difference between the tested products.
 
 ## Task 3 - Analyze whether a Triangle or a Duo-trio test has higher statistical power to detect the product differences between both variants.
 
-We, again, use functions from the [sensR](https://cran.r-project.org/web/packages/sensR/) package. Further we assume that the observed d-prime from Task 2 is the true effect size in the underlying population. Consequently, we will use this d-prime estimate (`r round(duo_trio_test$coefficients[3, 1], digits = 2)`) as input the compare the statistical power of Triangle test vs. the Duo-trio test (each with n=201).
+Again, we use functions from the [sensR](https://cran.r-project.org/web/packages/sensR/) package. Further, we assume that the observed d-prime from Task 2 is the true effect size in the underlying population. Consequently, we will use this d-prime estimate (`r round(duo_trio_test$coefficients[3, 1], digits = 2)`) as input to compare the statistical power of the Triangle test vs. the Duo-trio test (each with n=201).
 
 We start with the Duo-trio test. In the code chunk below, we use the obtained d-prime as input for the function *d.primePwr()*. Furthermore, we specify all other aspects of our test.
 
@@ -210,7 +210,7 @@ power_duo_trio
 ::: callout-tip
 ## Interpretation
 
-With the observed effect size for the difference, our Duo-trio test protocol only has a power of `r round(power_duo_trio*100, digits = 2)`%. Thus, if the observed effect is the true effect in the underlying population, then we would have this chance to find a significant difference in a Duo-trio test with n=206 and $\alpha$=5%, which falls below the common advice of having a statistical power of at least 80% [@Cohen.1988]. Thus, Jägermeister should allocate more money to such tests to be able to recruit more consumers.
+With the observed effect size for the difference, our Duo-trio test protocol only has a power of `r round(power_duo_trio*100, digits = 2)`%. Thus, if the observed effect is the true effect in the underlying population, then we would have this chance to find a significant difference in a Duo-trio test with n=206 and $\alpha$=5%, which falls below the standard advice of having a statistical power of at least 80% [@Cohen.1988]. Thus, Jägermeister should allocate more money to such tests to recruit more consumers.
 :::
 
 Next, we proceed with the Triangle test.
@@ -233,10 +233,10 @@ power_triangle
 ::: callout-tip
 ## Interpretation
 
-A Triangle test protocol would have a higher power of `r round(power_triangle*100, digits = 2)`%. Therefore, if the observed effect is the true effect in the underlying population and Jägermeister can not afford to have larger sample size than n=206, then the company should switch from a Duo-trio to a Triangle test protocol.
+A Triangle test protocol would have a higher power of `r round(power_triangle*100, digits = 2)`%. Therefore, if the observed effect is true in the underlying population and Jägermeister can not afford to have a larger sample size than n=206, the company should switch from a Duo-trio to a Triangle test protocol.
 :::
 
-For sake of completeness, I have visualized the development of the statistical power given a d-prime of `r round(duo_trio_test$coefficients[3, 1], digits = 2)` and an allowed $\alpha$ = 5% for both test variants.
+For the sake of completeness, I have visualized the development of the statistical power given a d-prime of `r round(duo_trio_test$coefficients[3, 1], digits = 2)` and an allowed $\alpha$ = 5% for both test variants.
 
 ```{r}
 
@@ -297,9 +297,9 @@ power_long %>% ggplot(
 
 ### Downloading the data
 
-First we will download the data from my personal homepage at the [Otto-von-Guericke-University](https://www.ovgu.de/en/)
+First, we will download the data from my homepage at the [Otto-von-Guericke-University](https://www.ovgu.de/en/).
 
-The dataset is stored as an .xlsx file (Microsoft Excel) within the following directory:\* https://www.ovgu.de/lichters/smpi/data/\* The dataset's name is **hearing_test_2023.xlsx**.
+The dataset is stored as a .xlsx file (Microsoft Excel) within the following directory:\* https://www.ovgu.de/lichters/smpi/data/\* The dataset's name is **hearing_test_2023.xlsx**.
 
 We first set the url (Uniform Resource Locator) for the download.
 
@@ -311,7 +311,7 @@ url_of_file <- "https://www.ovgu.de/lichters/smpi/data/hearing_test_2023.xlsx"
 
 ```
 
-We, then, download the file to our current *R project*. Base *R* isn't able to handle Excel files that well. Thus, we are using the function *read.xlsx()* provided by the [openxlsx](https://cran.r-project.org/web/packages/openxlsx/index.html) package [@openxlsx].
+We then, download the file to our current *R project*. Base *R* isn't able to handle Excel files that well. Thus, we are using the function *read.xlsx()* provided by the [openxlsx](https://cran.r-project.org/web/packages/openxlsx/index.html) package [@openxlsx].
 
 ```{r}
 
@@ -319,7 +319,7 @@ hearing_test <- read.xlsx(url_of_file) %>% as_tibble()
 
 ```
 
-If anything did not work out as expected on your machine, you can download the data by clicking on the following button.
+If anything does not work out as expected on your machine, you can download the data by clicking on the following button.
 
 ```{r}
 download_link(link = "https://www.ovgu.de/lichters/smpi/data/hearing_test_2023.xlsx", 
@@ -332,7 +332,7 @@ download_link(link = "https://www.ovgu.de/lichters/smpi/data/hearing_test_2023.x
 
 ```
 
-Let's have a look to the dataset:
+Let's have a look at the dataset:
 
 ```{r}
 
@@ -340,14 +340,14 @@ hearing_test
 
 ```
 
-In the dataset we find 4 variables in the columns.
+In the dataset, we find 4 variables in the columns.
 
 1.  *Gender* provides a character for females (f) or males (m)
 2.  *Age* is the participant's age in years
 3.  *Frequency* provides the highest frequency (in Hertz) that participants still can hear
 4.  *Year* indicates the calendar year where the data was recorded
 
-In the next step we fit an OLS linear regression model with *Age* as a predictor and *Frequency* as the dependent variable
+In the next step, we fit an OLS linear regression model with *Age* as a predictor and *Frequency* as the dependent variable
 
 ```{r}
 
@@ -355,7 +355,7 @@ regression_1 <- hearing_test %>% lm(Frequency~Age, data = .)
 
 ```
 
-Subsequently we summarize the results
+Subsequently, we summarize the results.
 
 ```{r}
 
@@ -366,18 +366,16 @@ summary(regression_1)
 ::: callout-tip
 ## Interpretation
 
-From this summary we see, that overall F-test for the regression is significant, thus either the Age or the intercept term (or both) in the model significantly explain the dependent variable *Frequency*. Specifically, the *Age* variable has a negative regression coefficient of `r round(regression_1$coefficients[2], digits = 2)`. and the corresponding p-value is significant at 5% with a value of `r round(summary(regression_1)$coefficients[,"Pr(>|t|)"][[2]], digits = 3)`. Therefore, we can conclude, that with every year increase in age, people roughly loose an additional `r abs(round(regression_1$coefficients[2], digits = 0))` Hertz of hearing capabilities for higher frequencies.
+From this summary, we see that the overall F-test for the regression is significant; thus, either the Age or the intercept term (or both) in the model significantly explains the dependent variable *Frequency*. Specifically, the *Age* variable has a negative regression coefficient of `r round(regression_1$coefficients[2], digits = 2)`. and the corresponding p-value is significant at 5% with a value of `r round(summary(regression_1)$coefficients[,"Pr(>|t|)"][[2]], digits = 3)`. Therefore, we can conclude that with every year increase in age, people roughly lose an additional `r abs(round(regression_1$coefficients[2], digits = 0))` Hertz of hearing capabilities for higher frequencies.
 :::
 
 ## Task 2 - Is this process contingent on gender?
 
 Use the PROCESS Macro's model 1 (see, [@Hayes.2022]) to evaluate whether age in years interacts with gender in the above regression.
 
-Put differently, your task is to evaluate, whether the decline in hearing capabilities that people experience with age is contingent on a person's gender. For example, it could be that the decreasee in capabilities is less pronounced for women as compared to men.
+Put differently, your task is to evaluate whether the decline in hearing capabilities that people experience with age is contingent on a person's gender. For example, it could be that the decrease in capabilities is less pronounced for women than for men.
 
-To evaluate such moderation effects, social scientists usually rely on the [PROCESS macros](https://afhayes.com/spss-sas-and-r-macros-and-code.html) provided by [Andrew F. Hayes](https://scholar.google.com/citations?user=qRrkCbkAAAAJ&hl=de&oi=ao), a recognized expert in the field.
-Of course there is also an *R* version of the tool.It can be downloaded [here](https://haskayne.ucalgary.ca/CCRAM/resource-hub), but I have also a copy on my homepage under \* https://www.ovgu.de/lichters/smpi/data/\*. Let's load the functions provided by the Process Macro:
-
+Social scientists usually rely on the PROCESS macros provided by Andrew F. Hayes, a recognized expert in the field, to evaluate such moderation effects. Of course, there is also an *R* version of the tool. It can be downloaded [here](https://haskayne.ucalgary.ca/CCRAM/resource-hub), but I also have a copy on my homepage under \* https://www.ovgu.de/lichters/smpi/data/\*. Let's load the functions provided by the Process Macro:
 
 ```{r}
 
@@ -386,8 +384,25 @@ source("https://www.ovgu.de/lichters/smpi/data/process.R")
 
 ```
 
-Now, we set up Model 1 in PROCESS. *Frequency* is the dependent variable, *Age* the main predictor, and *Gender* the moderator with only 2 possible values.
+Now, we set up Model 1 in PROCESS. While doing this, one caveat is that the process macro is not working with nominal-scaled variables stored as characters, such as the *Gender* variable in our case. We first transform this variable as a workaround to a labeled numerical one.
 
+```{r}
+
+hearing_test$Gender <- hearing_test$Gender %>% to_factor() %>% to_labelled()
+
+hearing_test$Gender
+
+```
+
+As a result, the variable *Gender* now is coded numerically with 1 (females) and 2 (males).
+
+Next, we use the *process()* functions. Here,
+
+-   y = *"Frequency"* is the dependent variable,
+-   x = *"Age"* is the main predictor,
+-   w = *"Gender"* is the moderator with only 2 possible values,
+-   model = 1 indicates that we are using PROCESS model #1 (see, [@Hayes.2022, p. 621 for an overview])
+-   An explanation of all arguments would go beyond this exercise. Noteworthy, however, is that we set *conf* to 0.95 to ask for 95% confidence intervals and *boot* to 5,000 to ask for an evaluation of 5,000 bootstrap samples (reduce this number if your machine is too slow).
 
 ```{r}
 
@@ -405,8 +420,7 @@ process(
 
 ```
 
-
-
+From the results above, we can see that the decline in hearing capabilities does not hinge on the gender of persons. This is evinced by the statistically insignificant interaction term of of *Gender* $\times$ *Age* (see the p value for the row **Int_1**). This is further supported by the bootstrapping analysis. Here, the 90% confidence intervals for the model term **Int_1** are crossing **0**.
 
 
 ------------------------------------------------------------------------
