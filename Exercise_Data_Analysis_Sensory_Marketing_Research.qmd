@@ -74,24 +74,6 @@ If this exercise grabs your attention, please check out our master study program
 
 <a title="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" href="https://www.ovgu.de/unimagdeburg/en/Master-p-48820.html"><img src="Signet_WW_3.jpg" alt="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" width="600"/></a>
 
-```{r}
-#| include: false
-
-
-#clear workspace
-rm(list = ls())
-
-
-#load packages
-if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
-
-library(pacman)
-
-pacman::p_load(haven, kableExtra, knitr, labelled, tidyverse, ggpubr, quarto, htmltools, pwr, compute.es)
-
-
-```
-
 # Loading packages
 
 ::: callout-important
@@ -124,7 +106,7 @@ if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(tidyverse, SensoMineR, sensR, pwr)
+pacman::p_load(tidyverse, SensoMineR, sensR, pwr, downloadthis, openxlsx)
 
 ```
 
@@ -135,7 +117,7 @@ if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(tidyverse, SensoMineR, sensR, pwr)
+pacman::p_load(tidyverse, SensoMineR, sensR, pwr, openxlsx)
 
 ```
 
@@ -233,7 +215,6 @@ With the observed effect size for the difference, our Duo-trio test protocol onl
 
 Next, we proceed with the Triangle test.
 
-
 ```{r}
 
 power_triangle <- d.primePwr(
@@ -248,11 +229,11 @@ power_triangle
 
 
 ```
+
 ::: callout-tip
 ## Interpretation
 
 A Triangle test protocol would have a higher power of `r round(power_triangle*100, digits = 2)`%. Therefore, if the observed effect is the true effect in the underlying population and Jägermeister can not afford to have larger sample size than n=206, then the company should switch from a Duo-trio to a Triangle test protocol.
-
 :::
 
 For sake of completeness, I have visualized the development of the statistical power given a d-prime of `r round(duo_trio_test$coefficients[3, 1], digits = 2)` and an allowed $\alpha$ = 5% for both test variants.
@@ -314,7 +295,115 @@ power_long %>% ggplot(
 
 ## Task 1 - Use a linear regression to evaluate if hearing capabilities are decreasing with increasing age in years.
 
-###Downloading the data
+### Downloading the data
+
+First we will download the data from my personal homepage at the [Otto-von-Guericke-University](https://www.ovgu.de/en/)
+
+The dataset is stored as an .xlsx file (Microsoft Excel) within the following directory:\* https://www.ovgu.de/lichters/smpi/data/\* The dataset's name is **hearing_test_2023.xlsx**.
+
+We first set the url (Uniform Resource Locator) for the download.
+
+```{r}
+
+url_of_file <- "https://www.ovgu.de/lichters/smpi/data/hearing_test_2023.xlsx"
+
+
+
+```
+
+We, then, download the file to our current *R project*. Base *R* isn't able to handle Excel files that well. Thus, we are using the function *read.xlsx()* provided by the [openxlsx](https://cran.r-project.org/web/packages/openxlsx/index.html) package [@openxlsx].
+
+```{r}
+
+hearing_test <- read.xlsx(url_of_file) %>% as_tibble()
+
+```
+
+If anything did not work out as expected on your machine, you can download the data by clicking on the following button.
+
+```{r}
+download_link(link = "https://www.ovgu.de/lichters/smpi/data/hearing_test_2023.xlsx", 
+              button_label = "Download Excel file manually", 
+              button_type = "default", 
+              has_icon = TRUE, 
+              icon = "fa fa-save", 
+              self_contained = FALSE)
+
+
+```
+
+Let's have a look to the dataset:
+
+```{r}
+
+hearing_test
+
+```
+
+In the dataset we find 4 variables in the columns.
+
+1.  *Gender* provides a character for females (f) or males (m)
+2.  *Age* is the participant's age in years
+3.  *Frequency* provides the highest frequency (in Hertz) that participants still can hear
+4.  *Year* indicates the calendar year where the data was recorded
+
+In the next step we fit an OLS linear regression model with *Age* as a predictor and *Frequency* as the dependent variable
+
+```{r}
+
+regression_1 <- hearing_test %>% lm(Frequency~Age, data = .)
+
+```
+
+Subsequently we summarize the results
+
+```{r}
+
+summary(regression_1)
+
+```
+
+::: callout-tip
+## Interpretation
+
+From this summary we see, that overall F-test for the regression is significant, thus either the Age or the intercept term (or both) in the model significantly explain the dependent variable *Frequency*. Specifically, the *Age* variable has a negative regression coefficient of `r round(regression_1$coefficients[2], digits = 2)`. and the corresponding p-value is significant at 5% with a value of `r round(summary(regression_1)$coefficients[,"Pr(>|t|)"][[2]], digits = 3)`. Therefore, we can conclude, that with every year increase in age, people roughly loose an additional `r abs(round(regression_1$coefficients[2], digits = 0))` Hertz of hearing capabilities for higher frequencies.
+:::
+
+## Task 2 - Is this process contingent on gender?
+
+Use the PROCESS Macro's model 1 (see, [@Hayes.2022]) to evaluate whether age in years interacts with gender in the above regression.
+
+Put differently, your task is to evaluate, whether the decline in hearing capabilities that people experience with age is contingent on a person's gender. For example, it could be that the decreasee in capabilities is less pronounced for women as compared to men.
+
+To evaluate such moderation effects, social scientists usually rely on the [PROCESS macros](https://afhayes.com/spss-sas-and-r-macros-and-code.html) provided by [Andrew F. Hayes](https://scholar.google.com/citations?user=qRrkCbkAAAAJ&hl=de&oi=ao), a recognized expert in the field.
+Of course there is also an *R* version of the tool.It can be downloaded [here](https://haskayne.ucalgary.ca/CCRAM/resource-hub), but I have also a copy on my homepage under \* https://www.ovgu.de/lichters/smpi/data/\*. Let's load the functions provided by the Process Macro:
+
+
+```{r}
+
+source("https://www.ovgu.de/lichters/smpi/data/process.R")
+
+
+```
+
+Now, we set up Model 1 in PROCESS. *Frequency* is the dependent variable, *Age* the main predictor, and *Gender* the moderator with only 2 possible values.
+
+
+```{r}
+
+process(
+  data = hearing_test,
+  y = "Frequency",
+  x = "Age",
+  w = "Gender",
+  model = 1,
+  center = 2, jn = 1,
+  moments = 1, modelbt = 1,
+  boot = 5000, seed = 54545, progress = F,
+  conf = 0.95
+)
+
+```
 
 
 
