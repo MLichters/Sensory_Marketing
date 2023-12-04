@@ -106,7 +106,7 @@ if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(tidyverse, SensoMineR, sensR, pwr, downloadthis, openxlsx, labelled)
+pacman::p_load(tidyverse, SensoMineR, sensR, pwr, downloadthis, openxlsx, labelled, lm.beta, ggstatsplot)
 
 ```
 
@@ -117,7 +117,7 @@ if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(tidyverse, SensoMineR, sensR, pwr, openxlsx, labelled)
+pacman::p_load(tidyverse, SensoMineR, sensR, pwr, openxlsx, labelled, lm.beta, ggstatsplot)
 
 ```
 
@@ -179,7 +179,7 @@ duo_trio_test
 ::: callout-tip
 ## Interpretation
 
-As the results of the $\chi^{2}$-test are significant p=(`r round(duo_trio_test$p.value, digits = 3)`), we must reject H~0~. Thus, consumers can reliably distinguish between the new and the old Jägermeister recipe. Of course, this does not answer whether the grated horn variant tastes better than Jägermeister Original.
+As the results of the $\chi^{2}$-test are significant (p=`r round(duo_trio_test$p.value, digits = 3)`), we must reject H~0~. Thus, consumers can reliably distinguish between the new and the old Jägermeister recipe. Of course, this does not answer whether the grated horn variant tastes better than Jägermeister Original.
 :::
 
 -   In the output above, *pc* means the percentage of correct discriminators (121/206).
@@ -299,7 +299,7 @@ power_long %>% ggplot(
 
 First, we will download the data from my homepage at the [Otto-von-Guericke-University](https://www.ovgu.de/en/).
 
-The dataset is stored as a .xlsx file (Microsoft Excel) within the following directory:\* https://www.ovgu.de/lichters/smpi/data/\* The dataset's name is **hearing_test_2023.xlsx**.
+The dataset is stored as a .xlsx file (Microsoft Excel) within the following directory: *https://www.ovgu.de/lichters/smpi/data/* The dataset's name is **hearing_test_2023.xlsx**.
 
 We first set the url (Uniform Resource Locator) for the download.
 
@@ -322,13 +322,14 @@ hearing_test <- read.xlsx(url_of_file) %>% as_tibble()
 If anything does not work out as expected on your machine, you can download the data by clicking on the following button.
 
 ```{r}
+#| include: false
+
 download_link(link = "https://www.ovgu.de/lichters/smpi/data/hearing_test_2023.xlsx", 
               button_label = "Download Excel file manually", 
               button_type = "default", 
               has_icon = TRUE, 
               icon = "fa fa-save", 
               self_contained = FALSE)
-
 
 ```
 
@@ -375,7 +376,7 @@ Use the PROCESS Macro's model 1 (see, [@Hayes.2022]) to evaluate whether age in 
 
 Put differently, your task is to evaluate whether the decline in hearing capabilities that people experience with age is contingent on a person's gender. For example, it could be that the decrease in capabilities is less pronounced for women than for men.
 
-Social scientists usually rely on the PROCESS macros provided by Andrew F. Hayes, a recognized expert in the field, to evaluate such moderation effects. Of course, there is also an *R* version of the tool. It can be downloaded [here](https://haskayne.ucalgary.ca/CCRAM/resource-hub), but I also have a copy on my homepage under \* https://www.ovgu.de/lichters/smpi/data/\*. Let's load the functions provided by the Process Macro:
+Social scientists usually rely on the PROCESS macros provided by Andrew F. Hayes, a recognized expert in the field, to evaluate such moderation effects. Of course, there is also an *R* version of the tool. It can be downloaded [here](https://haskayne.ucalgary.ca/CCRAM/resource-hub), but I also have a copy on my homepage under *https://www.ovgu.de/lichters/smpi/data/*. Let's load the functions provided by the Process Macro:
 
 ```{r}
 
@@ -420,7 +421,77 @@ process(
 
 ```
 
-From the results above, we can see that the decline in hearing capabilities does not hinge on the gender of persons. This is evinced by the statistically insignificant interaction term of of *Gender* $\times$ *Age* (see the p value for the row **Int_1**). This is further supported by the bootstrapping analysis. Here, the 90% confidence intervals for the model term **Int_1** are crossing **0**.
+::: callout-tip
+## Interpretation
 
+From the results above, we can see that the decline in hearing capabilities does not hinge on the gender of persons. This is evinced by the statistically insignificant interaction term of of *Gender* $\times$ *Age* (see the p value for the row **Int_1**). This is further supported by the bootstrapping analysis. Here, the 90% confidence intervals for the model term **Int_1** are crossing **0**.
+:::
+
+## Task 3 - Which variable, age or gender, impacts hearing capabilities more in the model without the interaction term?
+
+The most easiest way to evaluate the explanatory power of different predictors in the regression model is to compare their standardized regression coefficient's magnitude qualitatively. This assumes that, firstly, Age's and Gender's main effects are both signigificantly different from 0 (p\<0.05). To get a summary of the standardized regression coefficients, we apply the function *lm.beta()* from the *lm.beta* package [@lm.beta]. First, we build a model with the main effects of *Age* and *Gender* only.
+
+```{r}
+
+regression_2 <- hearing_test %>% lm(Frequency~Age + Gender, data = .)
+
+
+
+```
+
+Then, we ask for a model summary including the standardized regression coefficients
+
+```{r}
+
+regression_2 %>% lm.beta() %>% summary()
+
+```
+
+::: callout-tip
+## Interpretation
+
+For the inpretetion we should first focus on the p-value of the t-test for the model terms (**Pr(\>\|t\|)**). If one of both variables is accompanied by a value of \< 0.05, we would conclude that this variable has a higher explanatory power in hearing capabilities. If both predictors are below 0.05, then the predictor with the highest magnitude in the standardized regression coefficients (**Standardized**) explains better. However, if both predictors did not reach significance, then non of them is a good (in a statistical sense) predictor of hearing capabilities and we shuld not interpret differences in the magnitude of the standardized coefficients.
+:::
+
+## Task 4 - How much total information in hearing capabilities can be explained by gender, age, and its interaction?
+
+This question is directed to the adjusted R² value for the corresponding regression model. We build one with both main effects and the interactionterm between *Age* and *Gender*.
+
+```{r}
+
+regression_3 <- hearing_test %>% lm(Frequency~Age*Gender, data = .)
+
+summary(regression_3)
+
+```
+
+::: callout-tip
+## Interpretation
+
+Overall, both variables plus their interaction explain hearing capabilities quite well, as the adjusted R² value is relatively high (`r round(summary(regression_3)$adj.r.squared, digits = 2)`)
+:::
+
+## Task 5 - Is a linear regression truly fitting to the relationship between hearing capabilities and age?
+
+> Provide a plot that shows observed values for hearing capabilities (y), age in years (x), and a fitted linear regression line to guide your decision.
+
+As always, there multiple routes in *R* that lead to this result. In the following, I use the function *ggscatterstats()* provided by the package *ggstatsplot* [@patil2021].
+
+```{r}
+
+ggscatterstats(
+  data = hearing_test, ## data frame from which variables are taken
+  x = Age, ## predictor/independent variable
+  y = Frequency, ## dependent variable (Hearing capabilities)
+  xlab = "Age (in years)", ## label for the x-axis
+  ylab = "Frequency (highest hearable frequency in Hertz)", ## label for the y-axis
+  xfill = "#CC79A7", ## fill for marginals on the x-axis
+  yfill = "#009E73", ## fill for marginals on the y-axis
+  title = "Relationship between Age and Hearing capabilities",
+  bf.message = FALSE
+
+)
+
+```
 
 ------------------------------------------------------------------------
