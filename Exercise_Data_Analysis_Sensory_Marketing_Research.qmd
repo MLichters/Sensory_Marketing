@@ -447,6 +447,8 @@ regression_2 %>% lm.beta() %>% summary()
 
 ```
 
+
+
 ::: callout-tip
 ## Interpretation
 
@@ -490,7 +492,22 @@ ggscatterstats(
   title = "Relationship between Age and Hearing capabilities",
   bf.message = FALSE
 
-)
+) 
+# 
+# grouped_ggscatterstats(
+#   data = hearing_test, ## data frame from which variables are taken
+#   x = Age, ## predictor/independent variable
+#   y = Frequency, ## dependent variable (Hearing capabilities)
+#   xlab = "Age (in years)", ## label for the x-axis
+#   ylab = "Frequency (highest hearable frequency in Hertz)", ## label for the y-axis
+#   xfill = "#CC79A7", ## fill for marginals on the x-axis
+#   yfill = "#009E73", ## fill for marginals on the y-axis
+#   bf.message = FALSE,
+#   grouping.var = Gender
+# 
+# ) 
+
+
 
 ```
 
