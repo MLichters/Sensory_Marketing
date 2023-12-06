@@ -106,7 +106,7 @@ if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(tidyverse, SensoMineR, sensR, pwr, downloadthis, openxlsx, labelled, lm.beta, ggstatsplot)
+pacman::p_load(tidyverse, SensoMineR, sensR, pwr, downloadthis, openxlsx, labelled, lm.beta, ggstatsplot, jtools)
 
 ```
 
@@ -117,7 +117,7 @@ if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(tidyverse, SensoMineR, sensR, pwr, openxlsx, labelled, lm.beta, ggstatsplot)
+pacman::p_load(tidyverse, SensoMineR, sensR, pwr, openxlsx, labelled, lm.beta, ggstatsplot, jtools)
 
 ```
 
