@@ -23,7 +23,7 @@ csl: apa-old-doi-prefix.csl
 citation:
   language: "en"
   type: post
-  url: https://rpubs.com/M_Lichters/smpiexercise6
+  url: https://www.ovgu.de/lichters/smpi/Exercise/Practicing_Data_Analysis/Exercise_Data_Analysis_Sensory_Marketing_Research.html
   title: 'Sensory Marketing & Product Innovation: Exercise 6 - Practicing Data Analysis in Sensory Marketing Research'
 appendix-cite-as: display
 format:
@@ -106,7 +106,7 @@ if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(tidyverse, SensoMineR, sensR, pwr, downloadthis, openxlsx, labelled, lm.beta, ggstatsplot, jtools, interactions)
+pacman::p_load(tidyverse, SensoMineR, sensR, pwr, downloadthis, openxlsx, labelled, lm.beta, ggstatsplot, interactions, psych)
 
 ```
 
@@ -117,7 +117,7 @@ if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(tidyverse, SensoMineR, sensR, pwr, openxlsx, labelled, lm.beta, ggstatsplot, jtools, interactions)
+pacman::p_load(tidyverse, SensoMineR, sensR, pwr, openxlsx, labelled, lm.beta, ggstatsplot, interactions, psych)
 
 ```
 
@@ -476,7 +476,7 @@ regression_2 %>% interact_plot(model = .,
 
 ```
 
-Overall, it seems as if males are losing their hearing capabilities faster than females, although the interaction is not statistically significant.
+Overall, it seems males are losing their hearing capabilities faster than females, although the interaction is not statistically significant.
 
 ## Task 3 - Which variable, age or gender, impacts hearing capabilities more in the model without the interaction term?
 
@@ -543,5 +543,25 @@ ggscatterstats(
 ) 
 
 ```
+
+## Task 6 - Imagine that your task is to develop an unobtrusive auditory signal for an electric vehicle's reverse gear driving modus.
+
+> Which frequency in Hertz should such a signal not exceed to keep it above the collective threshold of conscious perception?
+
+Think back to Chapter 2 of the Sensory Marketing and Product Innovation lecture. Such a question deals with the **threshold of collective conscious perception**, usually defined as the stimulus intensity, etc., that 50% of individuals can perceive consciously.
+
+Thus, we have to ask for the median in hearing capabilities. One way to display the basic descriptive statistics for an interval-scaled variable is to use the *describe()* function provided by the *psych* package [@psych].
+
+```{r}
+
+hearing_test$Frequency %>% psych::describe()
+
+```
+
+::: callout-tip
+## Interpretation
+
+Since the median in hearing capabilities is (`r format(round(psych::describe(hearing_test$Frequency)$median, digits = 2), scientific = FALSE)`) Hertz, this is the highest frequency in Hertz that the car manufacturer should consider if the goal is to stay above the threshold of collective conscious perception. Of course, this isn't a good idea since the other 50% of consumers would be unable to hear such an auditory signal.
+:::
 
 ------------------------------------------------------------------------
