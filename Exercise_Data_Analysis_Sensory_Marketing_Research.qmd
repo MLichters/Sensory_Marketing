@@ -83,7 +83,7 @@ If this exercise grabs your attention, please check out our master study program
 :::
 
 In *R,* most functionality is provided by additional packages.\
-Most of the packages are well-documented, see: <https://cran.r-project.org/>
+Most of the packages are well-documented; see: <https://cran.r-project.org/>
 
 1.  The code chunk below first evaluates if the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html) [@pacman] is already installed on your machine. If yes, the corresponding package will be loaded. If not, *R* will install the package.
 
@@ -106,7 +106,7 @@ if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(tidyverse, SensoMineR, sensR, pwr, downloadthis, openxlsx, labelled, lm.beta, ggstatsplot, jtools)
+pacman::p_load(tidyverse, SensoMineR, sensR, pwr, downloadthis, openxlsx, labelled, lm.beta, ggstatsplot, jtools, interactions)
 
 ```
 
@@ -117,7 +117,7 @@ if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(tidyverse, SensoMineR, sensR, pwr, openxlsx, labelled, lm.beta, ggstatsplot, jtools)
+pacman::p_load(tidyverse, SensoMineR, sensR, pwr, openxlsx, labelled, lm.beta, ggstatsplot, jtools, interactions)
 
 ```
 
@@ -159,7 +159,7 @@ The package [sensR](https://cran.r-project.org/web/packages/sensR/) provides fun
 -   statistic = The analysis strategy for the data (whether one wants to use normal distribution or Chi², etc.)
 -   test = Whether a test for similarity or difference should be obtained.
 
-Below, we assign the results of our Discrimination test to a new object named 'duo_trio_test'. Then, we call for its content.
+Below, we assign the results of our Discrimination test to a new object named 'duo_trio_test.' Then, we call for its content.
 
 ```{r}
 
@@ -183,8 +183,8 @@ As the results of the $\chi^{2}$-test are significant (p=`r round(duo_trio_test$
 :::
 
 -   In the output above, *pc* means the percentage of correct discriminators (121/206).
--   *pd* stands for the estimated proportion of individuals in the (relevant) population that would detect the product difference (`r round(duo_trio_test$coefficients[2,1]*100, digits = 3)`%). In the case of a Duo-trio test, this is: $pd=\frac{pc-1/2}{1/2}$. Note that the confidence interval for pd has an upper limit of `r round(duo_trio_test$coefficients[2, 4]*100, digits = 2)`%. Thus, in the worst case, the true proportion of discriminators is almost as high as 31%.
--   The Thurstonian approach of transforming the number of correct answers into an estimate, called d-prime of the underlying (relative) sensory difference is an attempt to overcome the concepts of *pc* and *pd* since these are dependent on the concrete test protocol one has applied (e.g., Triangle vs. 3-AFC tests). The higher the value, the higher the difference between the tested products.
+-   *pd* stands for the estimated proportion of individuals in the (relevant) population that would detect the product difference (`r round(duo_trio_test$coefficients[2,1]*100, digits = 3)`%). In the case of a Duo-trio test, this is $pd=\frac{pc-1/2}{1/2}$. Note that the confidence interval for pd has an upper limit of `r round(duo_trio_test$coefficients[2, 4]*100, digits = 2)`%. Thus, in the worst case, the true proportion of discriminators is almost as high as 31%.
+-   The Thurstonian approach of transforming the number of correct answers into an estimate, called d-prime of the underlying (relative) sensory difference, is an attempt to overcome the concepts of *pc* and *pd* since these are dependent on the concrete test protocol one has applied (e.g., Triangle vs. 3-AFC tests). The higher the value, the higher the difference between the tested products.
 
 ## Task 3 - Analyze whether a Triangle or a Duo-trio test has higher statistical power to detect the product differences between both variants.
 
@@ -233,7 +233,7 @@ power_triangle
 ::: callout-tip
 ## Interpretation
 
-A Triangle test protocol would have a higher power of `r round(power_triangle*100, digits = 2)`%. Therefore, if the observed effect is true in the underlying population and Jägermeister can not afford to have a larger sample size than n=206, the company should switch from a Duo-trio to a Triangle test protocol.
+A Triangle test protocol would have a higher power of `r round(power_triangle*100, digits = 2)`%. Therefore, if the observed effect is true in the underlying population and Jägermeister can not afford a larger sample size than n=206, the company should switch from a Duo-trio to a Triangle test protocol.
 :::
 
 For the sake of completeness, I have visualized the development of the statistical power given a d-prime of `r round(duo_trio_test$coefficients[3, 1], digits = 2)` and an allowed $\alpha$ = 5% for both test variants.
@@ -311,7 +311,7 @@ url_of_file <- "https://www.ovgu.de/lichters/smpi/data/hearing_test_2023.xlsx"
 
 ```
 
-We then, download the file to our current *R project*. Base *R* isn't able to handle Excel files that well. Thus, we are using the function *read.xlsx()* provided by the [openxlsx](https://cran.r-project.org/web/packages/openxlsx/index.html) package [@openxlsx].
+We then download the file to our current *R project*. Base *R* isn't able to handle Excel files that well. Thus, we are using the function *read.xlsx()* provided by the [openxlsx](https://cran.r-project.org/web/packages/openxlsx/index.html) package [@openxlsx].
 
 ```{r}
 
@@ -348,7 +348,15 @@ In the dataset, we find 4 variables in the columns.
 3.  *Frequency* provides the highest frequency (in Hertz) that participants still can hear
 4.  *Year* indicates the calendar year where the data was recorded
 
-In the next step, we fit an OLS linear regression model with *Age* as a predictor and *Frequency* as the dependent variable
+Next, we explicitly tell *R* to treat the variable *Gender* as a categorial factor:
+
+```{r}
+
+hearing_test$Gender <- hearing_test$Gender %>% to_factor()
+
+```
+
+In the next step, we fit an OLS linear regression model with *Age* as a predictor and *Frequency* as the dependent variable.
 
 ```{r}
 
@@ -372,9 +380,20 @@ From this summary, we see that the overall F-test for the regression is signific
 
 ## Task 2 - Is this process contingent on gender?
 
-Use the PROCESS Macro's model 1 (see, [@Hayes.2022]) to evaluate whether age in years interacts with gender in the above regression.
-
 Put differently, your task is to evaluate whether the decline in hearing capabilities that people experience with age is contingent on a person's gender. For example, it could be that the decrease in capabilities is less pronounced for women than for men.
+
+Below, we first build a new regression model that includes *Age*, *Gender*, and their interaction as predictors.
+
+```{r}
+regression_2 <- hearing_test %>% lm(Frequency~Age*Gender, data = .)
+
+summary(regression_2)
+
+```
+
+The simple results summary tells us that the interaction term is not significant. However, in many fields, it's more common to use bootstrapped results instead to evaluate whether an interaction (aka moderation) effect is significant.
+
+Use the PROCESS Macro's model 1 [see, @Hayes.2022] to evaluate whether age in years interacts with gender in the above regression.
 
 Social scientists usually rely on the PROCESS macros provided by Andrew F. Hayes, a recognized expert in the field, to evaluate such moderation effects. Of course, there is also an *R* version of the tool. It can be downloaded [here](https://haskayne.ucalgary.ca/CCRAM/resource-hub), but I also have a copy on my homepage under *https://www.ovgu.de/lichters/smpi/data/*. Let's load the functions provided by the Process Macro:
 
@@ -385,13 +404,15 @@ source("https://www.ovgu.de/lichters/smpi/data/process.R")
 
 ```
 
-Now, we set up Model 1 in PROCESS. While doing this, one caveat is that the process macro is not working with nominal-scaled variables stored as characters, such as the *Gender* variable in our case. We first transform this variable as a workaround to a labeled numerical one.
+Now, we set up Model 1 in PROCESS. While doing this, one caveat is that the process macro is not working with nominal-scaled variables stored as characters, such as the *Gender* variable. We first transform this variable as a workaround to a labeled numerical one.
 
 ```{r}
 
-hearing_test$Gender <- hearing_test$Gender %>% to_factor() %>% to_labelled()
+hearing_test_PROCESS <- hearing_test
 
-hearing_test$Gender
+hearing_test_PROCESS$Gender <- hearing_test_PROCESS$Gender %>% to_labelled()
+
+hearing_test_PROCESS$Gender
 
 ```
 
@@ -408,7 +429,7 @@ Next, we use the *process()* functions. Here,
 ```{r}
 
 process(
-  data = hearing_test,
+  data = hearing_test_PROCESS,
   y = "Frequency",
   x = "Age",
   w = "Gender",
@@ -424,46 +445,74 @@ process(
 ::: callout-tip
 ## Interpretation
 
-From the results above, we can see that the decline in hearing capabilities does not hinge on the gender of persons. This is evinced by the statistically insignificant interaction term of of *Gender* $\times$ *Age* (see the p value for the row **Int_1**). This is further supported by the bootstrapping analysis. Here, the 90% confidence intervals for the model term **Int_1** are crossing **0**.
+The results above show that the decline in hearing capabilities does not hinge on a person's gender. This is displayed by the statistically insignificant interaction term of *Gender* $\times$ *Age* (see the p-value for the row **Int_1**). The bootstrapping analysis further supports this. Here, the 95% confidence intervals for the model term **Int_1** are crossing **0**.
 :::
+
+However, the non-significant moderation effect could also have resulted from a sample size that was too tiny (think of the statistical power).
+
+To illustrate the descriptive difference in declines in hearing capabilities by gender, we plot regression lines for both values of the moderator *Gender* below. This is most easily done by the function *interact_plot(),* which the *interactions* package [@interactions] provides.
+
+In the code chunk below, we hand in *regression_2* (the regression model containing the main effects plus the interaction) to the argument *model* of the function *interact_plot()*.
+
+Here,
+
+-   data = is the underlying dataset,
+-   pred = *"Age"* is the main predictor,
+-   modx = *"Gender"* is the moderator with only 2 possible values,
+-   plot.points = TRUE indicates that each data point should be superimposed
+-   interval = TRUE asks for 95% confidence intervals around the regression lines
+
+```{r}
+
+regression_2 %>% interact_plot(model = ., 
+                               data =  hearing_test, 
+                               pred = Age, 
+                               modx = Gender,
+                               plot.points = TRUE,
+                               interval = TRUE,
+                               main.title = "Highest detectable frequency by age (years) and gender \n together with 95% confidence intervals"
+                               ) 
+  
+
+```
+
+Overall, it seems as if males are losing their hearing capabilities faster than females, although the interaction is not statistically significant.
 
 ## Task 3 - Which variable, age or gender, impacts hearing capabilities more in the model without the interaction term?
 
-The most easiest way to evaluate the explanatory power of different predictors in the regression model is to compare their standardized regression coefficient's magnitude qualitatively. This assumes that, firstly, Age's and Gender's main effects are both signigificantly different from 0 (p\<0.05). To get a summary of the standardized regression coefficients, we apply the function *lm.beta()* from the *lm.beta* package [@lm.beta]. First, we build a model with the main effects of *Age* and *Gender* only.
+The easiest way to evaluate the explanatory power of different predictors in the regression model is to compare their standardized regression coefficient's magnitude qualitatively. This assumes that Age's and Gender's main effects significantly differ from 0 (p\<0.05). To get a summary of the standardized regression coefficients, we apply the function *lm.beta()* from the *lm.beta* package [@lm.beta]. First, we build a model with the main effects of *Age* and *Gender* only.
 
 ```{r}
 
-regression_2 <- hearing_test %>% lm(Frequency~Age + Gender, data = .)
+regression_3 <- hearing_test %>% lm(Frequency~Age + Gender, data = .)
 
 
 
 ```
 
-Then, we ask for a model summary including the standardized regression coefficients
+Then, we ask for a model summary, including the standardized regression coefficients.
 
 ```{r}
 
-regression_2 %>% lm.beta() %>% summary()
+regression_3 %>% lm.beta() %>% summary()
 
 ```
-
-
 
 ::: callout-tip
 ## Interpretation
 
-For the inpretetion we should first focus on the p-value of the t-test for the model terms (**Pr(\>\|t\|)**). If one of both variables is accompanied by a value of \< 0.05, we would conclude that this variable has a higher explanatory power in hearing capabilities. If both predictors are below 0.05, then the predictor with the highest magnitude in the standardized regression coefficients (**Standardized**) explains better. However, if both predictors did not reach significance, then non of them is a good (in a statistical sense) predictor of hearing capabilities and we shuld not interpret differences in the magnitude of the standardized coefficients.
+For the interpretation, we should first focus on the p-value of the t-test for the model terms (**Pr(\>\|t\|)**). If one of both variables is accompanied by a value of \< 0.05, we would conclude that this variable has a higher explanatory power in hearing capabilities. If both predictors are below 0.05, the predictor with the highest magnitude in the standardized regression coefficients (**Standardized**) explains better. However, suppose both predictors did not reach significance. In that case, none of them is a good (in a statistical sense) predictor of hearing capabilities, and we should not interpret differences in the magnitude of the standardized coefficients.
 :::
 
 ## Task 4 - How much total information in hearing capabilities can be explained by gender, age, and its interaction?
 
-This question is directed to the adjusted R² value for the corresponding regression model. We build one with both main effects and the interactionterm between *Age* and *Gender*.
+This question is directed to the adjusted R² value for the corresponding regression model. We build one with both main effects and the interaction term between *Age* and *Gender*.
 
 ```{r}
 
-regression_3 <- hearing_test %>% lm(Frequency~Age*Gender, data = .)
 
-summary(regression_3)
+
+summary(regression_2)
 
 ```
 
@@ -477,7 +526,7 @@ Overall, both variables plus their interaction explain hearing capabilities quit
 
 > Provide a plot that shows observed values for hearing capabilities (y), age in years (x), and a fitted linear regression line to guide your decision.
 
-As always, there multiple routes in *R* that lead to this result. In the following, I use the function *ggscatterstats()* provided by the package *ggstatsplot* [@patil2021].
+As always, multiple routes in R lead to this result. In the following, I use the function *ggscatterstats()* provided by the package *ggstatsplot* [@patil2021].
 
 ```{r}
 
@@ -491,23 +540,7 @@ ggscatterstats(
   yfill = "#009E73", ## fill for marginals on the y-axis
   title = "Relationship between Age and Hearing capabilities",
   bf.message = FALSE
-
 ) 
-# 
-# grouped_ggscatterstats(
-#   data = hearing_test, ## data frame from which variables are taken
-#   x = Age, ## predictor/independent variable
-#   y = Frequency, ## dependent variable (Hearing capabilities)
-#   xlab = "Age (in years)", ## label for the x-axis
-#   ylab = "Frequency (highest hearable frequency in Hertz)", ## label for the y-axis
-#   xfill = "#CC79A7", ## fill for marginals on the x-axis
-#   yfill = "#009E73", ## fill for marginals on the y-axis
-#   bf.message = FALSE,
-#   grouping.var = Gender
-# 
-# ) 
-
-
 
 ```
 
