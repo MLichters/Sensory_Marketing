@@ -266,3 +266,31 @@ We can see that with a sample size of n=200 and above, we realize a power of ove
 :::
 
 ------------------------------------------------------------------------
+
+# Examplary Analyses for Descriptive analysis
+
+::: callout-warning
+## Attention
+
+We use the R Commander GUI. Thus, the subsequent code only shows how to install and load the R Commander [@Rcmdr; @fox2005] and the package *SensoMineR* [@SensoMineR-2; @le2008]. The rest of this example is presented in the lecture slides.
+:::
+
+```{r}
+#| eval: false
+
+
+if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman") ##install pacman if not present
+
+if (!"Rcmdr" %in% rownames(installed.packages())) install.packages("Rcmdr") ##install R Commander if not present
+
+library(pacman) ##loads pacman package
+
+pacman::p_load(tidyverse, and) ##load packages (and firstly install if necessary) 
+
+set_language("en_US") ##set language to English (important for R Commander GUI) 
+
+source("http://sensominer.free.fr/install-senso.r") ##latest version of SensoMineR and R Commander PlugIn, also opens R Commander
+
+```
+
+------------------------------------------------------------------------

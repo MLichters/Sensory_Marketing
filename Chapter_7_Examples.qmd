@@ -244,16 +244,3 @@ We can see that with a sample size of n=200 and above, we realize a power of ove
 ------------------------------------------------------------------------
 
 
-
-# Using Posit Cloud (formerly RStudio Cloud)
-
-If you are new to the *R* universe (rumors say there are still folks outside), it is also an option to run all of the code presented in the script via [Posit Cloud](https://posit.cloud). This solution allows you to analyze your data using RStudio, directly from your web browser, which comes with several advantages:
-
--   For you as student its for free (just sign up)
--   No need to install *R* & *RStudio*
--   No need to update *R* and packages
--   All packages used are already installed and loaded in the corresponding *Posit Cloud* project <https://posit.cloud/content/5201389>.
-
-::: callout-note
-Just make sure to create a copy of the provided project to your own account! Otherwise, results are not saved (it's a temporary project).
-:::
