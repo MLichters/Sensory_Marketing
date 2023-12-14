@@ -70,24 +70,6 @@ If this exercise grabs your attention, please check out our master study program
 
 <a title="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" href="https://www.ovgu.de/unimagdeburg/en/Master-p-48820.html"><img src="Signet_WW_3.jpg" alt="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" width="600"/></a>
 
-```{r}
-#| include: false
-
-
-#clear workspace
-rm(list = ls())
-
-
-#load packages
-if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
-
-library(pacman)
-
-pacman::p_load(haven, kableExtra, knitr, labelled, tidyverse, ggpubr, quarto, htmltools, pwr, compute.es)
-
-
-```
-
 ------------------------------------------------------------------------
 
 R analysis script presenting the examples studied in Chapter 6 of the Sensory Marketing lecture
@@ -111,7 +93,7 @@ Most of the packages are well-documented, See: <https://cran.r-project.org/>
 
 3.  The second line then loads the package *pacman*
 
-4.  The third line uses the function *p_load()* from the pacman package to install (if necessary) and load all packages that we provide as arguments (e.g., [tidyverse](https://cran.r-project.org/web/packages/tidyverse/) [@tidyverse], [sensR](https://cran.r-project.org/web/packages/sensR/ "Link to CRAN") [@sensR], [SensoMineR](https://cran.r-project.org/web/packages/SensoMineR/index.html "Link to CRAN") [@SensoMineR]). This only works if all packages are still available on *CRAN.*
+4.  The third line uses the function *p_load()* from the pacman package to install (if necessary) and load all packages that we provide as arguments (e.g., [tidyverse](https://cran.r-project.org/web/packages/tidyverse/) [@tidyverse], [sensR](https://cran.r-project.org/web/packages/sensR/ "Link to CRAN") [@sensR], [SensoMineR](https://cran.r-project.org/web/packages/SensoMineR/index.html "Link to CRAN") [@SensoMineR-2]). This only works if all packages are still available on *CRAN.*
 
 ```{r}
 #| include: false
@@ -126,7 +108,7 @@ if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(tidyverse, SensoMineR, purrr, sensR)
+pacman::p_load(tidyverse, SensoMineR, purrr, sensR, labelled)
 
 ```
 
@@ -137,7 +119,7 @@ if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(tidyverse, SensoMineR, purrr, sensR)
+pacman::p_load(tidyverse, SensoMineR, purrr, sensR, labelled)
 
 ```
 
@@ -272,25 +254,130 @@ We can see that with a sample size of n=200 and above, we realize a power of ove
 ::: callout-warning
 ## Attention
 
-We use the R Commander GUI. Thus, the subsequent code only shows how to install and load the R Commander [@Rcmdr; @fox2005] and the package *SensoMineR* [@SensoMineR-2; @le2008]. The rest of this example is presented in the lecture slides.
+Make sure, that the package *SensoMineR* [@SensoMineR-2; @le2008] has been loaded (see above).
 :::
 
+## Laoding datasets
+
 ```{r}
-#| eval: false
+
+data(chocolates)
+```
+
+The data used here refer to six varieties of LINDT chocolates sold in France [@pagès2001].
+
+1.  Excellence Noir 70%
+
+2.  Qualité amère
+
+3.  Mi-doux
+
+4.  Amazonie
+
+5.  Pâtissier noir
+
+6.  Extra supérieur
+
+There are two data frames:
+
+1.  *sensochoc*: a data frame with 348 rows and 19 columns: 5 qualitative variables (Panelist, Session, Form, Rank, Product) and 14 sensory descriptors from sensory descriptive analysis
+
+2.  *hedochoc*: a data frame with 6 rows and 222 columns: each row corresponds to a bar of chocolate and each column to the hedonic overall liking scores given by one of the 222 consumers participating in an affective product acceptance test.
+
+Let's have a look to the *sensochoc* data:
+
+```{r}
+
+sensochoc %>% as_tibble()
 
 
-if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman") ##install pacman if not present
 
-if (!"Rcmdr" %in% rownames(installed.packages())) install.packages("Rcmdr") ##install R Commander if not present
-
-library(pacman) ##loads pacman package
-
-pacman::p_load(tidyverse, and) ##load packages (and firstly install if necessary) 
-
-set_language("en_US") ##set language to English (important for R Commander GUI) 
-
-source("http://sensominer.free.fr/install-senso.r") ##latest version of SensoMineR and R Commander PlugIn, also opens R Commander
 
 ```
+
+Next, we insert the actual product names
+
+```{r}
+
+sensochoc$Product
+
+levels(sensochoc$Product) <- c("Excellence Noir 70%", "Qualité amère", "Mi-doux", "Amazonie", "Pâtissier noir", "Extra supérieur")
+
+```
+
+Get an overview over the mean values per product x descriptor
+
+```{r}
+
+
+sensochoc %>% 
+  as_tibble() %>% 
+  group_by(Product) %>% 
+  summarise(across(where(is.numeric), ~ round(mean(.x, na.rm = TRUE), digits = 2))) %>% t() 
+
+
+
+```
+
+Next, we test, which descriptors are significantly discriminating between products
+
+```{r}
+
+test_results <- decat(donnee = sensochoc, 
+                      formul = "~Product+Panelist", 
+                      firstvar = 5, 
+                      graph = FALSE)
+
+test_results$tabF
+
+```
+
+
+Now, we prepare a series of data visualizations
+
+
+```{r}
+
+graphical_results <- panellipse(donnee = sensochoc[,c("Panelist", "Session", "Rank", "Product", 
+  "CocoaA", "MilkA", "CocoaF", "MilkF", "Caramel", "Vanilla", "Sweetness", 
+  "Acidity", "Bitterness", "Astringency", "Crunchy", "Melting", "Sticky", 
+  "Granular")],
+  col.p = 4,
+  col.j = 1,
+  firstvar = 5,
+  nbsimul = 500,
+  scale.unit = TRUE,
+  variability.variable = TRUE,
+  graph.type = "ggplot")
+
+```
+
+```{r}
+
+graphical_results$eig
+graphical_results$graph$plotVarVariab
+graphical_results$graph$plotIndEll
+graphical_results$graph$plotVar
+graphical_results$graph$plotInd
+
+
+graphical_results$coordinates
+
+
+
+```
+
+
+# results$eig # # # # dev.new() # barplot(results$eig\[,1\], main="Eigenvalues", xlab="Dimension",
+
+# ylab="Eigenvalues",names.arg=1:nrow(results$eig)) # results$coordinates
+
+# results$correl # results$hotelling
+
+# coltable(results\$hotelling, main.title =
+
+# "P-values for the Hotelling T2 tests")
+
+\`\`\`
 
 ------------------------------------------------------------------------
