@@ -564,4 +564,8 @@ hearing_test$Frequency %>% psych::describe()
 Since the median in hearing capabilities is (`r format(round(psych::describe(hearing_test$Frequency)$median, digits = 2), scientific = FALSE)`) Hertz, this is the highest frequency in Hertz that the car manufacturer should consider if the goal is to stay above the threshold of collective conscious perception. Of course, this isn't a good idea since the other 50% of consumers would be unable to hear such an auditory signal.
 :::
 
+
+
+
+
 ------------------------------------------------------------------------

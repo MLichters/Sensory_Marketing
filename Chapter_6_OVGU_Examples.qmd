@@ -23,7 +23,7 @@ csl: apa-old-doi-prefix.csl
 citation:
   language: "en"
   type: post
-  url: https://rpubs.com/M_Lichters/smpichap6
+  url: https://ovgu.de/lichters/smpi/chap6/Chapter_6_OVGU_Examples.html
   title: 'Sensory Marketing & Product Innovation: Chapter 6 - Sensory Product Research - Examples'
 appendix-cite-as: display
 format:
@@ -257,7 +257,7 @@ We can see that with a sample size of n=200 and above, we realize a power of ove
 Make sure, that the package *SensoMineR* [@SensoMineR-2; @le2008] has been loaded (see above).
 :::
 
-## Laoding datasets
+## Loading datasets
 
 ```{r}
 
@@ -299,11 +299,12 @@ Next, we insert the actual product names
 
 ```{r}
 
-sensochoc$Product
 
 levels(sensochoc$Product) <- c("Excellence Noir 70%", "Qualité amère", "Mi-doux", "Amazonie", "Pâtissier noir", "Extra supérieur")
 
 ```
+
+## Basic statistics
 
 Get an overview over the mean values per product x descriptor
 
@@ -313,7 +314,8 @@ Get an overview over the mean values per product x descriptor
 sensochoc %>% 
   as_tibble() %>% 
   group_by(Product) %>% 
-  summarise(across(where(is.numeric), ~ round(mean(.x, na.rm = TRUE), digits = 2))) %>% t() 
+  summarise(across(where(is.numeric), ~ round(mean(.x, na.rm = TRUE), digits = 2))) %>% 
+  t() 
 
 
 
@@ -332,6 +334,7 @@ test_results$tabF
 
 ```
 
+## Data visualizations
 
 Now, we prepare a series of data visualizations
 
@@ -352,32 +355,111 @@ graphical_results <- panellipse(donnee = sensochoc[,c("Panelist", "Session", "Ra
 
 ```
 
+Let us being with the first plot:
+
+
 ```{r}
 
-graphical_results$eig
-graphical_results$graph$plotVarVariab
-graphical_results$graph$plotIndEll
 graphical_results$graph$plotVar
-graphical_results$graph$plotInd
-
-
-graphical_results$coordinates
-
-
 
 ```
 
 
-# results$eig # # # # dev.new() # barplot(results$eig\[,1\], main="Eigenvalues", xlab="Dimension",
+::: callout-tip
+## Interpretation
 
-# ylab="Eigenvalues",names.arg=1:nrow(results$eig)) # results$coordinates
+What we see here is a PCA-Plot (based on a principal component analysis) of the percepual space of the trained panel.
+We see all descriptors as vectors. Two descriptors are highly positively correlated if the angle between them is very small. Two perfectly negative correlated descriptors would point in opposite directions (e.g., have a look to *Acidity* vs. *Sweetness*). Further we see, how much information of the panel's product evaluations is represented by the first two principal components. As a general rule of thumb, both axes should esxplan at minimum 75-80% of the information contained in the panelists' perceptions. Otherwise a 2D map is may miss important information on the products' dissimilarity. The length of each vector furthermore correspondents to the *communality* in the PCA. Put different, descriptors possessing short vectors are now well explained in terms of th first two principal components.
+:::
 
-# results$correl # results$hotelling
+The map above helps to understand which sensory descriptors usually go hand in hand for the evaluated product category.
 
-# coltable(results\$hotelling, main.title =
+Next, we call again for the second plot:
 
-# "P-values for the Hotelling T2 tests")
+```{r}
 
-\`\`\`
+graphical_results$graph$plotVarVariab
+
+```
+
+::: callout-tip
+## Interpretation
+
+This graphic is very similar to the first one. It, again, presents the first two principal components in the space of descriptors. This time, however, the plot also provides an impression of the uncertainty, or better said, the (dis)agreement in the panalists' scoring in relation to each descriptor. Here, we can see that the panel's agreement is very good for some descriptors (e.g., *Sweetness*), while it is rather low for others as indicated by a wide cloud of individual evaluations (e.g., *Sticky*).
+
+:::
+
+Product developers should trust more in the panel's ability to use descriptors with low variance (vs. high variance).
+
+We move on with the next plot:
+
+```{r}
+
+graphical_results$graph$plotInd 
+
+```
+
+::: callout-tip
+## Interpretation
+
+This biplot provides us with information on the product's location in the space of the sensory perception as defined by the panel. More precisely, we see the factor/ component scores of each product. The logic is that products that are very far away from each other on a certain axis are very dissimilar from a sensory perception. Products that are very close to each other are very similar in terms of sensory descriptors. 
+
+:::
+
+
+In practice, this information is essential to understand the competitive landscape. It provides companies with information on sensory (dis)similarity of own products in the assortment , R&D samples and also competitors. **Empty spaces** in the product perception map may also give raise to product innovation. 
+
+
+Finally, we can enrich the above data visualization in terms of uncertainty estimates in form of 95% confidence ellipses.
+
+
+```{r}
+
+graphical_results$graph$plotIndEll 
+
+```
+
+This helps us to understand which products do, overall, significantly differ from each other in terms of sensory descriptors and which not. For example, the confidence ellipse for Exellence Noir 70% does not overlap with other products. The product is therefore very sensory different from other product variants. This is not true for the three products at the bottom of the plot, which have a lot of overlap.
+
+
+Finally, we build a bridge between the perceptions of the trained panel and the naaive consumer liking judgement by superimposing a preference mapping of distinct consumer segments.
+
+```{r}
+
+#first save means by descriptor
+sensochoc_aggregated <- sensochoc %>% 
+  as_tibble() %>% 
+  group_by(Product) %>% 
+  summarise(across(where(is.numeric), ~ mean(.x, na.rm = TRUE))) 
+
+# delete first row
+sensochoc_aggregated <- sensochoc_aggregated %>% select(-Product)
+
+# Conduct principal component analysis on panel data
+sensochoc_aggregated_PCA <- PCA(sensochoc_aggregated, graph = FALSE)
+
+#adjust row names in the data set containing the consumers' liking scores
+row.names(hedochoc) <- c(1, 2, 3, 4, 5, 6)
+
+# simultan clustering and preference mapping
+prference_mapping_choc <- carto(Mat =sensochoc_aggregated_PCA$ind$coord[,1:2], 
+                                MatH= as.data.frame(hedochoc), 
+                                graph.tree=TRUE,
+                                graph.corr=TRUE,
+                                graph.carto=TRUE)
+
+
+```
+
+::: callout-tip
+## Interpretation
+
+Interestingly, we see two bigger red areas of preference in the heat map produced by preference mapping
+
+:::
+
+
+
+
 
 ------------------------------------------------------------------------
