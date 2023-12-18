@@ -186,9 +186,9 @@ div.csl-indent {
   <ul>
 <li><a href="#loading-packages-that-we-will-use" id="toc-loading-packages-that-we-will-use" class="nav-link active" data-scroll-target="#loading-packages-that-we-will-use"><span class="header-section-number">1</span> Loading packages that we will use</a></li>
   <li><a href="#example-for-discrimination-test---triangle-test." id="toc-example-for-discrimination-test---triangle-test." class="nav-link" data-scroll-target="#example-for-discrimination-test---triangle-test."><span class="header-section-number">2</span> Example for Discrimination test - Triangle test.</a></li>
-  <li><a href="#example-of-a-post-hoc-power-analyis-for-a-triangle-test" id="toc-example-of-a-post-hoc-power-analyis-for-a-triangle-test" class="nav-link" data-scroll-target="#example-of-a-post-hoc-power-analyis-for-a-triangle-test"><span class="header-section-number">3</span> Example of a Post-hoc Power Analyis for a Triangle Test</a></li>
+  <li><a href="#example-of-a-post-hoc-power-analysis-for-a-triangle-test" id="toc-example-of-a-post-hoc-power-analysis-for-a-triangle-test" class="nav-link" data-scroll-target="#example-of-a-post-hoc-power-analysis-for-a-triangle-test"><span class="header-section-number">3</span> Example of a Post-hoc Power Analysis for a Triangle Test</a></li>
   <li>
-<a href="#examplary-analyses-for-descriptive-analysis" id="toc-examplary-analyses-for-descriptive-analysis" class="nav-link" data-scroll-target="#examplary-analyses-for-descriptive-analysis"><span class="header-section-number">4</span> Examplary Analyses for Descriptive analysis</a>
+<a href="#exemplary-analyses-for-descriptive-analysis" id="toc-exemplary-analyses-for-descriptive-analysis" class="nav-link" data-scroll-target="#exemplary-analyses-for-descriptive-analysis"><span class="header-section-number">4</span> Exemplary Analyses for Descriptive Analysis</a>
   <ul class="collapse">
 <li><a href="#loading-datasets" id="toc-loading-datasets" class="nav-link" data-scroll-target="#loading-datasets"><span class="header-section-number">4.1</span> Loading datasets</a></li>
   <li><a href="#basic-statistics" id="toc-basic-statistics" class="nav-link" data-scroll-target="#basic-statistics"><span class="header-section-number">4.2</span> Basic statistics</a></li>
@@ -340,7 +340,7 @@ loaded via a namespace (and not attached):
 <li>statistic = The type of analysis strategy to apply for the data (whether one wants to use normal distribution or Chi² etc.)</li>
 <li>test = Whether a test for similarity or difference should be obtained.</li>
 </ul>
-<p>Below, we assign the results of our Triangle Discrimination test to a new object named ‘triangle_test’. Then we call for its content.</p>
+<p>Below, we assign the results of our Triangle Discrimination test to a new object named ‘triangle_test’. Then, we call for its content.</p>
 <div class="cell">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">triangle_test</span> <span class="op">&lt;-</span> <span class="fu">discrim</span><span class="op">(</span></span>
 <span>  correct<span class="op">=</span> <span class="fl">43</span>, </span>
@@ -383,12 +383,12 @@ Interpretation
 </div>
 <ul>
 <li>In the output above, <em>pc</em> means the percentage of correct discriminators (43/100).</li>
-<li>pd stands for the estimated proportion of individuals in the (relevant) population that would detect the product difference. Which is in the case of a Triangle test: <span class="math inline">\(pd=\frac{pc-1/3}{2/3}\)</span>. Note that the confidence interval for pd has an upper limit of 29.92%. Thus, in the worst case, the true proportion of discriminators is almost as high as 30%. <span class="citation" data-cites="schlich1993">Schlich (<a href="#ref-schlich1993" role="doc-biblioref">1993</a>)</span> proposed the following limits for <em>pd</em> as <em>small</em>, <em>medium</em>, <em>large</em> differences: <em>0.25</em>, <em>0.375</em>, and <em>0.50</em>.</li>
-<li>The Thurstonian approach of transforming the number of correct answers into an estimate, called d-prime of the underlying (relative) sensory difference is an attempt to overcome the concepts of <em>pc</em> and <em>pd</em>, since these are dependent on the concrete test protocol one has applied (e.g., Triangle vs.&nbsp;3-AFC tests). The higher the value the higher is the degree of difference between the two products that were tested.</li>
+<li>pd stands for the estimated proportion of individuals in the (relevant) population that would detect the product difference, which is in the case of a Triangle test: <span class="math inline">\(pd=\frac{pc-1/3}{2/3}\)</span>. Note that the confidence interval for pd has an upper limit of 29.92%. Thus, in the worst case, the true proportion of discriminators is almost as high as 30%. <span class="citation" data-cites="schlich1993">Schlich (<a href="#ref-schlich1993" role="doc-biblioref">1993</a>)</span> proposed the following limits for <em>pd</em> as <em>small</em>, <em>medium</em>, and <em>large</em> differences: <em>0.25</em>, <em>0.375</em>, and <em>0.50</em>.</li>
+<li>The Thurstonian approach of transforming the number of correct answers into an estimate, called d-prime of the underlying (relative) sensory difference is an attempt to overcome the concepts of <em>pc</em> and <em>pd</em>, since these are dependent on the concrete test protocol one has applied (e.g., Triangle vs.&nbsp;3-AFC tests). The higher the value, the higher the degree of difference between the tested products.</li>
 </ul>
-<hr></section><section id="example-of-a-post-hoc-power-analyis-for-a-triangle-test" class="level1" data-number="3"><h1 data-number="3">
-<span class="header-section-number">3</span> Example of a Post-hoc Power Analyis for a Triangle Test</h1>
-<p>To get an idea about the statistical Power of a Similarity or Dissimilarity test protocol, the <a href="https://cran.r-project.org/web/packages/sensR/">sensR</a> package also provides functions that facilitate sample size planning for discrimination tests (i.e., statistical power analysis). To provide an example, we will use the d-prime estimate from the Triangle test on lasagna above (1.07) as input the determine the statistical power of the Triangle test with n=100.</p>
+<hr></section><section id="example-of-a-post-hoc-power-analysis-for-a-triangle-test" class="level1" data-number="3"><h1 data-number="3">
+<span class="header-section-number">3</span> Example of a Post-hoc Power Analysis for a Triangle Test</h1>
+<p>To get an idea about the statistical Power of a Similarity or Dissimilarity test protocol, the <a href="https://cran.r-project.org/web/packages/sensR/">sensR</a> package also provides functions that facilitate sample size planning for discrimination tests (i.e., statistical power analysis). To give an example, we will use the d-prime estimate from the Triangle test on lasagna above (1.07) as input the determine the statistical power of the Triangle test with n=100.</p>
 <p>In the code chunk below, we use the obtained d-prime as input for the function <em>d.primePwr()</em>. Furthermore, we specify all other aspects of our exemplary Triangle test.</p>
 <div class="cell">
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">power_triangle</span> <span class="op">&lt;-</span> <span class="fu">d.primePwr</span><span class="op">(</span></span>
@@ -417,7 +417,7 @@ Interpretation
 <p>With the observed effect size for the difference, our Triangle test protocol only has a power of 61.76%. Thus, if the observed effect is the true effect in the underlying population, then we would have this chance to find a significant difference in a Triangle test with n=100 and <span class="math inline">\(\alpha\)</span>=5%, which is insufficient.</p>
 </div>
 </div>
-<p>As a final remark, we can estimate how many consumers should be tested in order to obtain a sufficient statistical power based on the observed effect size for the difference, a Triangle test, and <span class="math inline">\(\alpha\)</span>=5%. For this purpose, we first establish a list of varying sample sizes below. Afterwards, we use this list as input for the <em>sample.size</em> argument of the <em>d.primePwr()</em> function. Usually, this function does not accept a list of values as arguments. To handle this problem, we additionally apply the <em>map()</em> function provided by the <a href="https://cran.r-project.org/web/packages/purrr/index.html">purrr</a> package <span class="citation" data-cites="purrr">(<a href="#ref-purrr" role="doc-biblioref">Wickham &amp; Henry, 2023</a>)</span>. In the corresponding call of <em>d.primePwr()</em> we set <strong>sample.size = .</strong>, to tell the map function to use each element of the input list as input for the sample size argument in repeated calls of <em>d.primePwr()</em>.</p>
+<p>As a final remark, we can estimate how many consumers should be tested to obtain sufficient statistical power based on the observed effect size for the difference, a Triangle test, and <span class="math inline">\(\alpha\)</span>=5%. For this purpose, we first establish a list of varying sample sizes below. Afterward, we use this list as input for the <em>sample.size</em> argument of the <em>d.primePwr()</em> function. Usually, this function does not accept a list of values as arguments. To handle this problem, we additionally apply the <em>map()</em> function provided by the <a href="https://cran.r-project.org/web/packages/purrr/index.html">purrr</a> package <span class="citation" data-cites="purrr">(<a href="#ref-purrr" role="doc-biblioref">Wickham &amp; Henry, 2023</a>)</span>. In the corresponding call of <em>d.primePwr()</em> we set <strong>sample.size = .</strong>, to tell the map function to use each element of the input list as input for the sample size argument in repeated calls of <em>d.primePwr()</em>.</p>
 <div class="cell">
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">sample_sizes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>n100 <span class="op">=</span> <span class="fl">100</span>, </span>
 <span>                     n200 <span class="op">=</span> <span class="fl">200</span>, </span>
@@ -464,8 +464,8 @@ Interpretation
 <p>We can see that with a sample size of n=200 and above, we realize a power of over 85%.</p>
 </div>
 </div>
-<hr></section><section id="examplary-analyses-for-descriptive-analysis" class="level1" data-number="4"><h1 data-number="4">
-<span class="header-section-number">4</span> Examplary Analyses for Descriptive analysis</h1>
+<hr></section><section id="exemplary-analyses-for-descriptive-analysis" class="level1" data-number="4"><h1 data-number="4">
+<span class="header-section-number">4</span> Exemplary Analyses for Descriptive Analysis</h1>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -476,7 +476,7 @@ Attention
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Make sure, that the package <em>SensoMineR</em> <span class="citation" data-cites="SensoMineR-2 le2008">(<a href="#ref-SensoMineR-2" role="doc-biblioref">Husson et al., 2023</a>; <a href="#ref-le2008" role="doc-biblioref">Lê &amp; Husson, 2008</a>)</span> has been loaded (see above).</p>
+<p>Ensure that the package <em>SensoMineR</em> <span class="citation" data-cites="SensoMineR-2 le2008">(<a href="#ref-SensoMineR-2" role="doc-biblioref">Husson et al., 2023</a>; <a href="#ref-le2008" role="doc-biblioref">Lê &amp; Husson, 2008</a>)</span> has been loaded (see above).</p>
 </div>
 </div>
 <section id="loading-datasets" class="level2" data-number="4.1"><h2 data-number="4.1" class="anchored" data-anchor-id="loading-datasets">
@@ -484,7 +484,7 @@ Attention
 <div class="cell">
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">chocolates</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The data used here refer to six varieties of LINDT chocolates sold in France <span class="citation" data-cites="pagès2001">(<a href="#ref-pag%C3%A8s2001" role="doc-biblioref">Pagès &amp; Husson, 2001</a>)</span>.</p>
+<p>The data here refer to six varieties of LINDT chocolates sold in France <span class="citation" data-cites="pagès2001">(<a href="#ref-pag%C3%A8s2001" role="doc-biblioref">Pagès &amp; Husson, 2001</a>)</span>.</p>
 <ol type="1">
 <li><p>Excellence Noir 70%</p></li>
 <li><p>Qualité amère</p></li>
@@ -498,7 +498,7 @@ Attention
 <li><p><em>sensochoc</em>: a data frame with 348 rows and 19 columns: 5 qualitative variables (Panelist, Session, Form, Rank, Product) and 14 sensory descriptors from sensory descriptive analysis</p></li>
 <li><p><em>hedochoc</em>: a data frame with 6 rows and 222 columns: each row corresponds to a bar of chocolate and each column to the hedonic overall liking scores given by one of the 222 consumers participating in an affective product acceptance test.</p></li>
 </ol>
-<p>Let’s have a look to the <em>sensochoc</em> data:</p>
+<p>Let’s have a look at the <em>sensochoc</em> data:</p>
 <div class="cell">
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">sensochoc</span> <span class="op">%&gt;%</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -521,13 +521,13 @@ Attention
 #   Granular &lt;int&gt;</code></pre>
 </div>
 </div>
-<p>Next, we insert the actual product names</p>
+<p>Next, we insert the actual product names.</p>
 <div class="cell">
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">sensochoc</span><span class="op">$</span><span class="va">Product</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Excellence Noir 70%"</span>, <span class="st">"Qualité amère"</span>, <span class="st">"Mi-doux"</span>, <span class="st">"Amazonie"</span>, <span class="st">"Pâtissier noir"</span>, <span class="st">"Extra supérieur"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="basic-statistics" class="level2" data-number="4.2"><h2 data-number="4.2" class="anchored" data-anchor-id="basic-statistics">
 <span class="header-section-number">4.2</span> Basic statistics</h2>
-<p>Get an overview over the mean values per product x descriptor</p>
+<p>Get an overview of the mean values per product x descriptor.</p>
 <div class="cell">
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">sensochoc</span> <span class="op">%&gt;%</span> </span>
 <span>  <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
@@ -569,7 +569,7 @@ Sticky      "3.22"           "3.93"
 Granular    "3.07"           "3.17"           </code></pre>
 </div>
 </div>
-<p>Next, we test, which descriptors are significantly discriminating between products</p>
+<p>Next, we test which descriptors significantly discriminate between products.</p>
 <div class="cell">
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">test_results</span> <span class="op">&lt;-</span> <span class="fu">decat</span><span class="op">(</span>donnee <span class="op">=</span> <span class="va">sensochoc</span>, </span>
 <span>                      formul <span class="op">=</span> <span class="st">"~Product+Panelist"</span>, </span>
@@ -597,7 +597,7 @@ Granular     4.370921 6.186172e-06</code></pre>
 </div>
 </section><section id="data-visualizations" class="level2" data-number="4.3"><h2 data-number="4.3" class="anchored" data-anchor-id="data-visualizations">
 <span class="header-section-number">4.3</span> Data visualizations</h2>
-<p>Now, we prepare a series of data visualizations</p>
+<p>Now, we prepare a series of data visualizations.</p>
 <div class="cell">
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">graphical_results</span> <span class="op">&lt;-</span> <span class="fu">panellipse</span><span class="op">(</span>donnee <span class="op">=</span> <span class="va">sensochoc</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Panelist"</span>, <span class="st">"Session"</span>, <span class="st">"Rank"</span>, <span class="st">"Product"</span>, </span>
 <span>  <span class="st">"CocoaA"</span>, <span class="st">"MilkA"</span>, <span class="st">"CocoaF"</span>, <span class="st">"MilkF"</span>, <span class="st">"Caramel"</span>, <span class="st">"Vanilla"</span>, <span class="st">"Sweetness"</span>, </span>
@@ -640,10 +640,10 @@ Interpretation
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>What we see here is a PCA-Plot (based on a principal component analysis) of the percepual space of the trained panel. We see all descriptors as vectors. Two descriptors are highly positively correlated if the angle between them is very small. Two perfectly negative correlated descriptors would point in opposite directions (e.g., have a look to <em>Acidity</em> vs.&nbsp;<em>Sweetness</em>). Further we see, how much information of the panel’s product evaluations is represented by the first two principal components. As a general rule of thumb, both axes should esxplan at minimum 75-80% of the information contained in the panelists’ perceptions. Otherwise a 2D map is may miss important information on the products’ dissimilarity. The length of each vector furthermore correspondents to the <em>communality</em> in the PCA. Put different, descriptors possessing short vectors are now well explained in terms of th first two principal components.</p>
+<p>We see a PCA-Plot (based on a principal component analysis) of the perceptual space of the trained panel. We see all descriptors as vectors. Two descriptors are highly positively correlated if the angle between them is very small. Two perfectly negative correlated descriptors would point in opposite directions (e.g., have a look at <em>Acidity</em> vs.&nbsp;<em>Sweetness</em>). Further, we see how much information about the panel’s product evaluations is represented by the first two principal components. Generally, both axes should explain at least 75-80% of the information in the panelists’ perceptions. Otherwise, a 2D map may miss important information on the products’ dissimilarity. The length of each vector further corresponds to the <em>communality</em> in the PCA. Put differently, descriptors possessing short vectors are now well explained in terms of the first two principal components.</p>
 </div>
 </div>
-<p>The map above helps to understand which sensory descriptors usually go hand in hand for the evaluated product category.</p>
+<p>The map above helps to understand which sensory descriptors usually go hand in hand with the evaluated product category.</p>
 <p>Next, we call again for the second plot:</p>
 <div class="cell">
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">graphical_results</span><span class="op">$</span><span class="va">graph</span><span class="op">$</span><span class="va">plotVarVariab</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -661,11 +661,11 @@ Interpretation
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This graphic is very similar to the first one. It, again, presents the first two principal components in the space of descriptors. This time, however, the plot also provides an impression of the uncertainty, or better said, the (dis)agreement in the panalists’ scoring in relation to each descriptor. Here, we can see that the panel’s agreement is very good for some descriptors (e.g., <em>Sweetness</em>), while it is rather low for others as indicated by a wide cloud of individual evaluations (e.g., <em>Sticky</em>).</p>
+<p>This graphic is very similar to the first one. It, again, presents the first two principal components in the space of descriptors. This time, however, the plot also provides an impression of the uncertainty, or better said, the (dis)agreement in the panalists’ scoring concerning each descriptor. Here, we can see that the panel’s agreement is excellent for some descriptors (e.g., <em>Sweetness</em>). In contrast, it is relatively low for others, as indicated by an expansive cloud of individual evaluations (e.g., <em>Sticky</em>).</p>
 </div>
 </div>
 <p>Product developers should trust more in the panel’s ability to use descriptors with low variance (vs.&nbsp;high variance).</p>
-<p>We move on with the next plot:</p>
+<p>We move on to the next plot:</p>
 <div class="cell">
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">graphical_results</span><span class="op">$</span><span class="va">graph</span><span class="op">$</span><span class="va">plotInd</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -682,19 +682,19 @@ Interpretation
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This biplot provides us with information on the product’s location in the space of the sensory perception as defined by the panel. More precisely, we see the factor/ component scores of each product. The logic is that products that are very far away from each other on a certain axis are very dissimilar from a sensory perception. Products that are very close to each other are very similar in terms of sensory descriptors.</p>
+<p>This biplot provides us with information on the product’s location in the space of the sensory perception as defined by the panel. More precisely, we see the factor/ component scores of each product. The logic is that products that are very far away from each other on a particular axis are very dissimilar in sensory perception. Products that are very close to each other are very similar in terms of sensory descriptors.</p>
 </div>
 </div>
-<p>In practice, this information is essential to understand the competitive landscape. It provides companies with information on sensory (dis)similarity of own products in the assortment , R&amp;D samples and also competitors. <strong>Empty spaces</strong> in the product perception map may also give raise to product innovation.</p>
-<p>Finally, we can enrich the above data visualization in terms of uncertainty estimates in form of 95% confidence ellipses.</p>
+<p>In practice, this information is essential to understand the competitive landscape. It provides companies with information on their products’ sensory (dis)similarity in the assortment, R&amp;D samples, and competitors. <strong>Empty spaces</strong> in the product perception map may also raise product innovation.</p>
+<p>Finally, we can enrich the above data visualization with uncertainty estimates in the form of 95% confidence ellipses.</p>
 <div class="cell">
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">graphical_results</span><span class="op">$</span><span class="va">graph</span><span class="op">$</span><span class="va">plotIndEll</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Chapter_6_OVGU_Examples_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>This helps us to understand which products do, overall, significantly differ from each other in terms of sensory descriptors and which not. For example, the confidence ellipse for Exellence Noir 70% does not overlap with other products. The product is therefore very sensory different from other product variants. This is not true for the three products at the bottom of the plot, which have a lot of overlap.</p>
-<p>Finally, we build a bridge between the perceptions of the trained panel and the naaive consumer liking judgement by superimposing a preference mapping of distinct consumer segments.</p>
+<p>This helps us to understand which products do, overall, significantly differ from each other in terms of sensory descriptors and which do not. For example, the confidence ellipse for Exellence Noir 70% does not overlap with other products. The product is, therefore, very sensory different from other product variants. This is not true for the three products at the bottom of the plot, which have a lot of overlap.</p>
+<p>Finally, we build a bridge between the perceptions of the trained panel and the naive consumer liking judgment by superimposing a preference mapping of distinct consumer segments.</p>
 <div class="cell">
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#first save means by descriptor</span></span>
 <span><span class="va">sensochoc_aggregated</span> <span class="op">&lt;-</span> <span class="va">sensochoc</span> <span class="op">%&gt;%</span> </span>
@@ -737,7 +737,7 @@ Interpretation
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Interestingly, we see two bigger red areas of preference in the heat map produced by preference mapping</p>
+<p>Interestingly, we see two more extensive red areas of preference in the heat map produced by preference mapping.</p>
 </div>
 </div>
 <hr>

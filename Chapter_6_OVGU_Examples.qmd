@@ -160,7 +160,7 @@ The package [sensR](https://cran.r-project.org/web/packages/sensR/) is providing
 -   statistic = The type of analysis strategy to apply for the data (whether one wants to use normal distribution or Chi² etc.)
 -   test = Whether a test for similarity or difference should be obtained.
 
-Below, we assign the results of our Triangle Discrimination test to a new object named 'triangle_test'. Then we call for its content.
+Below, we assign the results of our Triangle Discrimination test to a new object named 'triangle_test'. Then, we call for its content.
 
 ```{r}
 
@@ -187,14 +187,14 @@ As the results of the $\chi^{2}$-test is significant (`r round(triangle_test$p.v
 :::
 
 -   In the output above, *pc* means the percentage of correct discriminators (43/100).
--   pd stands for the estimated proportion of individuals in the (relevant) population that would detect the product difference. Which is in the case of a Triangle test: $pd=\frac{pc-1/3}{2/3}$. Note that the confidence interval for pd has an upper limit of `r round(triangle_test$coefficients[2, 4]*100, digits = 2)`%. Thus, in the worst case, the true proportion of discriminators is almost as high as 30%. @schlich1993 proposed the following limits for *pd* as *small*, *medium*, *large* differences: *0.25*, *0.375*, and *0.50*.
--   The Thurstonian approach of transforming the number of correct answers into an estimate, called d-prime of the underlying (relative) sensory difference is an attempt to overcome the concepts of *pc* and *pd*, since these are dependent on the concrete test protocol one has applied (e.g., Triangle vs. 3-AFC tests). The higher the value the higher is the degree of difference between the two products that were tested.
+-   pd stands for the estimated proportion of individuals in the (relevant) population that would detect the product difference, which is in the case of a Triangle test: $pd=\frac{pc-1/3}{2/3}$. Note that the confidence interval for pd has an upper limit of `r round(triangle_test$coefficients[2, 4]*100, digits = 2)`%. Thus, in the worst case, the true proportion of discriminators is almost as high as 30%. @schlich1993 proposed the following limits for *pd* as *small*, *medium*, and *large* differences: *0.25*, *0.375*, and *0.50*.
+-   The Thurstonian approach of transforming the number of correct answers into an estimate, called d-prime of the underlying (relative) sensory difference is an attempt to overcome the concepts of *pc* and *pd*, since these are dependent on the concrete test protocol one has applied (e.g., Triangle vs. 3-AFC tests). The higher the value, the higher the degree of difference between the tested products.
 
 ------------------------------------------------------------------------
 
-# Example of a Post-hoc Power Analyis for a Triangle Test
+# Example of a Post-hoc Power Analysis for a Triangle Test
 
-To get an idea about the statistical Power of a Similarity or Dissimilarity test protocol, the [sensR](https://cran.r-project.org/web/packages/sensR/) package also provides functions that facilitate sample size planning for discrimination tests (i.e., statistical power analysis). To provide an example, we will use the d-prime estimate from the Triangle test on lasagna above (`r round(triangle_test$coefficients[3, 1], digits = 2)`) as input the determine the statistical power of the Triangle test with n=100.
+To get an idea about the statistical Power of a Similarity or Dissimilarity test protocol, the [sensR](https://cran.r-project.org/web/packages/sensR/) package also provides functions that facilitate sample size planning for discrimination tests (i.e., statistical power analysis). To give an example, we will use the d-prime estimate from the Triangle test on lasagna above (`r round(triangle_test$coefficients[3, 1], digits = 2)`) as input the determine the statistical power of the Triangle test with n=100.
 
 In the code chunk below, we use the obtained d-prime as input for the function *d.primePwr()*. Furthermore, we specify all other aspects of our exemplary Triangle test.
 
@@ -219,7 +219,7 @@ power_triangle
 With the observed effect size for the difference, our Triangle test protocol only has a power of `r round(power_triangle*100, digits = 2)`%. Thus, if the observed effect is the true effect in the underlying population, then we would have this chance to find a significant difference in a Triangle test with n=100 and $\alpha$=5%, which is insufficient.
 :::
 
-As a final remark, we can estimate how many consumers should be tested in order to obtain a sufficient statistical power based on the observed effect size for the difference, a Triangle test, and $\alpha$=5%. For this purpose, we first establish a list of varying sample sizes below. Afterwards, we use this list as input for the *sample.size* argument of the *d.primePwr()* function. Usually, this function does not accept a list of values as arguments. To handle this problem, we additionally apply the *map()* function provided by the [purrr](https://cran.r-project.org/web/packages/purrr/index.html) package [@purrr]. In the corresponding call of *d.primePwr()* we set **sample.size = .**, to tell the map function to use each element of the input list as input for the sample size argument in repeated calls of *d.primePwr()*.
+As a final remark, we can estimate how many consumers should be tested to obtain sufficient statistical power based on the observed effect size for the difference, a Triangle test, and $\alpha$=5%. For this purpose, we first establish a list of varying sample sizes below. Afterward, we use this list as input for the *sample.size* argument of the *d.primePwr()* function. Usually, this function does not accept a list of values as arguments. To handle this problem, we additionally apply the *map()* function provided by the [purrr](https://cran.r-project.org/web/packages/purrr/index.html) package [@purrr]. In the corresponding call of *d.primePwr()* we set **sample.size = .**, to tell the map function to use each element of the input list as input for the sample size argument in repeated calls of *d.primePwr()*.
 
 ```{r}
 
@@ -249,12 +249,12 @@ We can see that with a sample size of n=200 and above, we realize a power of ove
 
 ------------------------------------------------------------------------
 
-# Examplary Analyses for Descriptive analysis
+# Exemplary Analyses for Descriptive Analysis
 
 ::: callout-warning
 ## Attention
 
-Make sure, that the package *SensoMineR* [@SensoMineR-2; @le2008] has been loaded (see above).
+Ensure that the package *SensoMineR* [@SensoMineR-2; @le2008] has been loaded (see above).
 :::
 
 ## Loading datasets
@@ -264,7 +264,7 @@ Make sure, that the package *SensoMineR* [@SensoMineR-2; @le2008] has been loade
 data(chocolates)
 ```
 
-The data used here refer to six varieties of LINDT chocolates sold in France [@pagès2001].
+The data here refer to six varieties of LINDT chocolates sold in France [@pagès2001].
 
 1.  Excellence Noir 70%
 
@@ -284,7 +284,7 @@ There are two data frames:
 
 2.  *hedochoc*: a data frame with 6 rows and 222 columns: each row corresponds to a bar of chocolate and each column to the hedonic overall liking scores given by one of the 222 consumers participating in an affective product acceptance test.
 
-Let's have a look to the *sensochoc* data:
+Let's have a look at the *sensochoc* data:
 
 ```{r}
 
@@ -295,7 +295,7 @@ sensochoc %>% as_tibble()
 
 ```
 
-Next, we insert the actual product names
+Next, we insert the actual product names.
 
 ```{r}
 
@@ -306,7 +306,7 @@ levels(sensochoc$Product) <- c("Excellence Noir 70%", "Qualité amère", "Mi-dou
 
 ## Basic statistics
 
-Get an overview over the mean values per product x descriptor
+Get an overview of the mean values per product x descriptor.
 
 ```{r}
 
@@ -321,7 +321,7 @@ sensochoc %>%
 
 ```
 
-Next, we test, which descriptors are significantly discriminating between products
+Next, we test which descriptors significantly discriminate between products.
 
 ```{r}
 
@@ -336,8 +336,7 @@ test_results$tabF
 
 ## Data visualizations
 
-Now, we prepare a series of data visualizations
-
+Now, we prepare a series of data visualizations.
 
 ```{r}
 
@@ -357,22 +356,19 @@ graphical_results <- panellipse(donnee = sensochoc[,c("Panelist", "Session", "Ra
 
 Let us being with the first plot:
 
-
 ```{r}
 
 graphical_results$graph$plotVar
 
 ```
 
-
 ::: callout-tip
 ## Interpretation
 
-What we see here is a PCA-Plot (based on a principal component analysis) of the percepual space of the trained panel.
-We see all descriptors as vectors. Two descriptors are highly positively correlated if the angle between them is very small. Two perfectly negative correlated descriptors would point in opposite directions (e.g., have a look to *Acidity* vs. *Sweetness*). Further we see, how much information of the panel's product evaluations is represented by the first two principal components. As a general rule of thumb, both axes should esxplan at minimum 75-80% of the information contained in the panelists' perceptions. Otherwise a 2D map is may miss important information on the products' dissimilarity. The length of each vector furthermore correspondents to the *communality* in the PCA. Put different, descriptors possessing short vectors are now well explained in terms of th first two principal components.
+We see a PCA-Plot (based on a principal component analysis) of the perceptual space of the trained panel. We see all descriptors as vectors. Two descriptors are highly positively correlated if the angle between them is very small. Two perfectly negative correlated descriptors would point in opposite directions (e.g., have a look at *Acidity* vs. *Sweetness*). Further, we see how much information about the panel's product evaluations is represented by the first two principal components. Generally, both axes should explain at least 75-80% of the information in the panelists' perceptions. Otherwise, a 2D map may miss important information on the products' dissimilarity. The length of each vector further corresponds to the *communality* in the PCA. Put differently, descriptors possessing short vectors are now well explained in terms of the first two principal components.
 :::
 
-The map above helps to understand which sensory descriptors usually go hand in hand for the evaluated product category.
+The map above helps to understand which sensory descriptors usually go hand in hand with the evaluated product category.
 
 Next, we call again for the second plot:
 
@@ -385,13 +381,12 @@ graphical_results$graph$plotVarVariab
 ::: callout-tip
 ## Interpretation
 
-This graphic is very similar to the first one. It, again, presents the first two principal components in the space of descriptors. This time, however, the plot also provides an impression of the uncertainty, or better said, the (dis)agreement in the panalists' scoring in relation to each descriptor. Here, we can see that the panel's agreement is very good for some descriptors (e.g., *Sweetness*), while it is rather low for others as indicated by a wide cloud of individual evaluations (e.g., *Sticky*).
-
+This graphic is very similar to the first one. It, again, presents the first two principal components in the space of descriptors. This time, however, the plot also provides an impression of the uncertainty, or better said, the (dis)agreement in the panalists' scoring concerning each descriptor. Here, we can see that the panel's agreement is excellent for some descriptors (e.g., *Sweetness*). In contrast, it is relatively low for others, as indicated by an expansive cloud of individual evaluations (e.g., *Sticky*).
 :::
 
 Product developers should trust more in the panel's ability to use descriptors with low variance (vs. high variance).
 
-We move on with the next plot:
+We move on to the next plot:
 
 ```{r}
 
@@ -402,16 +397,12 @@ graphical_results$graph$plotInd
 ::: callout-tip
 ## Interpretation
 
-This biplot provides us with information on the product's location in the space of the sensory perception as defined by the panel. More precisely, we see the factor/ component scores of each product. The logic is that products that are very far away from each other on a certain axis are very dissimilar from a sensory perception. Products that are very close to each other are very similar in terms of sensory descriptors. 
-
+This biplot provides us with information on the product's location in the space of the sensory perception as defined by the panel. More precisely, we see the factor/ component scores of each product. The logic is that products that are very far away from each other on a particular axis are very dissimilar in sensory perception. Products that are very close to each other are very similar in terms of sensory descriptors.
 :::
 
+In practice, this information is essential to understand the competitive landscape. It provides companies with information on their products' sensory (dis)similarity in the assortment, R&D samples, and competitors. **Empty spaces** in the product perception map may also raise product innovation.
 
-In practice, this information is essential to understand the competitive landscape. It provides companies with information on sensory (dis)similarity of own products in the assortment , R&D samples and also competitors. **Empty spaces** in the product perception map may also give raise to product innovation. 
-
-
-Finally, we can enrich the above data visualization in terms of uncertainty estimates in form of 95% confidence ellipses.
-
+Finally, we can enrich the above data visualization with uncertainty estimates in the form of 95% confidence ellipses.
 
 ```{r}
 
@@ -419,10 +410,9 @@ graphical_results$graph$plotIndEll
 
 ```
 
-This helps us to understand which products do, overall, significantly differ from each other in terms of sensory descriptors and which not. For example, the confidence ellipse for Exellence Noir 70% does not overlap with other products. The product is therefore very sensory different from other product variants. This is not true for the three products at the bottom of the plot, which have a lot of overlap.
+This helps us to understand which products do, overall, significantly differ from each other in terms of sensory descriptors and which do not. For example, the confidence ellipse for Exellence Noir 70% does not overlap with other products. The product is, therefore, very sensory different from other product variants. This is not true for the three products at the bottom of the plot, which have a lot of overlap.
 
-
-Finally, we build a bridge between the perceptions of the trained panel and the naaive consumer liking judgement by superimposing a preference mapping of distinct consumer segments.
+Finally, we build a bridge between the perceptions of the trained panel and the naive consumer liking judgment by superimposing a preference mapping of distinct consumer segments.
 
 ```{r}
 
@@ -454,12 +444,7 @@ prference_mapping_choc <- carto(Mat =sensochoc_aggregated_PCA$ind$coord[,1:2],
 ::: callout-tip
 ## Interpretation
 
-Interestingly, we see two bigger red areas of preference in the heat map produced by preference mapping
-
+Interestingly, we see two more extensive red areas of preference in the heat map produced by preference mapping.
 :::
-
-
-
-
 
 ------------------------------------------------------------------------
