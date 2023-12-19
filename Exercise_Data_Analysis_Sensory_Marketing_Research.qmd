@@ -519,7 +519,7 @@ summary(regression_2)
 ::: callout-tip
 ## Interpretation
 
-Overall, both variables plus their interaction explain hearing capabilities quite well, as the adjusted R² value is relatively high (`r round(summary(regression_3)$adj.r.squared, digits = 2)`)
+Overall, both variables plus their interaction explain hearing capabilities quite well, as the adjusted R² value is relatively high (`r round(summary(regression_2)$adj.r.squared, digits = 2)`)
 :::
 
 ## Task 5 - Is a linear regression truly fitting to the relationship between hearing capabilities and age?
@@ -555,6 +555,8 @@ Thus, we have to ask for the median in hearing capabilities. One way to display 
 ```{r}
 
 hearing_test$Frequency %>% psych::describe()
+
+
 
 ```
 
