@@ -1,31 +1,39 @@
 ---
 title-block-banner: true
-title: "Sensory Marketing and Product Innovation"
-subtitle: "Chapter 6 - Sensory Product Research - Examples"
+title: "Sensory Marketing & Product Innovation"
+subtitle: "R Lecture Examples for Sensory Product Research"
+keywords: 
+  - marketing
+  - market research
+  - marketing methods
+  - sensory marketing
+  - sensory product research
+  - product innovation
 author: 
   - name: 
       given: Marcel
       family: Lichters
-      non-dropping-particle: Prof. Dr.
-    url: https://www.marketing.ovgu.de/
+      degrees: Prof. Dr.
+      id: ML
     email: marcel.lichters@ovgu.de
+    url: https://www.marketing.ovgu.de/
+    orcid: 0000-0002-3710-2292
     corresponding: true
     affiliation: 
-    - name: Otto-von-Guericke-University Magdeburg
+    - name: Otto von Guericke University Magdeburg
       city: Magdeburg
       state: Saxony-Anhalt
       country: Germany
-    affiliation-url: https://www.ovgu.de/en/
-    orcid: 0000-0002-3710-2292
-date: now
+      url: https://www.ovgu.de/en/
+date: last-modified
 date-format: full
 csl: apa-old-doi-prefix.csl
 citation:
   language: "en"
-  type: post
-  url: https://ovgu.de/lichters/smpi/chap6/Chapter_6_OVGU_Examples.html
-  title: 'Sensory Marketing & Product Innovation: Chapter 6 - Sensory Product Research - Examples'
-appendix-cite-as: display
+  type: post-weblog
+  url: https://ovgu.de/lichters/smpi/chap6/Chapter_6_OVGU_Examples.html   
+  title: 'Sensory Marketing & Product Innovation: R Lecture Examples for Sensory Product Research'
+  doi: https://doi.org/10.24352/UB.OVGU-2024-085
 format:
   html:
     theme: cosmo
@@ -41,7 +49,6 @@ format:
     number-depth: 3
     citations-hover: true
     footnotes-hover: true
-email-obfuscation: javascript
 editor: source
 bibliography: references.bib
 editor_options: 
@@ -49,7 +56,13 @@ editor_options:
 google-scholar: true
 copyright: 
   holder: Prof. Dr. Marcel Lichters
-  year: 2023
+  year: 2025
+  statement: Please cite the author Marcel Lichters!
+license: 
+  text: >
+    CC BY-NC-ND 4.0, see https://creativecommons.org/licenses/by-nc-nd/4.0/ 
+  type: open-access
+  url: https://creativecommons.org/licenses/by-nc-nd/4.0/ 
 ---
 
 ------------------------------------------------------------------------
