@@ -31,7 +31,7 @@ csl: apa-old-doi-prefix.csl
 citation:
   language: "en"
   type: post-weblog
-  url: https://ovgu.de/lichters/smpi/chap6/Chapter_6_OVGU_Examples.html   
+  url: https://pub.ww.ovgu.de/lichters/smpi/lecture/OVGU_Sensory_Marketing_Lecture_Examples.html   
   title: 'Sensory Marketing & Product Innovation: R Lecture Examples for Sensory Product Research'
   doi: https://doi.org/10.24352/UB.OVGU-2025-005 
 format:
@@ -49,6 +49,8 @@ format:
     number-depth: 3
     citations-hover: true
     footnotes-hover: true
+    embed-resources: true
+    anchor-sections: true
 editor: source
 bibliography: references.bib
 editor_options: 
@@ -82,6 +84,8 @@ If this exercise grabs your attention, please check out our master study program
 :::
 
 <a title="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" href="https://www.ovgu.de/unimagdeburg/en/Master-p-48820.html"><img src="Signet_WW_3.jpg" alt="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" width="600"/></a>
+
+<img src="https://vg01.met.vgwort.de/na/5618ea4f5f7d4ad7bbfc56addf8c48ac" width="1" height="1" alt="">
 
 ------------------------------------------------------------------------
 
@@ -460,6 +464,6 @@ prference_mapping_choc <- carto(Mat =sensochoc_aggregated_PCA$ind$coord[,1:2],
 Interestingly, we see two more extensive red areas of preference in the heat map produced by preference mapping.
 :::
 
-<img src="https://vg01.met.vgwort.de/na/5618ea4f5f7d4ad7bbfc56addf8c48ac" width="1" height="1" alt="">
+
 
 ------------------------------------------------------------------------
