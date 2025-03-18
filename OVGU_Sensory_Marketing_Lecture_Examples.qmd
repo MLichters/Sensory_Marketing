@@ -1,0 +1,465 @@
+---
+title-block-banner: true
+title: "Sensory Marketing & Product Innovation"
+subtitle: "R Lecture Examples for Sensory Product Research"
+keywords: 
+  - marketing
+  - market research
+  - marketing methods
+  - sensory marketing
+  - sensory product research
+  - product innovation
+author: 
+  - name: 
+      given: Marcel
+      family: Lichters
+      degrees: Prof. Dr.
+      id: ML
+    email: marcel.lichters@ovgu.de
+    url: https://www.marketing.ovgu.de/
+    orcid: 0000-0002-3710-2292
+    corresponding: true
+    affiliation: 
+    - name: Otto von Guericke University Magdeburg
+      city: Magdeburg
+      state: Saxony-Anhalt
+      country: Germany
+      url: https://www.ovgu.de/en/
+date: last-modified
+date-format: full
+csl: apa-old-doi-prefix.csl
+citation:
+  language: "en"
+  type: post-weblog
+  url: https://ovgu.de/lichters/smpi/chap6/Chapter_6_OVGU_Examples.html   
+  title: 'Sensory Marketing & Product Innovation: R Lecture Examples for Sensory Product Research'
+  doi: https://doi.org/10.24352/UB.OVGU-2025-005 
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-location: left
+    code-fold: false
+    code-link: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-tools: false
+    code-copy: hover
+    number-sections: true
+    number-depth: 3
+    citations-hover: true
+    footnotes-hover: true
+editor: source
+bibliography: references.bib
+editor_options: 
+  chunk_output_type: console
+google-scholar: true
+copyright: 
+  holder: Prof. Dr. Marcel Lichters
+  year: 2025
+  statement: Please cite the author Marcel Lichters!
+license: 
+  text: >
+    CC BY-NC-ND 4.0, see https://creativecommons.org/licenses/by-nc-nd/4.0/ 
+  type: open-access
+  url: https://creativecommons.org/licenses/by-nc-nd/4.0/ 
+---
+
+------------------------------------------------------------------------
+
+<a title="Follow me on ResearchGate" href="https://www.researchgate.net/profile/Marcel_Lichters?cp=shp"><img src="https://www.researchgate.net/images/public/profile_share_badge.png" alt="Follow me on ResearchGate"/></a>
+
+[Connect with me on Open Science Framework](https://osf.io/u7hyz/) \| [Contact me via LinkedIn](https://www.linkedin.com/in/lichters/)
+
+It might be necessary to use right-click -\> open in a new browser window depending on your machine*.*
+
+------------------------------------------------------------------------
+
+::: callout-tip
+## If this grabs your attention
+
+If this exercise grabs your attention, please check out our master study programs at the Otto-von-Guericke-University in Magdeburg (Germany) by clicking on the logo!
+:::
+
+<a title="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" href="https://www.ovgu.de/unimagdeburg/en/Master-p-48820.html"><img src="Signet_WW_3.jpg" alt="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" width="600"/></a>
+
+------------------------------------------------------------------------
+
+R analysis script presenting the examples studied in Chapter 6 of the Sensory Marketing lecture
+
+In this exercise students should practice analyzing data with [*R*](https://cran.r-project.org/) and [*RStudio*](https://posit.co/products/open-source/rstudio/). These skills will serve them well in the progress of their study time and in the future. The internet provides countless further examples. Besides, there exist very good text books [@næs2010; @lê2018; @chapman2019].
+
+------------------------------------------------------------------------
+
+# Loading packages that we will use
+
+::: callout-note
+*R* is a context-sensitive language. Thus, 'data' will be interpreted not in the same way as 'Data' will.
+:::
+
+In *R* most functionality is provided by additional packages.\
+Most of the packages are well-documented, See: <https://cran.r-project.org/>
+
+1.  The code chunk below first evaluates if the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html) [@pacman-2] is already installed to your machine. If yes, the corresponding package will be loaded. If not, *R* will install the package (as long as the package is still maintained on the **C**omprehensive **R** **A**rchive **N**etwork [*CRAN*](https://cran.r-project.org/).
+
+2.  Alternatively, you can do this manually first by executing *install.packages("pacman")* and then *library(pacman)*.
+
+3.  The second line then loads the package *pacman*
+
+4.  The third line uses the function *p_load()* from the pacman package to install (if necessary) and load all packages that we provide as arguments (e.g., [tidyverse](https://cran.r-project.org/web/packages/tidyverse/) [@tidyverse], [sensR](https://cran.r-project.org/web/packages/sensR/ "Link to CRAN") [@sensR], [SensoMineR](https://cran.r-project.org/web/packages/SensoMineR/index.html "Link to CRAN") [@SensoMineR-2]). This only works if all packages are still available on *CRAN.*
+
+```{r}
+#| include: false
+
+
+#clear workspace
+rm(list = ls())
+
+
+#load packages
+if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
+
+library(pacman)
+
+pacman::p_load(tidyverse, SensoMineR, purrr, sensR, labelled)
+
+```
+
+```{r}
+#| eval: false
+
+if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
+
+library(pacman)
+
+pacman::p_load(tidyverse, SensoMineR, purrr, sensR, labelled)
+
+```
+
+------------------------------------------------------------------------
+
+Here is the *R* session info which gives you information on my machine, all loaded packages and their version:
+
+```{r  }
+
+sessionInfo()
+
+
+```
+
+------------------------------------------------------------------------
+
+# Example for Discrimination test - Triangle test.
+
+Triangle tests are very popular in sensory product research as tests for discrimination, and help to evaluate whether consumers can significantly distinguish between product alternatives [see, e.g., @Lawless.2010, chap. 4.4]. In our lecture example on Lasagna variants, we observe the following results on the basis of n=100 consumers:
+
+|              | Correctly identified odd sample | Incorrect response  |
+|--------------|:-------------------------------:|:-------------------:|
+| **Observed** |            43 (O~1~)            |      57 (O~2~)      |
+| **Expected** |       33.$\bar{3}$ (E~1~)       | 66.$\bar{6}$ (E~2~) |
+
+In our example, analysis draws on a (Pearson) $\chi^{2}$-test (without continuity correction). Here, the test statistic is calculated as follows:
+
+$\chi^{2}_{(1)}=\sum\frac{(observed-expected)^2}{expected}=[\frac{(O_{1}-E_{1})^2}{E_{1}}]+[\frac{(O_{2}-E_{2})^2}{E_{2}}]=[\frac{(43-33.\bar{3})^2}{33.\bar{3}}]+\frac{(57-66.\bar{6})^2}{66.\bar{6}}]=2.803+1.402=4.205$
+
+We know from lectures in statistics that the *df* in a $\chi^{2}$-test equal: (number of rows -1) \* (number of columns -1). Thus, df=(2-1)\*(2-1)=1. The degrees of freedom are 1.
+
+The package [sensR](https://cran.r-project.org/web/packages/sensR/) is providing functions to handle nearly all types of discrimination tests, including Triangle tests. We will use the function **discrim()**. This function allows us to specify many arguments (see help by pressing 'F1'). We will do so for
+
+-   correct = the number of correct answers
+-   total = total number of responses
+-   conf.level = significance level (Type I error probability $\alpha$)
+-   method = the discrimination protocol applied (see lecture slides for the various options)
+-   statistic = The type of analysis strategy to apply for the data (whether one wants to use normal distribution or Chi² etc.)
+-   test = Whether a test for similarity or difference should be obtained.
+
+Below, we assign the results of our Triangle Discrimination test to a new object named 'triangle_test'. Then, we call for its content.
+
+```{r}
+
+triangle_test <- discrim(
+  correct= 43, 
+  total= 100,
+  conf.level = 0.95,
+  method = "triangle", 
+  statistic = "score",
+  test = "difference")
+
+
+triangle_test
+
+
+
+
+```
+
+::: callout-tip
+## Interpretation
+
+As the results of the $\chi^{2}$-test is significant (`r round(triangle_test$p.value, digits = 3)`), we have to reject H~0~. Thus, consumers can reliably distinguish between the new and the old lasagna.
+:::
+
+-   In the output above, *pc* means the percentage of correct discriminators (43/100).
+-   pd stands for the estimated proportion of individuals in the (relevant) population that would detect the product difference, which is in the case of a Triangle test: $pd=\frac{pc-1/3}{2/3}$. Note that the confidence interval for pd has an upper limit of `r round(triangle_test$coefficients[2, 4]*100, digits = 2)`%. Thus, in the worst case, the true proportion of discriminators is almost as high as 30%. @schlich1993 proposed the following limits for *pd* as *small*, *medium*, and *large* differences: *0.25*, *0.375*, and *0.50*.
+-   The Thurstonian approach of transforming the number of correct answers into an estimate, called d-prime of the underlying (relative) sensory difference is an attempt to overcome the concepts of *pc* and *pd*, since these are dependent on the concrete test protocol one has applied (e.g., Triangle vs. 3-AFC tests). The higher the value, the higher the degree of difference between the tested products.
+
+------------------------------------------------------------------------
+
+# Example of a Post-hoc Power Analysis for a Triangle Test
+
+To get an idea about the statistical Power of a Similarity or Dissimilarity test protocol, the [sensR](https://cran.r-project.org/web/packages/sensR/) package also provides functions that facilitate sample size planning for discrimination tests (i.e., statistical power analysis). To give an example, we will use the d-prime estimate from the Triangle test on lasagna above (`r round(triangle_test$coefficients[3, 1], digits = 2)`) as input the determine the statistical power of the Triangle test with n=100.
+
+In the code chunk below, we use the obtained d-prime as input for the function *d.primePwr()*. Furthermore, we specify all other aspects of our exemplary Triangle test.
+
+```{r}
+
+power_triangle <- d.primePwr(
+  d.primeA = 1.075,
+  sample.size = 100,
+  alpha = 0.05,
+  method = "triangle",
+  test = "difference", statistic = "exact"
+)
+
+power_triangle
+
+
+```
+
+::: callout-tip
+## Interpretation
+
+With the observed effect size for the difference, our Triangle test protocol only has a power of `r round(power_triangle*100, digits = 2)`%. Thus, if the observed effect is the true effect in the underlying population, then we would have this chance to find a significant difference in a Triangle test with n=100 and $\alpha$=5%, which is insufficient.
+:::
+
+As a final remark, we can estimate how many consumers should be tested to obtain sufficient statistical power based on the observed effect size for the difference, a Triangle test, and $\alpha$=5%. For this purpose, we first establish a list of varying sample sizes below. Afterward, we use this list as input for the *sample.size* argument of the *d.primePwr()* function. Usually, this function does not accept a list of values as arguments. To handle this problem, we additionally apply the *map()* function provided by the [purrr](https://cran.r-project.org/web/packages/purrr/index.html) package [@purrr]. In the corresponding call of *d.primePwr()* we set **sample.size = .**, to tell the map function to use each element of the input list as input for the sample size argument in repeated calls of *d.primePwr()*.
+
+```{r}
+
+sample_sizes <- list(n100 = 100, 
+                     n200 = 200, 
+                     n300 = 300, 
+                     n400 = 400, 
+                     n500 = 500)
+
+
+sample_sizes %>%
+  map(~ d.primePwr(
+    d.primeA = 1.075,
+    sample.size = .,
+    alpha = 0.05,
+    method = "triangle",
+    test = "difference", statistic = "exact"
+  ))
+
+```
+
+::: callout-tip
+## Interpretation
+
+We can see that with a sample size of n=200 and above, we realize a power of over 85%.
+:::
+
+------------------------------------------------------------------------
+
+# Exemplary Analyses for Descriptive Analysis
+
+::: callout-warning
+## Attention
+
+Ensure that the package *SensoMineR* [@SensoMineR-2; @le2008] has been loaded (see above).
+:::
+
+## Loading datasets
+
+```{r}
+
+data(chocolates)
+```
+
+The data here refer to six varieties of LINDT chocolates sold in France [@pagès2001].
+
+1.  Excellence Noir 70%
+
+2.  Qualité amère
+
+3.  Mi-doux
+
+4.  Amazonie
+
+5.  Pâtissier noir
+
+6.  Extra supérieur
+
+There are two data frames:
+
+1.  *sensochoc*: a data frame with 348 rows and 19 columns: 5 qualitative variables (Panelist, Session, Form, Rank, Product) and 14 sensory descriptors from sensory descriptive analysis
+
+2.  *hedochoc*: a data frame with 6 rows and 222 columns: each row corresponds to a bar of chocolate and each column to the hedonic overall liking scores given by one of the 222 consumers participating in an affective product acceptance test.
+
+Let's have a look at the *sensochoc* data:
+
+```{r}
+
+sensochoc %>% as_tibble()
+
+
+
+
+```
+
+Next, we insert the actual product names.
+
+```{r}
+
+
+levels(sensochoc$Product) <- c("Excellence Noir 70%", "Qualité amère", "Mi-doux", "Amazonie", "Pâtissier noir", "Extra supérieur")
+
+```
+
+## Basic statistics
+
+Get an overview of the mean values per product x descriptor.
+
+```{r}
+
+
+sensochoc %>% 
+  as_tibble() %>% 
+  group_by(Product) %>% 
+  summarise(across(where(is.numeric), ~ round(mean(.x, na.rm = TRUE), digits = 2))) %>% 
+  t() 
+
+
+
+```
+
+Next, we test which descriptors significantly discriminate between products.
+
+```{r}
+
+test_results <- decat(donnee = sensochoc, 
+                      formul = "~Product+Panelist", 
+                      firstvar = 5, 
+                      graph = FALSE)
+
+test_results$tabF
+
+```
+
+## Data visualizations
+
+Now, we prepare a series of data visualizations.
+
+```{r}
+
+graphical_results <- panellipse(donnee = sensochoc[,c("Panelist", "Session", "Rank", "Product", 
+  "CocoaA", "MilkA", "CocoaF", "MilkF", "Caramel", "Vanilla", "Sweetness", 
+  "Acidity", "Bitterness", "Astringency", "Crunchy", "Melting", "Sticky", 
+  "Granular")],
+  col.p = 4,
+  col.j = 1,
+  firstvar = 5,
+  nbsimul = 500,
+  scale.unit = TRUE,
+  variability.variable = TRUE,
+  graph.type = "ggplot")
+
+```
+
+Let us being with the first plot:
+
+```{r}
+
+graphical_results$graph$plotVar
+
+```
+
+::: callout-tip
+## Interpretation
+
+We see a PCA-Plot (based on a principal component analysis) of the perceptual space of the trained panel. We see all descriptors as vectors. Two descriptors are highly positively correlated if the angle between them is very small. Two perfectly negative correlated descriptors would point in opposite directions (e.g., have a look at *Acidity* vs. *Sweetness*). Further, we see how much information about the panel's product evaluations is represented by the first two principal components. Generally, both axes should explain at least 75-80% of the information in the panelists' perceptions. Otherwise, a 2D map may miss important information on the products' dissimilarity. The length of each vector further corresponds to the *communality* in the PCA. Put differently, descriptors possessing short vectors are now well explained in terms of the first two principal components.
+:::
+
+The map above helps to understand which sensory descriptors usually go hand in hand with the evaluated product category.
+
+Next, we call again for the second plot:
+
+```{r}
+
+graphical_results$graph$plotVarVariab
+
+```
+
+::: callout-tip
+## Interpretation
+
+This graphic is very similar to the first one. It, again, presents the first two principal components in the space of descriptors. This time, however, the plot also provides an impression of the uncertainty, or better said, the (dis)agreement in the panalists' scoring concerning each descriptor. Here, we can see that the panel's agreement is excellent for some descriptors (e.g., *Sweetness*). In contrast, it is relatively low for others, as indicated by an expansive cloud of individual evaluations (e.g., *Sticky*).
+:::
+
+Product developers should trust more in the panel's ability to use descriptors with low variance (vs. high variance).
+
+We move on to the next plot:
+
+```{r}
+
+graphical_results$graph$plotInd 
+
+```
+
+::: callout-tip
+## Interpretation
+
+This biplot provides us with information on the product's location in the space of the sensory perception as defined by the panel. More precisely, we see the factor/ component scores of each product. The logic is that products that are very far away from each other on a particular axis are very dissimilar in sensory perception. Products that are very close to each other are very similar in terms of sensory descriptors.
+:::
+
+In practice, this information is essential to understand the competitive landscape. It provides companies with information on their products' sensory (dis)similarity in the assortment, R&D samples, and competitors. **Empty spaces** in the product perception map may also raise product innovation.
+
+Finally, we can enrich the above data visualization with uncertainty estimates in the form of 95% confidence ellipses.
+
+```{r}
+
+graphical_results$graph$plotIndEll 
+
+```
+
+This helps us to understand which products do, overall, significantly differ from each other in terms of sensory descriptors and which do not. For example, the confidence ellipse for Exellence Noir 70% does not overlap with other products. The product is, therefore, very sensory different from other product variants. This is not true for the three products at the bottom of the plot, which have a lot of overlap.
+
+Finally, we build a bridge between the perceptions of the trained panel and the naive consumer liking judgment by superimposing a preference mapping of distinct consumer segments.
+
+```{r}
+
+#first save means by descriptor
+sensochoc_aggregated <- sensochoc %>% 
+  as_tibble() %>% 
+  group_by(Product) %>% 
+  summarise(across(where(is.numeric), ~ mean(.x, na.rm = TRUE))) 
+
+# delete first row
+sensochoc_aggregated <- sensochoc_aggregated %>% select(-Product)
+
+# Conduct principal component analysis on panel data
+sensochoc_aggregated_PCA <- PCA(sensochoc_aggregated, graph = FALSE)
+
+#adjust row names in the data set containing the consumers' liking scores
+row.names(hedochoc) <- c(1, 2, 3, 4, 5, 6)
+
+# simultan clustering and preference mapping
+prference_mapping_choc <- carto(Mat =sensochoc_aggregated_PCA$ind$coord[,1:2], 
+                                MatH= as.data.frame(hedochoc), 
+                                graph.tree=TRUE,
+                                graph.corr=TRUE,
+                                graph.carto=TRUE)
+
+
+```
+
+::: callout-tip
+## Interpretation
+
+Interestingly, we see two more extensive red areas of preference in the heat map produced by preference mapping.
+:::
+
+<img src="https://vg01.met.vgwort.de/na/5618ea4f5f7d4ad7bbfc56addf8c48ac" width="1" height="1" alt="">
+
+------------------------------------------------------------------------
