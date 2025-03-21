@@ -79,12 +79,12 @@ It might be necessary to use right-click -\> open in a new browser window depend
 
 R analysis script presenting part of the solutions for exercise #1 in Sensory Marketing and Product Innovation regarding Li, Heuvinck, & Pandelaere [-@li2021]. In one of the questions, students are asked to estimate the appropriate sample size to replicate Study 1's findings (under $\alpha$=5%, Power=0.8).
 
-The purpose of this script does not solely lay in answering the exercise question. Moreover, studying these scripts should students make become familiar with some aspects of working in *R*.
+The purpose of this script is not solely to answer the exercise question. Moreover, studying these scripts should help students become familiar with some aspects of working in *R*.
 
 ::: callout-tip
 ## If this grabs your attention
 
-If this exercise grabs your attention, please check out our master study programs at the Otto-von-Guericke-University in Magdeburg (Germany) by clicking on the logo:
+If this exercise captures your interest, please take a look at our master study programs at Otto von Guericke University in Magdeburg (Germany), by clicking on the logo:
 :::
 
 <a title="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" href="https://www.ovgu.de/unimagdeburg/en/Master-p-48820.html"><img src="Signet_WW_3.jpg" alt="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" width="600"/></a>
@@ -112,13 +112,13 @@ pacman::p_load(haven, kableExtra, knitr, labelled, tidyverse, ggpubr, quarto, ht
 ::: callout-important
 ## Beware!
 
-*R* is a context-sensitive language. Thus, 'data' will be interpreted not in the same way as 'Data' will.
+*R* is a context-sensitive language. Thus, 'data' will not be interpreted the same way as 'Data'.
 :::
 
 In *R* most functionality is provided by additional packages.\
-Most of the packages are well-documented, see: <https://cran.r-project.org/>
+Most of the packages are well-documented; see: <https://cran.r-project.org/>
 
-1.  The code chunk below first evaluates if the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html) [@pacman] is already installed on your machine. If yes, the corresponding package will be loaded. If not, *R* will install the package.
+1.  The code chunk below first evaluates if the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html) [@pacman] has already been installed on your machine. If yes, the corresponding package will be loaded. If not, *R* will install the package.
 
 2.  Alternatively, you can do this manually first by executing *install.packages("pacman")* and then *library(pacman)*.
 
@@ -141,12 +141,12 @@ pacman::p_load(tidyverse, pwr, compute.es)
 ::: {.callout-caution collapse="true"}
 ## Expand to learn more about calling functions
 
-In all code chunks throughout this script, you can receive additional help on each used function by clicking on its name (or via right-click and then opening in a new browser tab). Alternatively, when coding, we can see which arguments a function understands by pressing 'F1' while setting the cursor to the function's name.
+In all code chunks throughout this script, you can get additional help on each function used by clicking on its name (or by right-clicking and then opening it in a new browser tab). Alternatively, you can see which arguments a function accepts while coding by pressing 'F1' with the cursor positioned over the function's name.
 :::
 
 ------------------------------------------------------------------------
 
-Here is the *R* session info which gives you information on my machine, all loaded packages, and their version:
+Here is the *R* session info, which gives you information on my machine, all loaded packages, and their version:
 
 ```{r  }
 
@@ -159,7 +159,7 @@ sessionInfo()
 
 # Finding an answer to question #4
 
-For your master thesis, it could be an idea to replicate the IAT findings of Study 1 (D-score \> 0, t-test). Based on a power analysis (Assumptions: $\alpha$=5%, Power=0.8), how many subjects should you recruit for such a study?
+For your master’s thesis, it might be a good idea to replicate the IAT findings of Study 1 (D-score \> 0, t-test). Based on a power analysis (Assumptions: 𝛼=5%, Power=0.8), how many subjects should you recruit for this study?
 
 ## Extract information on the effect size Cohen's d and the statistical analysis procedure
 
@@ -167,16 +167,16 @@ Information the article provides on page 3:
 
 *The D-score was significantly greater than 0 (D = 0.45, SD = 0.47, t(133) = 10.98, p \< .001, 95% CI = \[0.37, 0.53\], Cohen's d = 0.95), suggesting that participants responded significantly faster in assigning the stimuli when healthy and light were grouped together.*
 
-From this, we are able to extract:
+From this, we can extract:
 
 -   The effect size measure Cohen's d equals 0.95.
 -   For analysis, the authors applied a one-sample t-test, which tests against the constant value of 0.
 
 ## Conduct an a priori power analysis to search for minimum n
 
-In the question, we are asked for a statistical power of 80% (a commonly used threshold in social sciences).
+The question asks us for a statistical power of 80% (a commonly used threshold in social sciences).
 
-To estimate a minimum sample size *n* for the replication, we apply the *pwr.t.test()* function from the [pwr](https://cran.r-project.org/web/packages/pwr/index.html) package. This function needs us to provide 6 arguments to fill its parameters. These are (see help by pressing 'F1' when setting the cursor into the function's name):
+To estimate a minimum sample size *n* for the replication, we apply the *pwr.t.test()* function from the [pwr](https://cran.r-project.org/web/packages/pwr/index.html) package. This function needs us to provide six arguments to fill its parameters. These are (see help by pressing 'F1' when setting the cursor into the function's name):
 
 -   d = Effect size Cohen's d (see, e.g., Cohen [-@cohen2013])
 -   n = Total number of observations
@@ -185,7 +185,7 @@ To estimate a minimum sample size *n* for the replication, we apply the *pwr.t.t
 -   type = Type of t-test: one- ("one.sample") two- ("two.sample") or paired-samples ("paired")
 -   alternative = parameter indicating the test strategy: one of "two.sided" (default), "greater" or "less"
 
-The function, furthermore, assumes us to set one of the arguments (d, n, sig.level, or power) to **NULL**. By doing so, we tell the function to use the remaining 5 parameters to search for the value of the sixth. In our case, we are searching for 'n', therefore, we set 'n=NULL'. Furthermore, we are using a one sample t-test and the original study expects the d score to be greater than 0. Therefore, we set alternative to "greater".
+The function, furthermore, assumes us to set one of the arguments (d, n, sig.level, or power) to **NULL**. By doing so, we tell the function to use the remaining 5 parameters to search for the sixth value. In our case, we are searching for 'n', therefore, we set 'n=NULL'. Furthermore, we are using a one-sample t-test, and the original study expects the d score to be greater than 0. Therefore, we set alternative to "greater".
 
 We assign the results of our power analysis to a new object named 'results'. Then we call for its content.
 
@@ -197,15 +197,15 @@ results
 
 ```
 
-We can see that the (conservatively rounded) calculated sample size `r ceiling(results$n)` perfectly mirrors the one we have seen in G\*Power 3 [@faul2007]. As discussed in our exercise, the authors of the study applied standard exclusion criteria for IAT procedures. Therefore, 1.49 times the sample size estimate (1.49 times 9 = `r ceiling(1.49*9)`) would be necessary to end at n = 9 in the net sample.
+We can see that the (conservatively rounded) calculated sample size `r ceiling(results$n)` perfectly mirrors the one we have seen in G\*Power 3 [@faul2007]. As discussed in our exercise, the study authors applied standard exclusion criteria for IAT procedures. Therefore, 1.49 times the sample size estimate (1.49 times 9 = `r ceiling(1.49*9)`) would be necessary to end at n = 9 in the net sample.
 
-Keep in mind: if an original study comes with a very large effect size, then a replication with a power of 80% often needs fewer subjects as compared to the original study. However, studies reporting only small effects usually need many more participants for a successful replication.
+Remember that if an original study has a very large effect size, a replication with 80% power often requires fewer subjects than the original study. However, studies reporting only small effects typically need many more participants for success replication.
 
 ------------------------------------------------------------------------
 
 # Additional reading *(not relevant for the exam)*
 
-In the above-discussed example, we were planning a replication of the original findings. In doing so, we have made certain assumptions:
+In the above-discussed example, we were planning to replicate the original findings. In doing so, we have made certain assumptions:
 
 We assume that the observed effect size Cohen's d = 0.95 is the true effect size to find. Strictly speaking, this is wrong. Our calculated value is only a sample estimate of the true effect size in the underlying population. Under the assumption of knowing the true effect size, we calculated that we need at least n=`r ceiling(9*1.49)` participants for a replication of the original findings with a power of 80%. This means that we will have approximately the chance of 80% to find the effect to be significant at $\alpha$=0.05. Because, the true effect to find might, however, be smaller, this calculation may present an overly optimistic approach. Therefore, other researchers prefer to focus on the confidence intervals for the estimate of effect size measures [@thompson2002].
 
@@ -229,7 +229,7 @@ se
 
 ```
 
-Next, let us determine the critical z-value ($\alpha$ = 5%). For this purpose, we use the *qnorm()* function. We only have to provide the probability (95%) as well as the mean and standard deviation.
+Next, determine the critical z-value ($\alpha$ = 5%). For this purpose, we use the *qnorm()* function. We only have to provide the probability (95%) and the mean and standard deviation.
 
 ```{r}
 
@@ -250,9 +250,9 @@ d_lower95
 
 ```
 
-The results tell us which lower Cohen's d to expect in the underlying population (`r round(d_lower95, digits = 2)`). This is an alternative to the classical t-test. If we reach a significant result here (i.e., the lower limit is not crossing 0), this means that the effect size obtained is significantly greater than 0. Put differently, the effect is assumed to exist in the underlying population. Researchers in the context effect domain are starting to report tests on effect sizes, especially, when their articles span over multiple studies [@evangelidis2018].
+The results tell us which lower Cohen's d to expect in the underlying population (`r round(d_lower95, digits = 2)`). This is an alternative to the classical t-test. If we reach a significant result here (i.e., the lower limit is not crossing 0), this means that the effect size obtained is significantly greater than 0. Put differently, the effect is assumed to exist in the underlying population. Researchers in the context effect domain are starting to report tests on effect sizes, especially when their articles span multiple studies [@evangelidis2018].
 
-We can briefly calculate how this will change our assumptions about the minimum sample size. We, again, use the *pwr.t.test()* function (see above). This time, we hand in **d_lower95** as the argument for the effect size parameter d.
+We can briefly calculate how this will change our assumptions about the minimum sample size. Again, we use the *pwr.t.test()* function (see above). This time, we hand in **d_lower95** as the argument for the effect size parameter d.
 
 ```{r results='asis'}
 
@@ -262,4 +262,4 @@ results_worst_case
 
 ```
 
-We can see that the more conservative sample size is `r ceiling(results_worst_case$n)`. Combined with the exclusion factor discussed above, we end at a (worst-case) gross sample n of `r ceiling(1.49*results_worst_case$n)`.
+We can see that the more conservative sample size is `r ceiling(results_worst_case$n)`. Combined with the abovementioned exclusion factor, we end at a (worst-case) gross sample n of `r ceiling(1.49*results_worst_case$n)`.

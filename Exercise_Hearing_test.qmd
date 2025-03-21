@@ -1,0 +1,353 @@
+---
+title-block-banner: true
+title: "Sensory Marketing & Product Innovation"
+subtitle: "Exercise - Hearing test"
+keywords: 
+  - marketing
+  - market research
+  - marketing methods
+  - sensory marketing
+author: 
+  - name: 
+      given: Marcel
+      family: Lichters
+      degrees: Prof. Dr.
+      id: ML
+      attributes:
+      corresponding: true
+    email: marcel.lichters@ovgu.de
+    url: https://www.marketing.ovgu.de/
+    orcid: 0000-0002-3710-2292
+    corresponding: true
+    affiliation: 
+    - name: Otto von Guericke University Magdeburg
+      city: Magdeburg
+      state: Saxony-Anhalt
+      country: Germany
+      url: https://www.ovgu.de/en/
+date: last-modified
+date-format: full
+csl: apa-old-doi-prefix.csl
+citation:
+  language: "en"
+  type: post-weblog
+  url: https://pub.ww.ovgu.de/lichters/smpi/exercise/Exercise_Hearing_test.html
+  title: "Sensory Marketing & Product Innovation: Exercise - Hearing test"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-location: left
+    code-fold: false
+    code-link: true
+    code-summary: "Show the code"
+    code-overflow: wrap
+    code-tools: false
+    code-copy: hover
+    number-sections: true
+    number-depth: 3
+    citations-hover: true
+    footnotes-hover: true
+    embed-resources: true
+    anchor-sections: true
+    email-obfuscation: javascript
+editor: source
+bibliography: references.bib
+editor_options: 
+  chunk_output_type: console
+google-scholar: true
+copyright: 
+  holder: Prof. Dr. Marcel Lichters
+  year: 2025
+  statement: Please cite the author Marcel Lichters!
+license: 
+  text: >
+    CC BY-NC-ND 4.0, see https://creativecommons.org/licenses/by-nc-nd/4.0/ 
+  type: open-access
+  url: https://creativecommons.org/licenses/by-nc-nd/4.0/Deed - Attribution-NonCommercial-NoDerivatives 4.0 International - Creative Commons.html
+---
+
+------------------------------------------------------------------------
+
+<a title="Follow me on ResearchGate" href="https://www.researchgate.net/profile/Marcel_Lichters?cp=shp"><img src="https://www.researchgate.net/images/public/profile_share_badge.png" alt="Follow me on ResearchGate"/></a>
+
+[Connect with me on Open Science Framework](https://osf.io/u7hyz/) \| [Contact me via LinkedIn](https://www.linkedin.com/in/lichters/)
+
+It might be necessary to use right-click -\> open in a new browser window depending on your machine*.*
+
+------------------------------------------------------------------------
+
+R analysis script presenting part of the solutions for exercise on the hearing test (see last exercise).
+
+The purpose of this script is not solely to answer the exercise question. Moreover, studying these scripts should help students become familiar with some aspects of working in *R*.
+
+::: callout-tip
+## If this grabs your attention
+
+If this exercise captures your interest, please take a look at our master study programs at Otto von Guericke University in Magdeburg (Germany), by clicking on the logo:
+:::
+
+<a title="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" href="https://www.ovgu.de/unimagdeburg/en/Master-p-48820.html"><img src="Signet_WW_3.jpg" alt="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" width="600"/></a>
+
+```{r}
+#| include: false
+
+
+#clear workspace
+rm(list = ls())
+
+
+#load packages
+if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
+
+library(pacman)
+
+pacman::p_load(downloadthis, haven, hrbrthemes, kableExtra, knitr, labelled, modelsummary, tidyverse, ggpubr, quarto, openxlsx)
+
+
+```
+
+# Loading packages {#sec-loading-packages}
+
+::: callout-important
+## Beware!
+
+*R* is a context-sensitive language. Thus, 'data' will not be interpreted the same way as 'Data'.
+:::
+
+In *R* most functionality is provided by additional packages.\
+Most of the packages are well-documented; see: <https://cran.r-project.org/>
+
+1.  The code chunk below first evaluates if the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html) [@pacman] has already been installed on your machine. If yes, the corresponding package will be loaded. If not, *R* will install the package.
+
+2.  Alternatively, you can do this manually first by executing *install.packages("pacman")* and then *library(pacman)*.
+
+3.  The second line then loads the package [pacman](https://cran.r-project.org/web/packages/pacman/index.html).
+
+4.  The third line uses the function *p_load()* from the pacman package to install (if necessary) and loads all packages that we provide as arguments.
+
+```{r}
+
+
+
+if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
+
+library(pacman)
+
+pacman::p_load(haven, hrbrthemes, kableExtra, knitr, labelled, modelsummary, openxlsx, tidyverse)
+
+```
+
+::: {.callout-caution collapse="true"}
+## Expand to learn more about calling functions
+
+In all code chunks throughout this script, you can get additional help on each function used by clicking on its name (or by right-clicking and then opening it in a new browser tab). Alternatively, you can see which arguments a function accepts while coding by pressing 'F1' with the cursor positioned over the function's name.
+:::
+
+------------------------------------------------------------------------
+
+Here is the *R* session info, which gives you information on my machine, all loaded packages, and their version:
+
+```{r  }
+
+sessionInfo()
+
+
+```
+
+------------------------------------------------------------------------
+
+# Importing the data {#sec-import-data-from-chairs-homepage}
+
+For your master’s thesis, it might be a good idea to replicate the IAT findings of Study 1 (D-score \> 0, t-test). Based on a power analysis (Assumptions: 𝛼=5%, Power=0.8), how many subjects should you recruit for this study?
+
+The data set is stored as an Microsoft Excel file (.xlsx) within the following directory: *https://pub.ww.ovgu.de/lichters/smpi/data/hearing_test.xlsx*
+
+The data set's name is *hearing_test.xlsx*.
+
+We download the file to our current *R project* into an object named *d*. for this purpose, we draw on the function *read.xlsx()* from the package *openxlsx* [@openxlsx].
+
+Below, we tell the function to read the first sheet of the Excel file, check the names of the columns, and separate the non-standard names by an underscore.
+
+```{r}
+
+d <- read.xlsx("https://pub.ww.ovgu.de/lichters/smpi/data/hearing_test.xlsx", 
+             sheet = 1, 
+             check.names = TRUE, 
+             sep.names = "_") %>% as_tibble()
+
+
+
+```
+
+If anything does not work out as expected on your machine, you can download the data by clicking on the following button.
+
+Download the Excel file manually
+
+```{r}
+#| include: true
+#| echo: false
+
+download_link(link = "https://pub.ww.ovgu.de/lichters/smpi/data/hearing_test.xlsx", 
+              button_label = "Download xlsx file manually", 
+              button_type = "default", 
+              has_icon = TRUE, 
+              icon = "fa fa-save", 
+              self_contained = TRUE)
+
+```
+
+------------------------------------------------------------------------
+
+# Data inspection {#sec-data-inspection}
+
+Let's take a look at the first few rows of the data set to get an idea of its structure.
+
+```{r}
+
+d
+
+```
+
+# Using linear regression to explain the highest perceivable frequency by age {#sec-linear-regression}
+
+```{r}
+
+model_age <- lm(d$Frequency ~ d$Age)
+
+summary(model_age)
+
+
+
+```
+
+
+# Is capability to hear high frequencies a function of the interaction between age and gender? {#sec-linear-regression-interaction}
+
+
+We can first visualize the relationship between the highest perceivable frequency and age for both sexes in isolation.
+
+```{r}
+#| warning: false
+ggplot(d, aes(x = Age, y = Frequency, color = Gender)) +
+  geom_smooth(method = "lm", fill = "#AEC6D2", se = TRUE) +
+  geom_point(alpha = 0.8, shape = 21, size = 2, stroke = 1) +
+  theme_minimal() +
+  annotate(geom = "text", x = 30, y = 17000, label = paste(
+    "Model across both groups : ", "\n\n",
+    round(model_age$coefficients[1], digits = 2),
+    " - ",
+    abs(round(model_age$coefficients[2], digits = 2)),
+    "*years", "\n\n", "R²(adjusted) = ",
+    round(summary(model_age)$adj.r.squared, digits = 2)
+  ), hjust = "left") +
+  theme(
+    plot.background = element_rect(fill = "#F2F6F8"),
+    panel.background = element_rect(fill = "grey98"),
+    panel.border = element_rect(colour = "black", fill = NA, size = 0.7),
+    text = element_text(size = 12),
+    axis.title = element_text(size = 13)
+  )
+
+
+```
+
+
+Next, let's try a regression that includes the interaction and main effects of age and gender. The question is whether the slopes for both sexes are different enough to suggest that they likely do not come from the same data-generating process.
+
+```{r}
+
+model_moderation_regression <- lm(d$Frequency ~ d$Age*d$Gender)
+
+summary(model_moderation_regression)
+
+```
+
+Alternatively, more insights can be obtained by using a step-wise regression approach. We use the modelsummary package [@modelsummary] to focus on the model differences, which provides a function with the same name.
+
+Below, we establish a regression model with only participants' gender and age as predictors. We then, apply the modelsummary function to compare all three models.
+
+```{r}
+
+model_age_gender <- lm(d$Frequency ~ d$Age + d$Gender)
+
+models <- list(
+  "Model 1" = model_age,
+  "Model 1" = model_age_gender,
+  "Model 3" = model_moderation_regression
+)
+modelsummary(models,
+  stars = FALSE,
+  statistic = c("std.error", "p.value"),
+  shape = term ~ model + statistic,
+  fmt = 3,
+  coef_rename = TRUE,
+  align = "lrrrrrrrrr",
+  gof_omit = "AIC|RMSE|Log",
+  notes = c("Notes: Dependent variable is highest perceivable frequency in Hertz, independent varibles are: age in years, gender (female vs. male), and their interaction. The upper table area shows unstandardized model coefficients [Est.], non-robust standard errors [S.E.] and p-values [p].")
+)
+
+
+```
+
+
+------------------------------------------------------------------------
+
+Finally, we use a more prominent method to assess the moderating role of gender in the relationship between age and the highest perceivable frequency. We use the PROCESS macro [@Hayes.2022] to estimate the interaction effect, drawing on bootstrap samples.
+
+Below, we load the macro from the internet.
+
+```{r}
+
+source("https://pub.ww.ovgu.de/lichters/smpi/data/process.R")
+
+
+```
+
+If anything does not work out as expected on your machine, you can download the data by clicking on the following button.
+
+```{r}
+#| include: true
+#| echo: false
+
+download_link(link = "https://pub.ww.ovgu.de/lichters/smpi/data/process.R", 
+              button_label = "Download process.R manually", 
+              button_type = "default", 
+              has_icon = TRUE, 
+              icon = "fa fa-save", 
+              self_contained = TRUE)
+
+
+```
+
+If you have downloaded manually, you need to execute *source(process.R)*.
+
+
+------------------------------------------------------------------------
+
+Below, we need to explicitly convert the variable *gender* into a factor and then into a labelled variable. This is because the PROCESS macro requires the moderator to be a numeric variable.
+
+Subsequently, we run the PROCESS macro. The function requires the data set (*data*), the dependent variable (*y*), the independent variable (*w*), the moderator (*w*), the model number (which is 1), the centering method, the number of bootstrap samples (*boot*), and the confidence level (*conf*). We further set the seed to ensure reproducibility.
+In addition, we set the progress bar to FALSE. 
+
+
+```{r}
+
+
+d$Gender <- d$Gender %>% to_factor() %>% to_labelled()
+
+
+process(
+  data = d,
+  y = "Frequency",
+  x = "Age",
+  w = "Gender",
+  model = 1,
+  center = 2, jn = 1,
+  moments = 1, modelbt = 1,
+  boot = 10000, seed = 54545, progress = F,
+  conf = 0.95
+)
+
+```
+
