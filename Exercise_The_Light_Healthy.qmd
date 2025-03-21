@@ -1,31 +1,38 @@
 ---
 title-block-banner: true
-title: "Sensory Marketing and Product Innovation"
-subtitle: "Exercise 1 - The Light is Healthy Intuition"
+title: "Sensory Marketing & Product Innovation"
+subtitle: "Exercise - The Light is Healthy Intuition"
+keywords: 
+  - marketing
+  - market research
+  - marketing methods
+  - sensory marketing
 author: 
   - name: 
       given: Marcel
       family: Lichters
-      non-dropping-particle: Prof. Dr.
-    url: https://www.marketing.ovgu.de/
+      degrees: Prof. Dr.
+      id: ML
+      attributes:
+      corresponding: true
     email: marcel.lichters@ovgu.de
+    url: https://www.marketing.ovgu.de/
+    orcid: 0000-0002-3710-2292
     corresponding: true
     affiliation: 
-    - name: Otto-von-Guericke-University Magdeburg
+    - name: Otto von Guericke University Magdeburg
       city: Magdeburg
       state: Saxony-Anhalt
       country: Germany
-    affiliation-url: https://www.ovgu.de/en/
-    orcid: 0000-0002-3710-2292
-date: now
+      url: https://www.ovgu.de/en/
+date: last-modified
 date-format: full
 csl: apa-old-doi-prefix.csl
 citation:
   language: "en"
-  type: post
-  url: https://marcel-lichters.quarto.pub/smpiexercise1/
-  title: 'Sensory Marketing & Product Innovation: Exercise 1 - The Light is Healthy Intuition'
-appendix-cite-as: display
+  type: post-weblog
+  url: https://pub.ww.ovgu.de/lichters/smpi/exercise/Exercise_The_Light_Healthy.html
+  title: "Sensory Marketing & Product Innovation: Exercise - The Light is Healthy Intuition"
 format:
   html:
     theme: cosmo
@@ -41,7 +48,9 @@ format:
     number-depth: 3
     citations-hover: true
     footnotes-hover: true
-email-obfuscation: javascript
+    embed-resources: true
+    anchor-sections: true
+    email-obfuscation: javascript
 editor: source
 bibliography: references.bib
 editor_options: 
@@ -49,7 +58,13 @@ editor_options:
 google-scholar: true
 copyright: 
   holder: Prof. Dr. Marcel Lichters
-  year: 2023
+  year: 2025
+  statement: Please cite the author Marcel Lichters!
+license: 
+  text: >
+    CC BY-NC-ND 4.0, see https://creativecommons.org/licenses/by-nc-nd/4.0/ 
+  type: open-access
+  url: https://creativecommons.org/licenses/by-nc-nd/4.0/Deed - Attribution-NonCommercial-NoDerivatives 4.0 International - Creative Commons.html
 ---
 
 ------------------------------------------------------------------------
