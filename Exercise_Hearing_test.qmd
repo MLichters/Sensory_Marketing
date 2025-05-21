@@ -116,7 +116,7 @@ if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(downloadthis, ggstatsplot, haven, hrbrthemes, interactions, kableExtra, knitr, labelled, lm.beta, modelsummary, tidyverse, ggpubr, quarto, openxlsx)
+pacman::p_load(cv, downloadthis, ggstatsplot, haven, hrbrthemes, interactions, kableExtra, knitr, labelled, lm.beta, modelsummary, tidyverse, ggpubr, quarto, openxlsx)
 
 
 ```
@@ -150,7 +150,7 @@ if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(haven, ggstatsplot, hrbrthemes, interactions, kableExtra, knitr, labelled, lm.beta, modelsummary, openxlsx, tidyverse)
+pacman::p_load(cv, haven, ggstatsplot, hrbrthemes, interactions, kableExtra, knitr, labelled, lm.beta, modelsummary, openxlsx, tidyverse)
 
 ```
 
@@ -246,9 +246,10 @@ d$Gender <- d$Gender %>% to_factor()
 
 > Use a linear regression to evaluate if hearing capabilities are decreasing with increasing age in years.
 
-Before looking at the quantitative output of the regression model, we will inspect the data visually. We use the *ggscatterstats()* function from the [ggstatsplot](https://cran.r-project.org/web/packages/ggstatsplot/index.html) package [@ggstatsplot] to visualize the relationship between *Age* and hearing capabilities.
+Before looking at the quantitative output of the regression model, we will inspect the data visually. We use the *ggscatterstats()* function from the [ggstatsplot](https://cran.r-project.org/web/packages/ggstatsplot/index.html) package [@patil2021a; @ggstatsplot] to visualize the relationship between *Age* and hearing capabilities.
 
 ```{r}
+#| warning: false
 
 ggscatterstats(
   data = d, ## data frame from which variables are taken
@@ -396,9 +397,9 @@ If you have downloaded manually, you need to execute *source(process.R)*.
 
 ------------------------------------------------------------------------
 
-Below, we need to explicitly convert the variable *Gender* into a a labelled variable. This is because the PROCESS macro requires the moderator to be a numeric variable. As a result, the variable *Gender* now is coded numerically with 1 (females) and 2 (males). We store the results of this transformation to a dataset called *d_process*.
+Below, we need to explicitly convert the variable *Gender* into a labelled variable. This is because the PROCESS macro requires the moderator to be a numeric variable. As a result, the variable *Gender* is now coded numerically with 1 (females) and 2 (males). We store the results of this transformation in a dataset called *d_process*.
 
-Subsequently, we run the PROCESS macro. The function requires the data set (*data*), the dependent variable (*y*), the independent variable (*w*), the moderator (*w*), the model number (which is 1, see, [@Hayes.2022, p. 621 for an overview]), the centering method, the number of bootstrap samples (*boot*), and the confidence level (*conf*). We further set the seed to ensure reproducibility. In addition, we set the progress bar to FALSE.
+Subsequently, we run the PROCESS macro. The function requires the data set (*data*), the dependent variable (*y*), the independent variable (*w*), the moderator (*w*), the model number (which is 1, see, @Hayes.2022 [p. 621] for an overview), the centering method, the number of bootstrap samples (*boot*), and the confidence level (*conf*). We further set the seed to ensure reproducibility. In addition, we set the progress bar to FALSE.
 
 ```{r}
 
@@ -504,7 +505,7 @@ model_age_gender %>% lm.beta() %>% summary()
 ::: callout-tip
 ## Interpretation
 
-For the interpretation, we should first focus on the p-value of the t-test for the model terms (**Pr(\>\|t\|)**). If one of both variables is accompanied by a value of \< 0.05, we would conclude that this variable has a higher explanatory power in hearing capabilities. If both predictors are below 0.05, the predictor with the highest magnitude in the standardized regression coefficients (**Standardized**) explains better. However, suppose both predictors did not reach significance. In that case, none of them is a good (in a statistical sense) predictor of hearing capabilities, and we should not interpret differences in the magnitude of the standardized coefficients. Our results support the notion that *Age* hase ahigher influence in explaining hearing capabilities.
+For the interpretation, we should first focus on the p-value of the t-test for the model terms (**Pr(\>\|t\|)**). If one of both variables is accompanied by a value of \< 0.05, we would conclude that this variable has a higher explanatory power in hearing capabilities. If both predictors are below 0.05, the predictor with the highest magnitude in the standardized regression coefficients (**Standardized**) explains better. However, suppose both predictors did not reach significance. In that case, none of them is a good (in a statistical sense) predictor of hearing capabilities, and we should not interpret differences in the magnitude of the standardized coefficients. Our results support the notion that *Age* has a higher influence in explaining hearing capabilities.
 :::
 
 # Task 4
@@ -513,11 +514,11 @@ For the interpretation, we should first focus on the p-value of the t-test for t
 
 Think back to Chapter 2 of the Sensory Marketing and Product Innovation lecture. Such a question deals with the **threshold of collective conscious perception**, usually defined as the stimulus intensity, etc., that 50% of individuals can perceive consciously [e.g., @girard2019].
 
-Thus, we have to ask for the median in hearing capabilities. One way to display the basic descriptive statistics for an interval-scaled variable is to use the *describe()* function provided by the *psych* package [@psych].
+Thus, we have to ask for the median in hearing capabilities. One way to display the basic descriptive statistics for an interval-scaled variable is to use the *describe()* function provided by the *psych* package [@psych-2].
 
 ```{r}
 
-hearing_test$Frequency %>% psych::describe()
+d$Frequency %>% psych::describe()
 
 
 
@@ -526,7 +527,116 @@ hearing_test$Frequency %>% psych::describe()
 ::: callout-tip
 ## Interpretation
 
-Since the median in hearing capabilities is (`r format(round(psych::describe(hearing_test$Frequency)$median, digits = 2), scientific = FALSE)`) Hertz, this is the highest frequency in Hertz that the car manufacturer should consider if the goal is to stay above the threshold of collective conscious perception. Of course, this isn't a good idea since the other 50% of consumers would be unable to hear such an auditory signal.
+Since the median in hearing capabilities is (`r format(round(psych::describe(d$Frequency)$median, digits = 2), scientific = FALSE)`) Hertz, this is the highest frequency in Hertz that the car manufacturer should consider if the goal is to stay above the threshold of collective conscious perception. Of course, this isn't a good idea since the other 50% of consumers would be unable to hear such an auditory signal.
 :::
 
 ------------------------------------------------------------------------
+
+# Task 5
+
+> Imagine you are part of the “secret circle of women against male dominance in data analysis.” You plan to have a special messenger as a smartphone app for the circle. The app should provide a notification tone below the collective threshold of conscious perception for males (because of a frequency that is too high). Which frequency should you choose at a minimum? How many female members (%) will not be able to hear notifications at this frequency?
+
+First, we need the collective threshold of conscious perception for males. Below, we use some functions provided by the [dplyr](https://cran.r-project.org/web/packages/dplyr/index.html) package [@dplyr-2] that help summarize descriptive statistics by a grouping variable.
+
+```{r}
+
+d %>% select(Gender, Frequency) %>%
+  group_by(Gender) %>%
+  summarise(
+    n = n(),
+    mean = mean(Frequency),
+    median = median(Frequency),
+    sd = sd(Frequency),
+    min = min(Frequency),
+    max = max(Frequency),
+    IQR = IQR(Frequency)
+    )
+
+
+```
+
+```{r}
+#| include: false
+
+descriptive_stats <- d %>% select(Gender, Frequency) %>%
+  group_by(Gender) %>%
+  summarise(
+    n = n(),
+    mean = mean(Frequency),
+    median = median(Frequency),
+    sd = sd(Frequency),
+    min = min(Frequency),
+    max = max(Frequency),
+    IQR = IQR(Frequency)
+    ) 
+
+
+
+```
+
+::: callout-tip
+## Interpretation
+
+Since the median in hearing capabilities for males is `r format(round(as.numeric(descriptive_stats[2,"median"]), digits = 2), scientific = FALSE)` Hertz, this is the highest frequency that is above the males' collective threshold of conscious perception. Thus, any frequency above might not be perceivable for males.
+:::
+
+Second, we need to figure out how many women (in %) will also be unable to perceive such a frequency. Below, we first save the median of the men to an object named median_males. Then, we count the number of women we observe who are unable to perceive this frequency and calculate their percentage.
+
+```{r}
+
+median_males <- d %>% filter(Gender=="m") %>% select(Frequency) %>% unlist() %>% median()
+
+d %>% filter(Gender=="f" & Frequency <= median_males) %>%
+  summarise(
+    n = n(),
+    percentage = n()/nrow(d[d$Gender=="f",])*100
+  )
+
+
+```
+
+```{r}
+#| include: false
+
+lost_females <- d %>% filter(Gender=="f" & Frequency <= median_males) %>%
+  summarise(
+    percentage = n()/nrow(d[d$Gender=="f",])*100
+  )
+
+
+
+```
+
+::: callout-tip
+## Interpretation
+
+If we choose a notification tone with a frequency of `r format(round(descriptive_stats[2,"median"], digits = 2), scientific = FALSE)`, we will loose `r format(round(lost_females$percentage, digits = 2), scientific = FALSE)`% of the women who are not able to hear such a tone.
+:::
+
+------------------------------------------------------------------------
+
+# Task 6
+
+> Advanced: Is the full model, including gender, age, and the interaction term, predicting well in terms of root-mean-squared-error of prediction (RMSE) in a 5-fold cross-validation? Are there any signs of overfitting due to the inclusion of the interaction effect?
+
+Below, we apply **5-fold cross validation** The package [cv](https://cran.r-project.org/web/packages/cv/) [@cv] provides a function with the package's name. However, the package comes with one drawback. It is not apt in handling variables possessing variable labels. Therefore, below we re-estimate the regression model, but based on the data without variable labels (function *remove_labels()* from [labelled](https://cran.r-project.org/web/packages/labelled/) [@labelled]).
+
+Remember, when we judged the within sample GoF above (e.g., R²), we based our conclusions in great part on: $\sum_{i=1}^{n}(y_{i}-\hat{y}_{i})²$ (the sum of squares between the fitted values of the regression model ($\hat{y}$) and the observed values for the dependent variable (y)). Thus, the lower the sum of squared models residuals, the higher the global GoF is. Below, we apply a similar logic when using **5-fold cross validation**. More precisely, we have to tell the *cv()* function which measure of misfit for out-of-sample predictions to use when predicting each hold-out fold's values for the dependent variable. We use the **r**oot **m**ean **s**quared **e**rror of prediction (**RMSE**), given by: $RMSE=\sqrt{\frac{\sum_{j=1}^{k}\sum_{i=1}^{d}(y_{j,i}-\hat{y}_{j,i})²}{n}}$. This measure has the nice property of possessing the same measurement unit as the dependent variable (Hertz). 
+
+Also, we set *reps = 3*. We rerun 5-fold cross-validation for 3 times to get an impression of how strongly the results depend on the concrete allocation of data into the five folds.
+
+Note that due to the random elements in this procedure, your results might look slightly different from those below.
+
+```{r}
+
+lm(formula = Frequency ~ Age*Gender, data = remove_labels(d)) %>% cv::cv(k = 5, criterion = rmse, reps = 3) %>% summary()
+
+```
+
+::: callout-tip
+## Interpretation
+
+Above, we see that, on average, the model predicts the highest perceivable frequency (Hertz) of new participants not included in calibration rather badly. This is not surprising with an eye on our tiny sample size. The output portrays the results for each repetition and then averaged across repetitions, with the standard deviations of the CV criterion in parentheses. Based on these results we should not trust the model when doing predictions. We also see that the RMSE error within the complete sample is much lower. Such an adverse situation where the out-of-sample error of prediction is much higher than the in-sample error drawing on the whole sample is typically called **overfitting**.
+:::
+
+
