@@ -621,7 +621,7 @@ If we choose a notification tone with a frequency of `r format(round(descriptive
 
 Below, we apply **5-fold cross validation** The package [cv](https://cran.r-project.org/web/packages/cv/) [@cv] provides a function with the package's name. However, the package comes with one drawback. It is not apt in handling variables possessing variable labels. Therefore, below we re-estimate the regression model, but based on the data without variable labels (function *remove_labels()* from [labelled](https://cran.r-project.org/web/packages/labelled/) [@labelled]).
 
-Remember, when we judged the within sample GoF above (e.g., R²), we based our conclusions in great part on: $\sum_{i=1}^{n}(y_{i}-\hat{y}_{i})²$ (the sum of squares between the fitted values of the regression model ($\hat{y}$) and the observed values for the dependent variable (y)). Thus, the lower the sum of squared models residuals, the higher the global GoF is. Below, we apply a similar logic when using **5-fold cross validation**. More precisely, we have to tell the *cv()* function which measure of misfit for out-of-sample predictions to use when predicting each hold-out fold's values for the dependent variable. We use the **r**oot **m**ean **s**quared **e**rror of prediction (**RMSE**), given by: $RMSE=\sqrt{\frac{\sum_{j=1}^{k}\sum_{i=1}^{d}(y_{j,i}-\hat{y}_{j,i})²}{n}}$. This measure has the nice property of possessing the same measurement unit as the dependent variable (Hertz). 
+Remember, when we judged the within sample GoF above (e.g., R²), we based our conclusions in great part on: $\sum_{i=1}^{n}(y_{i}-\hat{y}_{i})²$ (the sum of squares between the fitted values of the regression model ($\hat{y}$) and the observed values for the dependent variable (y)). Thus, the lower the sum of squared models residuals, the higher the global GoF is. Below, we apply a similar logic when using **5-fold cross validation**. More precisely, we have to tell the *cv()* function which measure of misfit for out-of-sample predictions to use when predicting each hold-out fold's values for the dependent variable. We use the **r**oot **m**ean **s**quared **e**rror of prediction (**RMSE**), given by: $RMSE=\sqrt{\frac{\sum_{j=1}^{k}\sum_{i=1}^{d}(y_{j,i}-\hat{y}_{j,i})²}{n}}$. This measure has the nice property of possessing the same measurement unit as the dependent variable (Hertz).
 
 Also, we set *reps = 3*. We rerun 5-fold cross-validation for 3 times to get an impression of how strongly the results depend on the concrete allocation of data into the five folds.
 
@@ -636,7 +636,25 @@ lm(formula = Frequency ~ Age*Gender, data = remove_labels(d)) %>% cv::cv(k = 5, 
 ::: callout-tip
 ## Interpretation
 
-Above, we see that, on average, the model predicts the highest perceivable frequency (Hertz) of new participants not included in calibration rather badly. This is not surprising with an eye on our tiny sample size. The output portrays the results for each repetition and then averaged across repetitions, with the standard deviations of the CV criterion in parentheses. Based on these results we should not trust the model when doing predictions. We also see that the RMSE error within the complete sample is much lower. Such an adverse situation where the out-of-sample error of prediction is much higher than the in-sample error drawing on the whole sample is typically called **overfitting**.
+Above, we see that, on average, the model predicts the highest perceivable frequency (Hertz) of new participants not included in calibration rather badly. This is not surprising with an eye on our tiny sample size. The output portrays the results for each repetition and then averaged across repetitions, with the standard deviations of the CV criterion in parentheses. Based on these results we should not trust the model when doing predictions. We also see that the RMSE error within the complete sample is much lower. Such an adverse situation where the out-of-sample error of prediction is much higher than the in-sample error drawing on the whole sample is typically called **overfitting**. It could indicate that we should remove the interaction term from the model. However, we should be careful with such a conclusion since the sample size is very small. In addition, we have to keep in mind that the model is not predicting well in general.
 :::
 
+Below, we also conduct a 5-fold cross-validation for the model without the interaction term. We use the same function as above, but we do not include the interaction term in the regression model. Then, we do the same with only leaving *Age* as a prdictor in the model.
 
+```{r}
+
+lm(formula = Frequency ~ Age+Gender, data = remove_labels(d)) %>% cv::cv(k = 5, criterion = rmse, reps = 3) %>% summary()
+
+```
+
+```{r}
+
+lm(formula = Frequency ~ Age, data = remove_labels(d)) %>% cv::cv(k = 5, criterion = rmse, reps = 3) %>% summary()
+
+```
+
+::: callout-tip
+## Interpretation
+
+Above, we see that, on average, the model with only *Age* as a predictor predicts the highest perceivable frequency (Hertz) of new participants not included in calibration much better than the model with the interaction term and also than the model with both main effects of *Age* and *Gender*. Thus, if prediction is the goal, we should rather rely on the model with only *Age* as a predictor. :::
+:::
