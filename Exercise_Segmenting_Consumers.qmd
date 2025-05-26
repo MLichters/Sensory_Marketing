@@ -1,31 +1,33 @@
 ---
 title-block-banner: true
-title: "Sensory Marketing and Product Innovation"
+title: "Sensory Marketing & Product Innovation"
 subtitle: "Exercise 5 - Segmenting consumers based on sensory acceptance tests in sensory labs, immersive environments, and natural consumption settings"
 author: 
   - name: 
       given: Marcel
       family: Lichters
-      non-dropping-particle: Prof. Dr.
-    url: https://www.marketing.ovgu.de/
+      degrees: Prof. Dr.
+      id: ML
+      attributes:
+      corresponding: true
     email: marcel.lichters@ovgu.de
+    url: https://www.marketing.ovgu.de/
+    orcid: 0000-0002-3710-2292
     corresponding: true
     affiliation: 
-    - name: Otto-von-Guericke-University Magdeburg
+    - name: Otto von Guericke University Magdeburg
       city: Magdeburg
       state: Saxony-Anhalt
       country: Germany
-    affiliation-url: https://www.ovgu.de/en/
-    orcid: 0000-0002-3710-2292
-date: now
+      url: https://www.ovgu.de/en/
+date: last-modified
 date-format: full
 csl: apa-old-doi-prefix.csl
 citation:
   language: "en"
-  type: post
-  url: https://rpubs.com/M_Lichters/smpiexercise5
+  type: post-weblog
+  url: https://pub.ww.ovgu.de/lichters/smpi/exercise/Exercise_Segmenting_Consumers.html
   title: 'Sensory Marketing & Product Innovation: Exercise 5 - Segmenting consumers based on sensory acceptance tests in sensory labs, immersive environments, and natural consumption settings'
-appendix-cite-as: display
 format:
   html:
     theme: cosmo
@@ -41,7 +43,9 @@ format:
     number-depth: 3
     citations-hover: true
     footnotes-hover: true
-email-obfuscation: javascript
+    embed-resources: true
+    anchor-sections: true
+    email-obfuscation: javascript
 editor: source
 bibliography: references.bib
 editor_options: 
@@ -49,7 +53,13 @@ editor_options:
 google-scholar: true
 copyright: 
   holder: Prof. Dr. Marcel Lichters
-  year: 2023
+  year: 2025
+  statement: Please cite the author Marcel Lichters!
+license: 
+  text: >
+    CC BY-NC-ND 4.0, see https://creativecommons.org/licenses/by-nc-nd/4.0/ 
+  type: open-access
+  url: https://creativecommons.org/licenses/by-nc-nd/4.0/Deed - Attribution-NonCommercial-NoDerivatives 4.0 International - Creative Commons.html
 ---
 
 ------------------------------------------------------------------------
