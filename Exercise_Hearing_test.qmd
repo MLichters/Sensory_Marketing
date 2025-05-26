@@ -89,6 +89,20 @@ If this exercise captures your interest, please take a look at our master study 
 
 <a title="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" href="https://www.ovgu.de/unimagdeburg/en/Master-p-48820.html"><img src="Signet_WW_3.jpg" alt="Faculty of Economics and Management at Otto-von-Guericke-University Magdeburg" width="600"/></a>
 
+------------------------------------------------------------------------
+
+# Learning objectives for the students
+
+This exercise is designed to help students learn how to:
+
+-   Load datasets in Excel format (\*.xlsx) located on the internet
+
+-   Use linear regression including a moderator effect (aka interaction effect) and visualize the results
+
+-   Summarize step-wise regression modeling approaches
+
+-   Use of Hayes' PROCESS macro [@Hayes.2022] to evaluate moderation hypotheses, drawing on bootstrapping [@efron1994; @efron1983]
+
 ```{r}
 #| include: false
 
@@ -102,10 +116,12 @@ if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(downloadthis, haven, hrbrthemes, kableExtra, knitr, labelled, modelsummary, tidyverse, ggpubr, quarto, openxlsx)
+pacman::p_load(cv, downloadthis, ggstatsplot, haven, hrbrthemes, interactions, kableExtra, knitr, labelled, lm.beta, modelsummary, tidyverse, ggpubr, quarto, openxlsx)
 
 
 ```
+
+------------------------------------------------------------------------
 
 # Loading packages {#sec-loading-packages}
 
@@ -134,7 +150,7 @@ if (!"pacman" %in% rownames(installed.packages())) install.packages("pacman")
 
 library(pacman)
 
-pacman::p_load(haven, hrbrthemes, kableExtra, knitr, labelled, modelsummary, openxlsx, tidyverse)
+pacman::p_load(cv, haven, ggstatsplot, hrbrthemes, interactions, kableExtra, knitr, labelled, lm.beta, modelsummary, openxlsx, tidyverse)
 
 ```
 
@@ -159,19 +175,17 @@ sessionInfo()
 
 # Importing the data {#sec-import-data-from-chairs-homepage}
 
-For your master’s thesis, it might be a good idea to replicate the IAT findings of Study 1 (D-score \> 0, t-test). Based on a power analysis (Assumptions: 𝛼=5%, Power=0.8), how many subjects should you recruit for this study?
+The dataset is stored as a Microsoft Excel file (.xlsx) within the following directory at the homepage of the chair of marketing at the [Otto-von-Guericke-University](https://www.ovgu.de/en/): *https://marketing.ovgu.de/marketing_media/Downloads/SMPI/hearing_test.xlsx*
 
-The data set is stored as an Microsoft Excel file (.xlsx) within the following directory: *https://pub.ww.ovgu.de/lichters/smpi/data/hearing_test.xlsx*
+So, the dataset's name is *hearing_test.xlsx*.
 
-The data set's name is *hearing_test.xlsx*.
+We download the file to our current *R project* and put it into an object named *d*. For this purpose, we draw on the function *read.xlsx()* from the package *openxlsx* [@openxlsx].
 
-We download the file to our current *R project* into an object named *d*. for this purpose, we draw on the function *read.xlsx()* from the package *openxlsx* [@openxlsx].
-
-Below, we tell the function to read the first sheet of the Excel file, check the names of the columns, and separate the non-standard names by an underscore.
+Below, we tell the function to read the first sheet of the Excel file, check the column names, and separate the non-standard names by an underscore.
 
 ```{r}
 
-d <- read.xlsx("https://pub.ww.ovgu.de/lichters/smpi/data/hearing_test.xlsx", 
+d <- read.xlsx("https://marketing.ovgu.de/marketing_media/Downloads/SMPI/hearing_test.xlsx", 
              sheet = 1, 
              check.names = TRUE, 
              sep.names = "_") %>% as_tibble()
@@ -188,7 +202,7 @@ Download the Excel file manually
 #| include: true
 #| echo: false
 
-download_link(link = "https://pub.ww.ovgu.de/lichters/smpi/data/hearing_test.xlsx", 
+download_link(link = "https://marketing.ovgu.de/marketing_media/Downloads/SMPI/hearing_test.xlsx", 
               button_label = "Download xlsx file manually", 
               button_type = "default", 
               has_icon = TRUE, 
@@ -201,7 +215,7 @@ download_link(link = "https://pub.ww.ovgu.de/lichters/smpi/data/hearing_test.xls
 
 # Data inspection {#sec-data-inspection}
 
-Let's take a look at the first few rows of the data set to get an idea of its structure.
+Let's examine the first few rows of the data set to get an idea of its structure.
 
 ```{r}
 
@@ -209,67 +223,106 @@ d
 
 ```
 
-# Using linear regression to explain the highest perceivable frequency by age {#sec-linear-regression}
+::: callout-tip
+## Interpretation
+
+In the dataset, we find 4 variables in the columns.
+
+1.  *Gender* provides a character for females (f) or males (m)
+2.  *Age* is the participant's age in years
+3.  *Frequency* provides the highest frequency (in Hertz) that participants still can hear
+4.  *Year* indicates the calendar year where the data was recorded
+:::
+
+Next, we explicitly tell *R* to treat the variable *Gender* as a categorical factor:
 
 ```{r}
 
-model_age <- lm(d$Frequency ~ d$Age)
-
-summary(model_age)
-
-
+d$Gender <- d$Gender %>% to_factor()
 
 ```
 
+# Task 1 {#sec-linear-regression}
 
-# Is capability to hear high frequencies a function of the interaction between age and gender? {#sec-linear-regression-interaction}
+> Use a linear regression to evaluate if hearing capabilities are decreasing with increasing age in years.
 
-
-We can first visualize the relationship between the highest perceivable frequency and age for both sexes in isolation.
+Before looking at the quantitative output of the regression model, we will inspect the data visually. We use the *ggscatterstats()* function from the [ggstatsplot](https://cran.r-project.org/web/packages/ggstatsplot/index.html) package [@patil2021a; @ggstatsplot] to visualize the relationship between *Age* and hearing capabilities.
 
 ```{r}
 #| warning: false
-ggplot(d, aes(x = Age, y = Frequency, color = Gender)) +
-  geom_smooth(method = "lm", fill = "#AEC6D2", se = TRUE) +
-  geom_point(alpha = 0.8, shape = 21, size = 2, stroke = 1) +
-  theme_minimal() +
-  annotate(geom = "text", x = 30, y = 17000, label = paste(
-    "Model across both groups : ", "\n\n",
-    round(model_age$coefficients[1], digits = 2),
-    " - ",
-    abs(round(model_age$coefficients[2], digits = 2)),
-    "*years", "\n\n", "R²(adjusted) = ",
-    round(summary(model_age)$adj.r.squared, digits = 2)
-  ), hjust = "left") +
-  theme(
-    plot.background = element_rect(fill = "#F2F6F8"),
-    panel.background = element_rect(fill = "grey98"),
-    panel.border = element_rect(colour = "black", fill = NA, size = 0.7),
-    text = element_text(size = 12),
-    axis.title = element_text(size = 13)
-  )
+
+ggscatterstats(
+  data = d, ## data frame from which variables are taken
+  x = Age, ## predictor/independent variable
+  y = Frequency, ## dependent variable (Hearing capabilities)
+  xlab = "Age (in years)", ## label for the x-axis
+  ylab = "Frequency (highest hearable frequency in Hertz)", ## label for the y-axis
+  xfill = "#CC79A7", ## fill for marginals on the x-axis
+  yfill = "#009E73", ## fill for marginals on the y-axis
+  title = "Relationship between Age and Hearing capabilities",
+  bf.message = FALSE
+) 
+
+```
+
+::: callout-tip
+## Interpretation
+
+The scatterplot shows a negative linear relationship between *Age* and *Frequency*. This suggests that as age increases, the highest perceivable frequency decreases. The shaded area around the regression line represents the 95% confidence interval.
+:::
+
+Next, we fit a linear regression model to the data. We store the results in an object called *model_age*.
+
+```{r}
+
+model_age <- d %>% lm(Frequency~Age, data = .)
 
 
 ```
 
-
-Next, let's try a regression that includes the interaction and main effects of age and gender. The question is whether the slopes for both sexes are different enough to suggest that they likely do not come from the same data-generating process.
+Subsequently, we summarize the results.
 
 ```{r}
 
-model_moderation_regression <- lm(d$Frequency ~ d$Age*d$Gender)
+summary(model_age)
+
+```
+
+::: callout-tip
+## Interpretation
+
+From this summary, we see that the overall F-test for the regression is significant; thus, either the Age or the intercept term (or both) in the model significantly explains the dependent variable *Frequency*. Specifically, the *Age* variable has a negative regression coefficient of `r round(model_age$coefficients[2], digits = 2)`. and the corresponding p-value is significant at 5% with a value of `r round(summary(model_age)$coefficients[,"Pr(>|t|)"][[2]], digits = 3)`. Thus, the data is supports the hypothesis that an increasing age is deteriorating hearing capabilities in terms of the highest perceivable frequency of a tone in Hertz. Specifically, we estimate that with every year increase in age, people roughly lose an additional `r abs(round(model_age$coefficients[2], digits = 0))` Hertz of hearing capabilities for higher frequencies.
+:::
+
+# Task 2 {#sec-linear-regression-interaction}
+
+> Is this process contingent on gender? And, how much total information in hearing capabilities (in %) can be explained by gender, age, and their interaction? Use the PROCESS Macro’s (Hayes, 2022) model 1 to evaluate whether age in years interacts with gender in the above regression.
+
+Is capability to hear high frequencies a function of the interaction between age and gender?
+
+To answer this question, we fit a regression that includes the interaction and main effects of age and gender. The question is whether the slopes for both sexes are different enough to suggest that they likely do not come from the same data-generating process.
+
+```{r}
+
+model_moderation_regression <- d %>% lm(Frequency ~ Age*Gender, data=.)
 
 summary(model_moderation_regression)
 
 ```
 
-Alternatively, more insights can be obtained by using a step-wise regression approach. We use the modelsummary package [@modelsummary] to focus on the model differences, which provides a function with the same name.
+::: callout-tip
+## Interpretation
 
-Below, we establish a regression model with only participants' gender and age as predictors. We then, apply the modelsummary function to compare all three models.
+The interaction effect of gender and age does not met the conventional 5% threshold for the p-value. Thus, according to this analysis, the data is not supporting the idea that there is a generalizable moderation effect of gender on the relationship between age and the highest perceivable frequency.
+:::
+
+Alternatively, more insights can be obtained by using a step-wise regression approach. We use the [modelsummary](https://cran.r-project.org/web//packages/modelsummary/) package [@modelsummary] to focus on the model differences, which provides a function with the same name.
+
+Below, we establish a regression model with only participants' gender and age as predictors. We then, apply the *modelsummary()* function to compare all three models that we have estimated so far. The *modelsummary()* function provides a convenient way to summarize the results of multiple models in a single table.
 
 ```{r}
 
-model_age_gender <- lm(d$Frequency ~ d$Age + d$Gender)
+model_age_gender <- d %>% lm(Frequency ~ Age + Gender, data=.)
 
 models <- list(
   "Model 1" = model_age,
@@ -290,17 +343,37 @@ modelsummary(models,
 
 ```
 
+```{r}
+#| include: false
+
+model_summary_results <- modelsummary(models,
+  stars = FALSE,
+  statistic = c("std.error", "p.value"),
+  shape = term ~ model + statistic,
+  fmt = 3,
+  coef_rename = TRUE,
+  align = "lrrrrrrrrr",
+  gof_omit = "AIC|RMSE|Log",
+  notes = c("Notes: Dependent variable is highest perceivable frequency in Hertz, independent varibles are: age in years, gender (female vs. male), and their interaction. The upper table area shows unstandardized model coefficients [Est.], non-robust standard errors [S.E.] and p-values [p].")
+)
+
+```
+
+::: callout-tip
+## Interpretation
+
+Comparing the models show that the addition of gender and the genderxage interaction only marginally increases the internal model fit: adjusted R² value from `r round(as.numeric(model_summary_results@data[7,2]), digits = 2)` (Model 1) to `r round(as.numeric(model_summary_results@data[7,8]), digits = 2)` (Model 3).
+:::
 
 ------------------------------------------------------------------------
 
-Finally, we use a more prominent method to assess the moderating role of gender in the relationship between age and the highest perceivable frequency. We use the PROCESS macro [@Hayes.2022] to estimate the interaction effect, drawing on bootstrap samples.
+Finally, we use a more prominent method to assess the moderating role of gender in the relationship between age and the highest perceivable frequency. We use the PROCESS macro [@Hayes.2022] to estimate the interaction effect, drawing on bootstrap samples. This is the way to go if you want to assess the significance of the interaction effect. The PROCESS macro is a widely used tool for estimating and testing moderation and mediation effects in regression models.
 
 Below, we load the macro from the internet.
 
 ```{r}
 
-source("https://pub.ww.ovgu.de/lichters/smpi/data/process.R")
-
+source("https://marketing.ovgu.de/marketing_media/Downloads/SMPI/process.R")
 
 ```
 
@@ -310,7 +383,7 @@ If anything does not work out as expected on your machine, you can download the 
 #| include: true
 #| echo: false
 
-download_link(link = "https://pub.ww.ovgu.de/lichters/smpi/data/process.R", 
+download_link(link = "https://marketing.ovgu.de/marketing_media/Downloads/SMPI/process.R", 
               button_label = "Download process.R manually", 
               button_type = "default", 
               has_icon = TRUE, 
@@ -322,23 +395,20 @@ download_link(link = "https://pub.ww.ovgu.de/lichters/smpi/data/process.R",
 
 If you have downloaded manually, you need to execute *source(process.R)*.
 
-
 ------------------------------------------------------------------------
 
-Below, we need to explicitly convert the variable *gender* into a factor and then into a labelled variable. This is because the PROCESS macro requires the moderator to be a numeric variable.
+Below, we need to explicitly convert the variable *Gender* into a labelled variable. This is because the PROCESS macro requires the moderator to be a numeric variable. As a result, the variable *Gender* is now coded numerically with 1 (females) and 2 (males). We store the results of this transformation in a dataset called *d_process*.
 
-Subsequently, we run the PROCESS macro. The function requires the data set (*data*), the dependent variable (*y*), the independent variable (*w*), the moderator (*w*), the model number (which is 1), the centering method, the number of bootstrap samples (*boot*), and the confidence level (*conf*). We further set the seed to ensure reproducibility.
-In addition, we set the progress bar to FALSE. 
-
+Subsequently, we run the PROCESS macro. The function requires the data set (*data*), the dependent variable (*y*), the independent variable (*w*), the moderator (*w*), the model number (which is 1, see, @Hayes.2022 [p. 621] for an overview), the centering method, the number of bootstrap samples (*boot*), and the confidence level (*conf*). We further set the seed to ensure reproducibility. In addition, we set the progress bar to FALSE.
 
 ```{r}
 
-
-d$Gender <- d$Gender %>% to_factor() %>% to_labelled()
+d_process <- d
+d_process$Gender <- d$Gender %>% to_labelled()
 
 
 process(
-  data = d,
+  data = d_process,
   y = "Frequency",
   x = "Age",
   w = "Gender",
@@ -351,3 +421,240 @@ process(
 
 ```
 
+::: callout-tip
+## Interpretation
+
+Our PROCESS model 1 analysis reports the focal interaction effect's (*Int_1*) 95% confidence intervals to include the value of 0. Thus we can not support the notion that capability to hear high frequencies is a function of the interaction between age and gender.
+:::
+
+------------------------------------------------------------------------
+
+However, the non-significant moderation effect could also have resulted from a sample size that was too tiny (think of the statistical power). To illustrate the descriptive difference in declines in hearing capabilities by gender, we plot regression lines for both values of the moderator *Gender* below. For this purpose, we use standard [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html) functions [@ggplot2] to visualize the data. We use the *geom_smooth()* function to add a regression line to the plot. The *method* argument specifies that we want to use a linear model (lm) for the regression line. The *fill* argument specifies the color of the confidence interval around the regression line. If you are not familiar with ggplot2 logic, there are several good learning aids available in the internet [e.g., @wickham2016].
+
+```{r}
+#| warning: false
+ggplot(d, aes(x = Age, y = Frequency, color = Gender)) +
+  geom_smooth(method = "lm", fill = "#AEC6D2", se = TRUE) +
+  geom_point(alpha = 0.8, shape = 21, size = 2, stroke = 1) +
+  theme_minimal() +
+  annotate(geom = "text", x = 30, y = 17000, label = paste(
+    "Model across both groups: ", "\n",
+    round(model_age$coefficients[1], digits = 2),
+    " - ",
+    abs(round(model_age$coefficients[2], digits = 2)),
+    "*years", "\n", "R²(adjusted) = ",
+    round(summary(model_age)$adj.r.squared, digits = 2)
+  ), hjust = "left") +
+  theme(
+    plot.background = element_rect(fill = "#F2F6F8"),
+    panel.background = element_rect(fill = "grey98"),
+    panel.border = element_rect(colour = "black", fill = NA, size = 0.7),
+    text = element_text(size = 12),
+    axis.title = element_text(size = 13)
+  )
+
+
+```
+
+::: callout-tip
+## Interpretation
+
+The negative slope for age in years is less pronounced for females (vs. males). However, certain male outliers are driving this tendency. Ideally, we would have recorded more observations coming from older females.
+:::
+
+For sake of completeness, below we show how to create a similar plot using the *interactions* package [@interactions]. This package provides a convenient way to visualize interactions in regression models. It allows you to create plots that show how the relationship between a predictor variable and an outcome variable changes at different levels of a moderator variable.
+
+We hand in *model_moderation_regression* (the regression model containing the main effects plus the interaction) to the argument *model* of the function *interact_plot()*.
+
+Here,
+
+-   data = is the underlying dataset,
+-   pred = *"Age"* is the main predictor,
+-   modx = *"Gender"* is the moderator with only 2 possible values,
+-   plot.points = TRUE indicates that each data point should be superimposed
+-   interval = TRUE asks for 95% confidence intervals around the regression lines
+
+```{r}
+
+model_moderation_regression %>% interact_plot(model = ., 
+                               data =  d, 
+                               pred = Age, 
+                               modx = Gender,
+                               plot.points = TRUE,
+                               interval = TRUE,
+                               main.title = "Highest detectable frequency by age (years) and gender \n together with 95% confidence intervals"
+                               ) 
+  
+
+```
+
+------------------------------------------------------------------------
+
+# Task 3
+
+> Which variable, age or gender, impacts hearing capabilities more in the model without the interaction term?
+
+The easiest way to evaluate the explanatory power of different predictors in the regression model is to compare their standardized regression coefficient's magnitude qualitatively. This assumes that Age's and Gender's main effects significantly differ from 0 (p\<0.05). To get a summary of the standardized regression coefficients, we apply the function *lm.beta()* from the *lm.beta* package [@lm.beta]. We use the model with the main effects of *Age* and *Gender* only (*model_age_gender*).
+
+```{r}
+
+model_age_gender %>% lm.beta() %>% summary()
+
+```
+
+::: callout-tip
+## Interpretation
+
+For the interpretation, we should first focus on the p-value of the t-test for the model terms (**Pr(\>\|t\|)**). If one of both variables is accompanied by a value of \< 0.05, we would conclude that this variable has a higher explanatory power in hearing capabilities. If both predictors are below 0.05, the predictor with the highest magnitude in the standardized regression coefficients (**Standardized**) explains better. However, suppose both predictors did not reach significance. In that case, none of them is a good (in a statistical sense) predictor of hearing capabilities, and we should not interpret differences in the magnitude of the standardized coefficients. Our results support the notion that *Age* has a higher influence in explaining hearing capabilities.
+:::
+
+# Task 4
+
+> Imagine that your task is to develop an unobtrusive auditory signal for an electric vehicle’s reverse gear driving mode. Which frequency in Hertz should such a signal not exceed to keep it above the collective threshold of conscious perception?
+
+Think back to Chapter 2 of the Sensory Marketing and Product Innovation lecture. Such a question deals with the **threshold of collective conscious perception**, usually defined as the stimulus intensity, etc., that 50% of individuals can perceive consciously [e.g., @girard2019].
+
+Thus, we have to ask for the median in hearing capabilities. One way to display the basic descriptive statistics for an interval-scaled variable is to use the *describe()* function provided by the *psych* package [@psych-2].
+
+```{r}
+
+d$Frequency %>% psych::describe()
+
+
+
+```
+
+::: callout-tip
+## Interpretation
+
+Since the median in hearing capabilities is (`r format(round(psych::describe(d$Frequency)$median, digits = 2), scientific = FALSE)`) Hertz, this is the highest frequency in Hertz that the car manufacturer should consider if the goal is to stay above the threshold of collective conscious perception. Of course, this isn't a good idea since the other 50% of consumers would be unable to hear such an auditory signal.
+:::
+
+------------------------------------------------------------------------
+
+# Task 5
+
+> Imagine you are part of the “secret circle of women against male dominance in data analysis.” You plan to have a special messenger as a smartphone app for the circle. The app should provide a notification tone below the collective threshold of conscious perception for males (because of a frequency that is too high). Which frequency should you choose at a minimum? How many female members (%) will not be able to hear notifications at this frequency?
+
+First, we need the collective threshold of conscious perception for males. Below, we use some functions provided by the [dplyr](https://cran.r-project.org/web/packages/dplyr/index.html) package [@dplyr-2] that help summarize descriptive statistics by a grouping variable.
+
+```{r}
+
+d %>% select(Gender, Frequency) %>%
+  group_by(Gender) %>%
+  summarise(
+    n = n(),
+    mean = mean(Frequency),
+    median = median(Frequency),
+    sd = sd(Frequency),
+    min = min(Frequency),
+    max = max(Frequency),
+    IQR = IQR(Frequency)
+    )
+
+
+```
+
+```{r}
+#| include: false
+
+descriptive_stats <- d %>% select(Gender, Frequency) %>%
+  group_by(Gender) %>%
+  summarise(
+    n = n(),
+    mean = mean(Frequency),
+    median = median(Frequency),
+    sd = sd(Frequency),
+    min = min(Frequency),
+    max = max(Frequency),
+    IQR = IQR(Frequency)
+    ) 
+
+
+
+```
+
+::: callout-tip
+## Interpretation
+
+Since the median in hearing capabilities for males is `r format(round(as.numeric(descriptive_stats[2,"median"]), digits = 2), scientific = FALSE)` Hertz, this is the highest frequency that is above the males' collective threshold of conscious perception. Thus, any frequency above might not be perceivable for males.
+:::
+
+Second, we need to figure out how many women (in %) will also be unable to perceive such a frequency. Below, we first save the median of the men to an object named median_males. Then, we count the number of women we observe who are unable to perceive this frequency and calculate their percentage.
+
+```{r}
+
+median_males <- d %>% filter(Gender=="m") %>% select(Frequency) %>% unlist() %>% median()
+
+d %>% filter(Gender=="f" & Frequency <= median_males) %>%
+  summarise(
+    n = n(),
+    percentage = n()/nrow(d[d$Gender=="f",])*100
+  )
+
+
+```
+
+```{r}
+#| include: false
+
+lost_females <- d %>% filter(Gender=="f" & Frequency <= median_males) %>%
+  summarise(
+    percentage = n()/nrow(d[d$Gender=="f",])*100
+  )
+
+
+
+```
+
+::: callout-tip
+## Interpretation
+
+If we choose a notification tone with a frequency of `r format(round(descriptive_stats[2,"median"], digits = 2), scientific = FALSE)`, we will loose `r format(round(lost_females$percentage, digits = 2), scientific = FALSE)`% of the women who are not able to hear such a tone.
+:::
+
+------------------------------------------------------------------------
+
+# Task 6
+
+> Advanced: Is the full model, including gender, age, and the interaction term, predicting well in terms of root-mean-squared-error of prediction (RMSE) in a 5-fold cross-validation? Are there any signs of overfitting due to the inclusion of the interaction effect?
+
+Below, we apply **5-fold cross validation** The package [cv](https://cran.r-project.org/web/packages/cv/) [@cv] provides a function with the package's name. However, the package comes with one drawback. It is not apt in handling variables possessing variable labels. Therefore, below we re-estimate the regression model, but based on the data without variable labels (function *remove_labels()* from [labelled](https://cran.r-project.org/web/packages/labelled/) [@labelled]).
+
+Remember, when we judged the within sample GoF above (e.g., R²), we based our conclusions in great part on: $\sum_{i=1}^{n}(y_{i}-\hat{y}_{i})²$ (the sum of squares between the fitted values of the regression model ($\hat{y}$) and the observed values for the dependent variable (y)). Thus, the lower the sum of squared models residuals, the higher the global GoF is. Below, we apply a similar logic when using **5-fold cross validation**. More precisely, we have to tell the *cv()* function which measure of misfit for out-of-sample predictions to use when predicting each hold-out fold's values for the dependent variable. We use the **r**oot **m**ean **s**quared **e**rror of prediction (**RMSE**), given by: $RMSE=\sqrt{\frac{\sum_{j=1}^{k}\sum_{i=1}^{d}(y_{j,i}-\hat{y}_{j,i})²}{n}}$. This measure has the nice property of possessing the same measurement unit as the dependent variable (Hertz).
+
+Also, we set *reps = 3*. We rerun 5-fold cross-validation for 3 times to get an impression of how strongly the results depend on the concrete allocation of data into the five folds.
+
+Note that due to the random elements in this procedure, your results might look slightly different from those below.
+
+```{r}
+
+lm(formula = Frequency ~ Age*Gender, data = remove_labels(d)) %>% cv::cv(k = 5, criterion = rmse, reps = 3) %>% summary()
+
+```
+
+::: callout-tip
+## Interpretation
+
+Above, we see that, on average, the model predicts the highest perceivable frequency (Hertz) of new participants not included in calibration rather badly. This is not surprising with an eye on our tiny sample size. The output portrays the results for each repetition and then averaged across repetitions, with the standard deviations of the CV criterion in parentheses. Based on these results we should not trust the model when doing predictions. We also see that the RMSE error within the complete sample is much lower. Such an adverse situation where the out-of-sample error of prediction is much higher than the in-sample error drawing on the whole sample is typically called **overfitting**. It could indicate that we should remove the interaction term from the model. However, we should be careful with such a conclusion since the sample size is very small. In addition, we have to keep in mind that the model is not predicting well in general.
+:::
+
+Below, we also conduct a 5-fold cross-validation for the model without the interaction term. We use the same function as above, but we do not include the interaction term in the regression model. Then, we do the same with only leaving *Age* as a prdictor in the model.
+
+```{r}
+
+lm(formula = Frequency ~ Age+Gender, data = remove_labels(d)) %>% cv::cv(k = 5, criterion = rmse, reps = 3) %>% summary()
+
+```
+
+```{r}
+
+lm(formula = Frequency ~ Age, data = remove_labels(d)) %>% cv::cv(k = 5, criterion = rmse, reps = 3) %>% summary()
+
+```
+
+::: callout-tip
+## Interpretation
+
+Above, we see that, on average, the model with only *Age* as a predictor predicts the highest perceivable frequency (Hertz) of new participants not included in calibration much better than the model with the interaction term and also than the model with both main effects of *Age* and *Gender*. Thus, if prediction is the goal, we should rather rely on the model with only *Age* as a predictor. :::
+:::
