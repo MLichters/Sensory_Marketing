@@ -64,7 +64,7 @@ license:
   text: >
     CC BY-NC-ND 4.0, see https://creativecommons.org/licenses/by-nc-nd/4.0/ 
   type: open-access
-  url: https://creativecommons.org/licenses/by-nc-nd/4.0/Deed - Attribution-NonCommercial-NoDerivatives 4.0 International - Creative Commons.html
+  url: https://creativecommons.org/licenses/by-nc-nd/4.0/
 ---
 
 ------------------------------------------------------------------------
