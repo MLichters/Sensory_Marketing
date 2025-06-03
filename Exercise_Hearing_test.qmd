@@ -64,7 +64,7 @@ license:
   text: >
     CC BY-NC-ND 4.0, see https://creativecommons.org/licenses/by-nc-nd/4.0/ 
   type: open-access
-  url: https://creativecommons.org/licenses/by-nc-nd/4.0/Deed - Attribution-NonCommercial-NoDerivatives 4.0 International - Creative Commons.html
+  url: https://creativecommons.org/licenses/by-nc-nd/4.0/
 ---
 
 ------------------------------------------------------------------------
@@ -246,7 +246,7 @@ d$Gender <- d$Gender %>% to_factor()
 
 > Use a linear regression to evaluate if hearing capabilities are decreasing with increasing age in years.
 
-Before looking at the quantitative output of the regression model, we will inspect the data visually. We use the *ggscatterstats()* function from the [ggstatsplot](https://cran.r-project.org/web/packages/ggstatsplot/index.html) package [@patil2021a; @ggstatsplot] to visualize the relationship between *Age* and hearing capabilities.
+Before looking at the quantitative output of the regression model, we will inspect the data visually. We use the *ggscatterstats()* function from the [ggstatsplot](https://cran.r-project.org/web/packages/ggstatsplot/index.html) package [@patil2021; @ggstatsplot] to visualize the relationship between *Age* and hearing capabilities.
 
 ```{r}
 #| warning: false
@@ -362,7 +362,7 @@ model_summary_results <- modelsummary(models,
 ::: callout-tip
 ## Interpretation
 
-Comparing the models show that the addition of gender and the genderxage interaction only marginally increases the internal model fit: adjusted R² value from `r round(as.numeric(model_summary_results@data[7,2]), digits = 2)` (Model 1) to `r round(as.numeric(model_summary_results@data[7,8]), digits = 2)` (Model 3).
+Comparing the models show that the addition of gender and the $gender \times age$ interaction only marginally increases the internal model fit: adjusted R² value from `r round(as.numeric(model_summary_results@data[7,2]), digits = 2)` (Model 1) to `r round(as.numeric(model_summary_results@data[7,8]), digits = 2)` (Model 3).
 :::
 
 ------------------------------------------------------------------------
@@ -399,7 +399,7 @@ If you have downloaded manually, you need to execute *source(process.R)*.
 
 Below, we need to explicitly convert the variable *Gender* into a labelled variable. This is because the PROCESS macro requires the moderator to be a numeric variable. As a result, the variable *Gender* is now coded numerically with 1 (females) and 2 (males). We store the results of this transformation in a dataset called *d_process*.
 
-Subsequently, we run the PROCESS macro. The function requires the data set (*data*), the dependent variable (*y*), the independent variable (*w*), the moderator (*w*), the model number (which is 1, see, @Hayes.2022 [p. 621] for an overview), the centering method, the number of bootstrap samples (*boot*), and the confidence level (*conf*). We further set the seed to ensure reproducibility. In addition, we set the progress bar to FALSE.
+Subsequently, we run the PROCESS macro. The function requires the data set (*data*), the dependent variable (*y*), the independent variable (*x*), the moderator (*w*), the model number (which is 1, see, @Hayes.2022 [p. 621] for an overview), the centering method, the number of bootstrap samples (*boot*), and the confidence level (*conf*). We further set the seed to ensure reproducibility. In addition, we set the progress bar to FALSE.
 
 ```{r}
 
@@ -621,7 +621,8 @@ If we choose a notification tone with a frequency of `r format(round(descriptive
 
 Below, we apply **5-fold cross validation** The package [cv](https://cran.r-project.org/web/packages/cv/) [@cv] provides a function with the package's name. However, the package comes with one drawback. It is not apt in handling variables possessing variable labels. Therefore, below we re-estimate the regression model, but based on the data without variable labels (function *remove_labels()* from [labelled](https://cran.r-project.org/web/packages/labelled/) [@labelled]).
 
-Remember, when we judged the within sample GoF above (e.g., R²), we based our conclusions in great part on: $\sum_{i=1}^{n}(y_{i}-\hat{y}_{i})²$ (the sum of squares between the fitted values of the regression model ($\hat{y}$) and the observed values for the dependent variable (y)). Thus, the lower the sum of squared models residuals, the higher the global GoF is. Below, we apply a similar logic when using **5-fold cross validation**. More precisely, we have to tell the *cv()* function which measure of misfit for out-of-sample predictions to use when predicting each hold-out fold's values for the dependent variable. We use the **r**oot **m**ean **s**quared **e**rror of prediction (**RMSE**), given by: $RMSE=\sqrt{\frac{\sum_{j=1}^{k}\sum_{i=1}^{d}(y_{j,i}-\hat{y}_{j,i})²}{n}}$. This measure has the nice property of possessing the same measurement unit as the dependent variable (Hertz).
+Remember, when we judge the within sample GoF in regression (e.g., R²), we base our conclusions in great part on: $\sum_{i=1}^{n}(y_{i}-\hat{y}_{i})²$ (the sum of squares between the fitted values of the regression model ($\hat{y}$) and the observed values for the dependent variable (y)). Thus, the lower the sum of squared models residuals, the higher the global GoF is. Below, we apply a similar logic when using **5-fold cross validation**. More precisely, we have to tell the *cv()* function which measure of misfit for out-of-sample predictions to use when predicting each hold-out fold's values for the dependent variable. We use the **r**oot **m**ean **s**quared **e**rror of prediction (**RMSE**), given by: $RMSE=\frac{\sum_{j=1}^{k}(\frac{\sum_{i=1}^{g}(y_{j,i}-\hat{y}_{j,i})²}{g})}{k}$. This measure has the nice property of possessing the same measurement unit as the dependent variable (Hertz).
+
 
 Also, we set *reps = 3*. We rerun 5-fold cross-validation for 3 times to get an impression of how strongly the results depend on the concrete allocation of data into the five folds.
 
@@ -653,8 +654,9 @@ lm(formula = Frequency ~ Age, data = remove_labels(d)) %>% cv::cv(k = 5, criteri
 
 ```
 
+
 ::: callout-tip
 ## Interpretation
 
-Above, we see that, on average, the model with only *Age* as a predictor predicts the highest perceivable frequency (Hertz) of new participants not included in calibration much better than the model with the interaction term and also than the model with both main effects of *Age* and *Gender*. Thus, if prediction is the goal, we should rather rely on the model with only *Age* as a predictor. :::
+Above, we see that, on average, the model with only *Age* as a predictor predicts the highest perceivable frequency (Hertz) of new participants not included in calibration much better than the model with the interaction term and also than the model with both main effects of *Age* and *Gender*. Thus, if prediction is the goal, we should rather rely on the model with only *Age* as a predictor.
 :::
